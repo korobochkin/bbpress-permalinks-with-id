@@ -165,8 +165,4 @@ function bbp_permalinks_deactivate () {
 }
 register_deactivation_hook (__FILE__, 'bbp_permalinks_deactivate');
 
-function bbpp_test () {
-	echo realpath(__FILE__);
-}
-add_action ('wp_footer', 'bbpp_test');
 ?>
