@@ -7,3 +7,7 @@ This plugin for WordPress and bbPress converts default permalinks with topic and
 
  * /forums/forum/FORUM_SLUG &rarr; /forums/forum/FORUM_ID
  * /forums/topic/TOPIC_SLUG &rarr; /forums/topic/TOPIC_ID
+
+Real examples:
+ * site.com/forums/forum/1/
+ * site.com/forums/topic/2/
