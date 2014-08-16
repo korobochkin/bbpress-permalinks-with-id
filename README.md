@@ -1,4 +1,4 @@
-bbPress-permalinks-with-id
+bbPress Permalinks with ID
 ==========================
 
 Change bbPress permalinks. Topic and forum ID instead of slug
