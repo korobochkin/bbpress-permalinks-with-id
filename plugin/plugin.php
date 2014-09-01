@@ -70,8 +70,6 @@ function bbp_permalinks_rewrites_init () {
 	$forum_slug = bbp_get_forum_slug(); // string 'forum'
 	$topic_slug = bbp_get_topic_slug(); // string 'topic'
 	$reply_slug         = bbp_get_reply_slug();
-	$view_slug  = bbp_get_view_slug();
-	$ttag_slug  = bbp_get_topic_tag_tax_slug(); // string 'forums/topic/tag'
 
 	$paged_slug = bbp_get_paged_slug();
 
