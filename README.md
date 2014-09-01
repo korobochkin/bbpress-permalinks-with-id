@@ -11,3 +11,5 @@ This plugin for WordPress and bbPress converts default permalinks with topic and
 Real examples:
  * site.com/forums/forum/1/
  * site.com/forums/topic/2/
+
+To compile dist just hit npm install and then run grunt default task (working plugin in .zip archives will be created at dist/ folder).
