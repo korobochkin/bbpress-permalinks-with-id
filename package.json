@@ -1,0 +1,28 @@
+{
+  "name": "bbPress-permalinks-with-id",
+  "version": "1.0.0",
+  "description": "Change bbPress permalinks. ID number instead of topic slug.",
+  "main": "plugin/plugin.php",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/korobochkin/bbPress-permalinks-with-id.git"
+  },
+  "keywords": [
+    "bbPress",
+    "url",
+    "permalinks",
+    "forum",
+    "WordPress"
+  ],
+  "author": "Kolya Korobochkin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/korobochkin/bbPress-permalinks-with-id/issues"
+  },
+  "homepage": "https://github.com/korobochkin/bbPress-permalinks-with-id",
+  "devDependencies": {
+    "grunt": "latest",
+    "grunt-po2mo": "latest",
+    "grunt-contrib-compress": "latest"
+  }
+}
