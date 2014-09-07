@@ -38,7 +38,9 @@ function bbp_permalinks_post_type_link ($link, $post = 0) {
 			// site.com/post_type=forum&p=ID
 		}
 		else {
-			return home_url (bbp_get_forum_slug () . '/' . $post->ID . '/');
+			return home_url (
+				user_trailingslashit (bbp_get_forum_slug () . '/' . $post->ID)
+			);
 			// forums/forum/ID/
 		}
 	}
@@ -50,7 +52,9 @@ function bbp_permalinks_post_type_link ($link, $post = 0) {
 			// ?post_type=topic&p=ID
 		}
 		else {
-			return home_url (bbp_get_topic_slug () . '/' . $post->ID . '/');
+			return home_url (
+				user_trailingslashit (bbp_get_topic_slug () . '/' . $post->ID)
+			);
 			// forums/topic/ID/
 		}
 
