@@ -32,7 +32,7 @@ function bbp_permalinks_post_type_link ($link, $post = 0) {
 		// forums/forum/ID/
 
 		$structure = get_option ('permalink_structure');
-		if ($structure) {
+		if (!$structure) {
 			// Permalinks looks like site.com/?p=123
 			return home_url ('?post_type=' . bbp_get_forum_post_type () . '&p=' . $post->ID);
 			// site.com/post_type=forum&p=ID
@@ -45,7 +45,7 @@ function bbp_permalinks_post_type_link ($link, $post = 0) {
 	elseif ($post->post_type == bbp_get_topic_post_type () ) {
 		// forums/topic/ID/
 		$structure = get_option ('permalink_structure');
-		if ($structure) {
+		if (!$structure) {
 			return home_url ('?post_type=' . bbp_get_topic_post_type () . '&p=' . $post->ID);
 			// ?post_type=topic&p=ID
 		}
