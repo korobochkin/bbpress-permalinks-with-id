@@ -143,7 +143,23 @@ function bbp_permalinks_rewrites_init () {
 
 // Activation and deactivation hooks
 function bbp_permalinks_activate () {
-	flush_rewrite_rules (false);
+	/* 
+	 * We need add new rewrite rules first and only after this call flush_rewrite_rules
+	 * In other ways flush_rewrite_rules doesn't work.
+	 */
+	if (class_exists ('bbPress')) {
+		/*
+		 * Check if bbPress plugin activated
+		 * bbp_permalinks_rewrites_init use bbPress links and if bbPress not activated we call undefined functions
+		 * and got a fatal error.
+		 */
+		$structure = get_option ('permalink_structure');
+		if ($structure) {
+			// Run (add rewrite rules) only if WordPress permalink settings not default (site.com/?p=123)
+			bbp_permalinks_rewrites_init ();
+			flush_rewrite_rules (false);
+		}
+	}
 }
 register_activation_hook (__FILE__, 'bbp_permalinks_activate');
 
