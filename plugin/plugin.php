@@ -74,7 +74,7 @@ function bbp_permalinks_rewrites_init () {
 	$topic_slug = bbp_get_topic_slug (); // string 'topic'
 	$reply_slug = bbp_get_reply_slug (); // string 'slug'
 
-	$paged_slug = bbp_get_paged_slug ();
+	$paged_slug = bbp_get_paged_slug (); // string 'page'
 
 	$paged_rule = '/([^/]+)/' . $paged_slug . '/?([0-9]{1,})/?$';
 	$paged_rule_ids =  $ids_regex . $paged_slug . '/?([0-9]{1,})/?$';
