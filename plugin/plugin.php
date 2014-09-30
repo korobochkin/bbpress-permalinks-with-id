@@ -18,7 +18,7 @@ function bbp_permalinks_init () {
 		$structure = get_option ('permalink_structure');
 		if ($structure) {
 			// And run (add rewrite rules) only if WordPress permalink settings not default (site.com/?p=123)	
-			add_action ('bbp_init', 'bbp_permalinks_rewrites_init', 29); // bbPress add self rules at 30
+			add_action ('bbp_add_rewrite_rules', 'bbp_permalinks_rewrites_init');
 		}
 		// if rewrite rules disabled just fix links (change slugs to id)
 		add_filter ('post_type_link', 'bbp_permalinks_post_type_link', 99, 2);
