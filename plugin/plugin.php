@@ -10,8 +10,6 @@
  * Domain Path: /languages
  */
 
-defined ('ABSPATH') OR exit;
-
 function bbp_permalinks_init () {
 	// This plugin work only if bbPress activated
 	if (class_exists ('bbPress')) {
