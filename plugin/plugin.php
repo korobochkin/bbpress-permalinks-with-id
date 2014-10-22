@@ -145,7 +145,7 @@ function bbp_permalinks_activate () {
 	 * We need add new rewrite rules first and only after this call flush_rewrite_rules
 	 * In other ways flush_rewrite_rules doesn't work.
 	 */
-	if (class_exists ('bbPress')) {
+	if (function_exists ('bbpress')) {
 		/*
 		 * Check if bbPress plugin activated
 		 * bbp_permalinks_rewrites_init use bbPress links and if bbPress not activated we call undefined functions
