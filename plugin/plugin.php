@@ -24,7 +24,7 @@ function bbp_permalinks_init () {
 		add_filter ('post_type_link', 'bbp_permalinks_post_type_link', 99, 2);
 	}
 }
-add_action ('init', 'bbp_permalinks_init', 0);
+add_action ('bbp_init', 'bbp_permalinks_init');
 
 function bbp_permalinks_post_type_link ($link, $post = 0) {
 	
