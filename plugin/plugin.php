@@ -11,54 +11,44 @@
  */
 
 function bbp_permalinks_init () {
-	// This plugin work only if bbPress activated
-	if (class_exists ('bbPress')) {
-		$structure = get_option ('permalink_structure');
-		if ($structure) {
-			// And run (add rewrite rules) only if WordPress permalink settings not default (site.com/?p=123)	
-			add_action ('bbp_add_rewrite_rules', 'bbp_permalinks_rewrites_init');
-		}
-		// if rewrite rules disabled just fix links (change slugs to id)
-		add_filter ('post_type_link', 'bbp_permalinks_post_type_link', 99, 2);
+	$structure = get_option ('permalink_structure');
+	if ($structure) {
+		// Run (add rewrite rules) only if WordPress permalink settings not default (default looks like site.com/?p=123)
+		add_action ('bbp_add_rewrite_rules', 'bbp_permalinks_rewrites_init', 3);
+		// Create valid URL for our new rewrite rules
+		add_filter ('post_type_link', 'bbp_permalinks_post_type_link_pretty', 99, 2);
+	}
+	else {
+		// If permalink settings is default only change permalinks
+		add_filter ('post_type_link', 'bbp_permalinks_post_type_link_not_pretty', 99, 2);
 	}
 }
 add_action ('bbp_init', 'bbp_permalinks_init');
 
-function bbp_permalinks_post_type_link ($link, $post = 0) {
-	
+function bbp_permalinks_post_type_link_pretty ($link, $post = 0) {
 	if ($post->post_type == bbp_get_forum_post_type ()) {
-		// forums/forum/ID/
-
-		$structure = get_option ('permalink_structure');
-		if (!$structure) {
-			// Permalinks looks like site.com/?p=123
-			return home_url ('?post_type=' . bbp_get_forum_post_type () . '&p=' . $post->ID);
-			// site.com/post_type=forum&p=ID
-		}
-		else {
-			return home_url (
-				user_trailingslashit (bbp_get_forum_slug () . '/' . $post->ID)
-			);
-			// forums/forum/ID/
-		}
+		// site.com/forums/forum/ID/
+		return home_url (
+			user_trailingslashit (bbp_get_forum_slug () . '/' . $post->ID)
+		);
 	}
 	elseif ($post->post_type == bbp_get_topic_post_type () ) {
-		// forums/topic/ID/
-		$structure = get_option ('permalink_structure');
-		if (!$structure) {
-			return home_url ('?post_type=' . bbp_get_topic_post_type () . '&p=' . $post->ID);
-			// ?post_type=topic&p=ID
-		}
-		else {
-			return home_url (
-				user_trailingslashit (bbp_get_topic_slug () . '/' . $post->ID)
-			);
-			// forums/topic/ID/
-		}
-
+		// site.com/forums/topic/ID/
+		return home_url (
+			user_trailingslashit (bbp_get_topic_slug () . '/' . $post->ID)
+		);
 	}
-	else {
-		return $link;
+	return $link;
+}
+
+function bbp_permalinks_post_type_link_not_pretty ($link, $post = 0) {
+	if ($post->post_type == bbp_get_forum_post_type ()) {
+		// site.com/?post_type=forum&p=ID
+		return home_url ('?post_type=' . bbp_get_forum_post_type () . '&p=' . $post->ID);
+	}
+	elseif ($post->post_type == bbp_get_topic_post_type () ) {
+		// site.com/?post_type=topic&p=ID
+		return home_url ('?post_type=' . bbp_get_topic_post_type () . '&p=' . $post->ID);
 	}
 	return $link;
 }
