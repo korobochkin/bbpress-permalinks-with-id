@@ -7,7 +7,7 @@
  * Author URI: http://korobochkin.com/
  * Version: 1.0.0
  * Text Domain: bbpress_permalinks
- * Domain Path: /languages/
+ * Domain Path: /languages
  */
 
 defined ('ABSPATH') OR exit;
