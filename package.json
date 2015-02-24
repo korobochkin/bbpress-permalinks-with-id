@@ -23,6 +23,7 @@
   "devDependencies": {
     "grunt": "latest",
     "grunt-po2mo": "latest",
-    "grunt-contrib-compress": "latest"
+    "grunt-contrib-compress": "latest",
+    "grunt-potomo": "latest"
   }
 }

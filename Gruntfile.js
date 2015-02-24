@@ -9,6 +9,21 @@ module.exports = function (grunt) {
 				expand: true,
 			},
 		},
+		potomo: {
+			dev: {
+				options: {
+					poDel: false,
+				},
+				files: [{
+					expand: true,
+					cwd: 'plugin/languages/',
+					src: ['*.po'],
+					dest: 'plugin/languages/',
+					ext: '.mo',
+					nonull: true,
+				}],
+			},
+		},
 		compress: {
 			dist: {
 				options: {
@@ -30,6 +45,7 @@ module.exports = function (grunt) {
 	});
 
 	grunt.loadNpmTasks ('grunt-po2mo');
+	grunt.loadNpmTasks ('grunt-potomo');
 	grunt.loadNpmTasks ('grunt-contrib-compress');
 
 	grunt.registerTask('default', ['po2mo:languages', 'compress:dist']);
