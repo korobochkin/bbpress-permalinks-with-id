@@ -48,6 +48,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks ('grunt-potomo');
 	grunt.loadNpmTasks ('grunt-contrib-compress');
 
-	grunt.registerTask('default', ['po2mo:languages', 'compress:dist']);
+	grunt.registerTask ('default',
+		[
+			'po2mo:languages',
+			'compress:dist'
+		]
+	);
 
 };
