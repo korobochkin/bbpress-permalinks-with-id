@@ -1,6 +1,6 @@
 {
   "name": "bbPress-permalinks-with-id",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Change bbPress permalinks. ID number instead of topic slug.",
   "main": "plugin/plugin.php",
   "repository": {
