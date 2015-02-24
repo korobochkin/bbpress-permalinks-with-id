@@ -5,7 +5,7 @@
  * Description: Change bbPress permalinks. ID number instead of topic slug. This links better than default if you have Cyrilic or other non english charackters in forum's and topic's slugs. forums/forum/FORUM_SLUG/ &rarr; forums/forum/ID/. forums/topic/TOPIC_SLUG/&rarr;forums/topic/ID/
  * Author: Kolya Korobochkin
  * Author URI: http://korobochkin.com/
- * Version: 1.0.0
+ * Version: 1.0.2
  * Text Domain: bbpress_permalinks
  * Domain Path: /languages
  */
