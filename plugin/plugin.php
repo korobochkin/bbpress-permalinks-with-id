@@ -2,12 +2,15 @@
 /**
  * Plugin Name: bbPress Permalinks
  * Plugin URI: http://korobochkin.com/
- * Description: Change bbPress permalinks. ID number instead of topic slug. This links better than default if you have Cyrilic or other non english charackters in forum's and topic's slugs. forums/forum/FORUM_SLUG/ &rarr; forums/forum/ID/. forums/topic/TOPIC_SLUG/&rarr;forums/topic/ID/
+ * Description: ID instead of slug in bbPress topic and forum links.
  * Author: Kolya Korobochkin
  * Author URI: http://korobochkin.com/
  * Version: 1.0.3
  * Text Domain: bbpress_permalinks
- * Domain Path: /languages
+ * Domain Path: /languages/
+ * Requires at least: 4.1.1
+ * Tested up to: 4.1.1
+ * License: GPLv2 or later
  */
 
 function bbp_permalinks_init () {
