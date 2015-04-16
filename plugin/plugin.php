@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: bbPress Permalinks
+ * Plugin Name: bbPress Permalinks with ID
  * Plugin URI: http://korobochkin.com/
  * Description: ID instead of slug in bbPress topic and forum links.
  * Author: Kolya Korobochkin
