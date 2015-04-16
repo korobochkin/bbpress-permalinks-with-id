@@ -14,3 +14,5 @@ Real examples:
 
 ## Create a .zip plugin for WordPress
 To compile dist just hit npm install and then run grunt default task (working plugin in .zip archive will be created at dist/ folder).
+
+Photo on banner created by [Jay Mantri](https://stocksnap.io/photo/BD7R33PKME).

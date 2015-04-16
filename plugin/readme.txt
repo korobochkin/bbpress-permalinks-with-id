@@ -37,6 +37,8 @@ On deinstallation this plugin completely removes custom rewrite rules.
 
 [Plugin on Github](https://github.com/korobochkin/bbpress-permalinks-with-id)
 
+Photo on banner created by [Jay Mantri](https://stocksnap.io/photo/BD7R33PKME).
+
 == Installation ==
 
 1. Install bbPress Permalinks with ID either via the WordPress.org plugin directory, or by uploading the files to your server.
