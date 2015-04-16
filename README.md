@@ -1,7 +1,7 @@
 bbPress Permalinks with ID
 ==========================
 
-Change bbPress permalinks. Topic and forum ID instead of slug
+Change bbPress permalinks. Topic and forum ID instead of slug.
 
 This plugin for WordPress and bbPress converts default permalinks with topic and forum slugs to permalinks with ID's. Examples:
 
