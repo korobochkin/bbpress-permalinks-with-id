@@ -13,6 +13,11 @@
  * License: GPLv2 or later
  */
 
+/*
+ * Add plugin actions and filters at bbp_init action which triggered only if bbPress activated.
+ *
+ * @since 1.0.0
+ */
 function bbp_permalinks_init() {
 	$structure = get_option( 'permalink_structure' );
 	if( $structure ) {
@@ -28,6 +33,13 @@ function bbp_permalinks_init() {
 }
 add_action( 'bbp_init', 'bbp_permalinks_init' );
 
+/*
+ * Generate pretty permalinks for forums and topics.
+ *
+ * @since 1.0.0
+ * @param string $link URL.
+ * @param object $post An WordPress post object.
+ */
 function bbp_permalinks_post_type_link_pretty( $link, $post = 0 ) {
 	if( $post->post_type == bbp_get_forum_post_type() ) {
 		// site.com/forums/forum/ID/
@@ -44,6 +56,13 @@ function bbp_permalinks_post_type_link_pretty( $link, $post = 0 ) {
 	return $link;
 }
 
+/*
+ * Generate default permalinks for forums and topics.
+ *
+ * @since 1.0.0
+ * @param string $link URL.
+ * @param object $post An WordPress post object.
+ */
 function bbp_permalinks_post_type_link_not_pretty( $link, $post = 0 ) {
 	if( $post->post_type == bbp_get_forum_post_type() ) {
 		// site.com/?post_type=forum&p=ID
@@ -56,6 +75,11 @@ function bbp_permalinks_post_type_link_not_pretty( $link, $post = 0 ) {
 	return $link;
 }
 
+/*
+ * Generate rewrite rules for forums and topics based on bbPress settings.
+ *
+ * @since 1.0.0
+ */
 function bbp_permalinks_rewrites_init() {
 	$priority = 'top';
 	$edit_slug = 'edit';
@@ -132,7 +156,12 @@ function bbp_permalinks_rewrites_init() {
 	);
 }
 
-// Activation and deactivation hooks
+/*
+ * Activation callback. Check if bbPress activated. Check permalink structure settings in WordPress.
+ * If both of conditions comes to true then add new rewrite rules and flush it.
+ *
+ * @since 1.0.0
+ */
 function bbp_permalinks_activate() {
 	/* 
 	 * We need add new rewrite rules first and only after this call flush_rewrite_rules
@@ -154,6 +183,11 @@ function bbp_permalinks_activate() {
 }
 register_activation_hook( __FILE__, 'bbp_permalinks_activate' );
 
+/*
+ * Deactivation callback. Flush rewrite rules.
+ *
+ * @since 1.0.0
+ */
 function bbp_permalinks_deactivate() {
 	flush_rewrite_rules( false );
 }
