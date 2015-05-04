@@ -55,3 +55,8 @@ Simply adds few rewrite rules. If you deactivate or remove plugin and after that
 
 = 1.0.4 =
 * First version of plugin for wordpress.org. Without automaticly flushing rewrite rules.
+
+== Upgrade Notice ==
+
+= 1.0.4 =
+Basic functionality of plugin.
