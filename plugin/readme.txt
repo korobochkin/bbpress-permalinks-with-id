@@ -12,6 +12,10 @@ ID instead of slug in bbPress topic and forum links.
 
 == Description ==
 
+**Attention!**
+
+You need **manually flush rewrite rules** after activating bbPress and this plugin. You can do it by visiting `/wp-admin/options-permalink.php` page. Or use wp cli (`wp rewrite flush` command).
+
 By default bbPress URLs contains slugs. It's not good if your slugs (titles) contains something that not present in english alphabet. Sometimes links doesn't open or you can't send the link to your friend because URL contains this mystery symbols like cyrillic or chinese letters. Search engines also not love this types of URLs.
 
 The bad URL examples:
