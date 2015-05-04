@@ -49,7 +49,7 @@ P. S. I'm currently working on automatically flushing rules on activation and de
 
 = That this plugin do? =
 
-Simply adds few rewrite rules. If you deactivate and remove plugin and after that flush rewrite rules there is no stuff (garbage) after this plugin in database.
+Simply adds few rewrite rules. If you deactivate or remove plugin and after that flush rewrite rules there is no stuff (garbage) after this plugin in database.
 
 == Changelog ==
 
