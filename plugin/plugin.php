@@ -9,7 +9,7 @@
  * Text Domain: bbpress_permalinks
  * Domain Path: /languages/
  * Requires at least: 4.1.1
- * Tested up to: 4.1.1
+ * Tested up to: 4.2.1
  * License: GPLv2 or later
  */
 
