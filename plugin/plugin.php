@@ -181,7 +181,8 @@ function bbp_permalinks_activate() {
 		}
 	}
 }
-register_activation_hook( __FILE__, 'bbp_permalinks_activate' );
+// This stuff not working (Currently in progress)
+//register_activation_hook( __FILE__, 'bbp_permalinks_activate' );
 
 /*
  * Deactivation callback. Flush rewrite rules.
@@ -191,5 +192,6 @@ register_activation_hook( __FILE__, 'bbp_permalinks_activate' );
 function bbp_permalinks_deactivate() {
 	flush_rewrite_rules( false );
 }
-register_deactivation_hook( __FILE__, 'bbp_permalinks_deactivate' );
+// This stuff not working (Currently in progress)
+// register_deactivation_hook( __FILE__, 'bbp_permalinks_deactivate' );
 ?>
