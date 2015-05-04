@@ -12,28 +12,26 @@ ID instead of slug in bbPress topic and forum links.
 
 == Description ==
 
-By default bbPress URLs contains slugs. It's not good if your slugs (titles) containts something that not present in english alphabet. Sometimes links doesn't open or you can't send the link to your friend because URL contains this mystery symbols like cyrillic or chinese letters. Search engines also not love this types of URLs.
+By default bbPress URLs contains slugs. It's not good if your slugs (titles) contains something that not present in english alphabet. Sometimes links doesn't open or you can't send the link to your friend because URL contains this mystery symbols like cyrillic or chinese letters. Search engines also not love this types of URLs.
 
 The bad URL examples:
 
-* korobochkin.com/forums/forum/привет-заголовок
-* korobochkin.com/forums/topic/название-топика-с-кириллицей
+* `korobochkin.com/forums/forum/привет-заголовок`
+* `korobochkin.com/forums/topic/название-топика-с-кириллицей`
 
-This plugin automaticly add custom rewrite rules to WordPress and your links rocks.
+This plugin automatically adds custom rewrite rules to WordPress and your links rocks.
 
 The good URL examples (after plugin activation):
 
-* korobochkin.com/forums/forum/123/
-* korobochkin.com/forums/topic/456/
+* `korobochkin.com/forums/forum/123/`
+* `korobochkin.com/forums/topic/456/`
 
 The plugin works with any configuration of permalinks.
 
-* korobochkin.com/forums/forum/123/
-* korobochkin.com/?post_type=forum&p=123
+* `korobochkin.com/forums/forum/123/`
+* `korobochkin.com/?post_type=forum&p=123`
 
 The plugin featured and starred on Github by Stephen Edgar — bbPress core developer. [Discussion about this plugin](https://bbpress.org/forums/topic/topic-id-instead-of-slugs/) at bbPress official support forum.
-
-On deinstallation this plugin completely removes custom rewrite rules.
 
 [Plugin on Github](https://github.com/korobochkin/bbpress-permalinks-with-id)
 
@@ -43,6 +41,15 @@ Photo on banner created by [Jay Mantri](https://stocksnap.io/photo/BD7R33PKME).
 
 1. Install bbPress Permalinks with ID either via the WordPress.org plugin directory, or by uploading the files to your server.
 2. Activate bbPress and after it activate bbPress Permalinks with ID.
+3. Flush rewrite rules. You can do it by visiting `/wp-admin/options-permalink.php` page. Or use wp cli (`wp rewrite flush` command).
+
+P. S. I'm currently working on automatically flushing rules on activation and deactivation.
+
+== Frequently Asked Questions ==
+
+= That this plugin do? =
+
+Simply adds few rewrite rules. If you deactivate and remove plugin and after that flush rewrite rules there is no stuff (garbage) after this plugin in database.
 
 == Changelog ==
 
