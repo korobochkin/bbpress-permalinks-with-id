@@ -5,7 +5,7 @@
  * Description: ID instead of slug in bbPress topic and forum links.
  * Author: Kolya Korobochkin
  * Author URI: http://korobochkin.com/
- * Version: 1.0.3
+ * Version: 1.0.4
  * Text Domain: bbpress_permalinks
  * Domain Path: /languages/
  * Requires at least: 4.1.1
