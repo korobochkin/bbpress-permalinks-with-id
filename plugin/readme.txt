@@ -45,6 +45,11 @@ Photo on banner created by [Jay Mantri](https://stocksnap.io/photo/BD7R33PKME).
 
 P. S. I'm currently working on automatically flushing rules on activation and deactivation.
 
+== Screenshots ==
+
+1. Forum URL. The plugin adopts to your permalinks settings (you can change it on default bbPress settings page).
+2. Topic edit URL. With this plugin all pages and links correctly opens.
+
 == Frequently Asked Questions ==
 
 = That this plugin do? =
