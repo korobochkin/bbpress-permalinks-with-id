@@ -15,7 +15,7 @@
     "WordPress"
   ],
   "author": "Kolya Korobochkin",
-  "license": "MIT",
+  "license": "GPLv2",
   "bugs": {
     "url": "https://github.com/korobochkin/bbPress-permalinks-with-id/issues"
   },
