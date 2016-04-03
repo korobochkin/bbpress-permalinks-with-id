@@ -3,7 +3,7 @@ Contributors: korobochkin
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=me%40korobochkin%2ecom&item_name=bbPress%20Permalinks%20with%20ID&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted
 Tags: bbpress, permalinks, links, url, rewrite rule, id, forums, topics, slugs, characters
 Requires at least: 4.1.1
-Tested up to: 4.2.1
+Tested up to: 4.5.0
 Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
