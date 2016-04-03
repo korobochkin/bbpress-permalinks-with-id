@@ -22,8 +22,7 @@
   "homepage": "https://github.com/korobochkin/bbPress-permalinks-with-id",
   "devDependencies": {
     "grunt": "latest",
-    "grunt-po2mo": "latest",
     "grunt-contrib-compress": "latest",
-    "grunt-potomo": "latest"
+    "load-grunt-tasks": "^3.4.1"
   }
 }
