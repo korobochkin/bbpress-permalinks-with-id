@@ -1,8 +1,8 @@
 {
-  "name": "bbPress-permalinks-with-id",
+  "name": "bbpress-permalinks-with-id",
   "version": "1.0.4",
   "description": "Change bbPress permalinks. ID number instead of topic slug.",
-  "main": "plugin/plugin.php",
+  "main": "Gruntfile.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/korobochkin/bbPress-permalinks-with-id.git"
@@ -15,15 +15,14 @@
     "WordPress"
   ],
   "author": "Kolya Korobochkin",
-  "license": "MIT",
+  "license": "GPL-2.0+",
   "bugs": {
     "url": "https://github.com/korobochkin/bbPress-permalinks-with-id/issues"
   },
   "homepage": "https://github.com/korobochkin/bbPress-permalinks-with-id",
   "devDependencies": {
     "grunt": "latest",
-    "grunt-po2mo": "latest",
     "grunt-contrib-compress": "latest",
-    "grunt-potomo": "latest"
+    "load-grunt-tasks": "^3.4.1"
   }
 }
