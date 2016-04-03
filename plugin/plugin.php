@@ -6,7 +6,7 @@
  * Author: Kolya Korobochkin
  * Author URI: http://korobochkin.com/
  * Version: 1.0.4
- * Text Domain: bbpress_permalinks
+ * Text Domain: bbpress-permalinks-with-id
  * Domain Path: /languages/
  * Requires at least: 4.1.1
  * Tested up to: 4.2.1
