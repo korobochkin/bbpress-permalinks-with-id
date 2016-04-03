@@ -1,35 +1,18 @@
 module.exports = function (grunt) {
+	'use strict';
+
+	// Force use of Unix newlines
+	grunt.util.linefeed = '\n';
 
 	grunt.initConfig ({
 		pkg: grunt.file.readJSON ('package.json'),
 
-		po2mo: {
-			languages: {
-				src: 'plugin/languages/*.po',
-				expand: true,
-			},
-		},
-		potomo: {
-			dev: {
-				options: {
-					poDel: false,
-				},
-				files: [{
-					expand: true,
-					cwd: 'plugin/languages/',
-					src: ['*.po'],
-					dest: 'plugin/languages/',
-					ext: '.mo',
-					nonull: true,
-				}],
-			},
-		},
 		compress: {
-			dist: {
+			plugin: {
 				options: {
-					archive: 'dist/<%= pkg.name %>.zip',
+					archive: 'dist/<%= pkg.name %>.<%= pkg.version %>.zip',
 					mode: 'zip',
-					pretty: true,
+					pretty: true
 				},
 				files: [
 					{
@@ -37,22 +20,17 @@ module.exports = function (grunt) {
 						cwd: 'plugin/',
 						src: '**',
 						dest: '<%= pkg.name %>/',
-						dot: false,
-					},
-				],
-			},
-		},
+						dot: false
+					}
+				]
+			}
+		}
 	});
 
-	grunt.loadNpmTasks ('grunt-po2mo');
-	grunt.loadNpmTasks ('grunt-potomo');
-	grunt.loadNpmTasks ('grunt-contrib-compress');
+	require('load-grunt-tasks')(grunt, { scope: 'devDependencies' });
 
-	grunt.registerTask ('default',
-		[
-			'po2mo:languages',
-			'compress:dist'
-		]
-	);
+	grunt.registerTask('default', [
+		'compress:plugin'
+	]);
 
 };

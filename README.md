@@ -1,18 +1,21 @@
-bbPress Permalinks with ID
-==========================
+# bbPress Permalinks with ID
 
-Change bbPress permalinks. Topic and forum ID instead of slug.
+Stable version on WordPress.org — [wordpress.org/plugins/bbpress-permalinks-with-id/](https://wordpress.org/plugins/bbpress-permalinks-with-id/).
 
 This plugin for WordPress and bbPress converts default permalinks with topic and forum slugs to permalinks with ID's. Examples:
 
  * /forums/forum/FORUM_SLUG &rarr; /forums/forum/FORUM_ID
  * /forums/topic/TOPIC_SLUG &rarr; /forums/topic/TOPIC_ID
 
-Real examples:
- * site.com/forums/forum/1/
- * site.com/forums/topic/2/
-
 ## Create a .zip plugin for WordPress
-To compile dist just hit npm install and then run grunt default task (working plugin in .zip archive will be created at dist/ folder).
+
+To create working .zip-plugin just hit `npm install` and then run `grunt` default task (working plugin in .zip archive will be created at `dist` folder).
+
+```
+npm install
+grunt
+```
+
+## Credits
 
 Photo on banner created by [Jay Mantri](https://stocksnap.io/photo/BD7R33PKME).

@@ -1,15 +1,15 @@
 <?php
 /**
  * Plugin Name: bbPress Permalinks with ID
- * Plugin URI: http://korobochkin.com/
+ * Plugin URI: https://wordpress.org/plugins/bbpress-permalinks-with-id/
  * Description: ID instead of slug in bbPress topic and forum links.
  * Author: Kolya Korobochkin
  * Author URI: http://korobochkin.com/
- * Version: 1.0.4
- * Text Domain: bbpress_permalinks
+ * Version: 1.0.5
+ * Text Domain: bbpress-permalinks-with-id
  * Domain Path: /languages/
  * Requires at least: 4.1.1
- * Tested up to: 4.2.1
+ * Tested up to: 4.5.0
  * License: GPLv2 or later
  */
 
