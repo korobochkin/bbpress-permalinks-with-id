@@ -11,5 +11,9 @@
     ],
     "minimum-stability": "dev",
     "require": {},
-    "autoload": {}
+    "autoload": {
+        "files": [
+            "source/other/common.php"
+        ]
+    }
 }

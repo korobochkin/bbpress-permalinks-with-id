@@ -1,18 +1,4 @@
 <?php
-/**
- * Plugin Name: bbPress Permalinks with ID
- * Plugin URI: https://wordpress.org/plugins/bbpress-permalinks-with-id/
- * Description: ID instead of slug in bbPress topic and forum links.
- * Author: Kolya Korobochkin
- * Author URI: http://korobochkin.com/
- * Version: 1.0.5
- * Text Domain: bbpress-permalinks-with-id
- * Domain Path: /languages/
- * Requires at least: 4.1.1
- * Tested up to: 4.5.0
- * License: GPLv2 or later
- */
-
 /*
  * Add plugin actions and filters at bbp_init action which triggered only if bbPress activated.
  *
@@ -31,7 +17,6 @@ function bbp_permalinks_init() {
 		add_filter( 'post_type_link', 'bbp_permalinks_post_type_link_not_pretty', 99, 2 );
 	}
 }
-add_action( 'bbp_init', 'bbp_permalinks_init' );
 
 /*
  * Generate pretty permalinks for forums and topics.
@@ -163,7 +148,7 @@ function bbp_permalinks_rewrites_init() {
  * @since 1.0.0
  */
 function bbp_permalinks_activate() {
-	/* 
+	/*
 	 * We need add new rewrite rules first and only after this call flush_rewrite_rules
 	 * In other ways flush_rewrite_rules doesn't work.
 	 */
@@ -192,6 +177,3 @@ function bbp_permalinks_activate() {
 function bbp_permalinks_deactivate() {
 	flush_rewrite_rules( false );
 }
-// This stuff not working (Currently in progress)
-// register_deactivation_hook( __FILE__, 'bbp_permalinks_deactivate' );
-?>
