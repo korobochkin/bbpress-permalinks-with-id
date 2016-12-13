@@ -3,6 +3,12 @@ namespace Korobochkin\BBPressPermalinksWithID;
 
 class Plugin {
 
+	const NAME    = 'bbpress-permalinks-with-id';
+
+	const _NAME_  = 'bbpress_permalinks_with_id';
+
+	const VERSION = '1.1.0';
+
 	private $pluginFile;
 
 	public function __construct( $pluginFile ) {

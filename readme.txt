@@ -62,6 +62,11 @@ Simply adds few rewrite rules. If you deactivate or remove plugin and after that
 
 == Changelog ==
 
+= 1.1.0 =
+
+* Developers can install plugin via Composer from Github.
+* Refactored repository structure.
+
 = 1.0.5 =
 
 Update plugin text domain.
