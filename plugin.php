@@ -17,5 +17,5 @@ License: GPLv2 or later
 if( !class_exists( 'Korobochkin\BBPressPermalinksWithID\Plugin' ) ) {
 	require_once 'vendor/autoload.php';
 }
-$GLOBALS['WPBBPressPermalinksWithIDPlugin'] = new Plugin( __FILE__ );
-$GLOBALS['WPBBPressPermalinksWithIDPlugin']->run();
+$GLOBALS['BBPressPermalinksWithIDPlugin'] = new Plugin( __FILE__ );
+$GLOBALS['BBPressPermalinksWithIDPlugin']->run();
