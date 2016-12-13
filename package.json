@@ -1,6 +1,6 @@
 {
   "name": "bbpress-permalinks-with-id",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "Change bbPress permalinks. ID number instead of topic slug.",
   "main": "Gruntfile.js",
   "repository": {
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/korobochkin/bbPress-permalinks-with-id",
   "devDependencies": {
     "grunt": "latest",
+    "grunt-cli": "^1.2.0",
     "grunt-contrib-compress": "latest",
     "load-grunt-tasks": "^3.4.1"
   }
