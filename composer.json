@@ -1,0 +1,15 @@
+{
+    "name": "korobochkin/bbpress-permalinks-with-id",
+    "description": "WordPress plugin",
+    "type": "wordpress-plugin",
+    "license": "GPLv2 or later",
+    "authors": [
+        {
+            "name": "Kolya Korobochkin",
+            "email": "me@korobochkin.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {}
+}
