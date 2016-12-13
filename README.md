@@ -2,6 +2,8 @@
 
 Stable version on WordPress.org — [wordpress.org/plugins/bbpress-permalinks-with-id/](https://wordpress.org/plugins/bbpress-permalinks-with-id/).
 
+You can install this plugin with Composer from this repository.
+
 This plugin for WordPress and bbPress converts default permalinks with topic and forum slugs to permalinks with ID's. Examples:
 
  * /forums/forum/FORUM_SLUG &rarr; /forums/forum/FORUM_ID

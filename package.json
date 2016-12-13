@@ -1,6 +1,6 @@
 {
   "name": "bbpress-permalinks-with-id",
-  "version": "1.0.4",
+  "version": "2.0.0",
   "description": "Change bbPress permalinks. ID number instead of topic slug.",
   "main": "Gruntfile.js",
   "repository": {
