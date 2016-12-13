@@ -1,24 +1,5 @@
 <?php
 /*
- * Add plugin actions and filters at bbp_init action which triggered only if bbPress activated.
- *
- * @since 1.0.0
- */
-function bbp_permalinks_init() {
-	$structure = get_option( 'permalink_structure' );
-	if( $structure ) {
-		// Run (add rewrite rules) only if WordPress permalink settings not default (default looks like site.com/?p=123)
-		add_action( 'bbp_add_rewrite_rules', 'bbp_permalinks_rewrites_init', 3 );
-		// Create valid URL for our new rewrite rules
-		add_filter( 'post_type_link', 'bbp_permalinks_post_type_link_pretty', 99, 2 );
-	}
-	else {
-		// If permalink settings is default only change permalinks
-		add_filter( 'post_type_link', 'bbp_permalinks_post_type_link_not_pretty', 99, 2 );
-	}
-}
-
-/*
  * Generate pretty permalinks for forums and topics.
  *
  * @since 1.0.0

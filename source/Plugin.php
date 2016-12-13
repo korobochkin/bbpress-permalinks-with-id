@@ -16,7 +16,7 @@ class Plugin {
 	}
 
 	public function run() {
-		add_action( 'bbp_init', 'bbp_permalinks_init' );
+		add_action( 'bbp_init', array( 'Korobochkin\BBPressPermalinksWithID\BBPress\BBPress', 'run' ) );
 	}
 
 	/**
