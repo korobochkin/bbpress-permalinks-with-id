@@ -7,7 +7,7 @@ class Plugin {
 
 	const _NAME_  = 'bbpress_permalinks_with_id';
 
-	const VERSION = '2.0.0';
+	const VERSION = '2.0.0-alpha';
 
 	private $pluginFile;
 
