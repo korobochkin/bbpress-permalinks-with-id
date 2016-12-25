@@ -23,7 +23,6 @@ before_script:
   - bash wp-tests/bin/install-wp-tests.sh test root '' localhost $WP_VERSION
 
 install:
-  - composer self-update
   - composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader --classmap-authoritative
 
 
