@@ -10,13 +10,14 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "squizlabs/php_codesniffer": "^2.7"
+    },
     "autoload": {
         "psr-4": {
             "Korobochkin\\BBPressPermalinksWithID\\": "source/"
         }
     },
     "require-dev": {
-        "escapestudios/symfony2-coding-standard": "^2.9"
     }
 }
