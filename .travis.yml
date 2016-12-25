@@ -6,8 +6,10 @@ notifications:
   on_failure: change
 
 php:
-  - nightly # PHP 7.0
   - 5.6
+  - 7.0
+  - nightly
+  - hhvm
 
 env:
   - WP_PROJECT_TYPE=plugin WP_VERSION=latest WP_MULTISITE=0 WP_TEST_URL=http://localhost:12000 WP_TEST_USER=test WP_TEST_USER_PASS=test
