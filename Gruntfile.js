@@ -25,6 +25,8 @@ module.exports = function (grunt) {
 				]
 			}
 		}
+
+		// TODO: create a composer task for building production version of vendor
 	});
 
 	require('load-grunt-tasks')(grunt, { scope: 'devDependencies' });
