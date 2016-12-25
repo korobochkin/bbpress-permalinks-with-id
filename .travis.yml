@@ -22,8 +22,8 @@ before_script:
   - bash bin/install-wp-tests.sh test root '' localhost $WP_VERSION
 
 install:
+  - wp plugin install bbpress --activate
   - composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader --classmap-authoritative
-
 
 script:
   - phpunit -c phpunit.xml.dist
