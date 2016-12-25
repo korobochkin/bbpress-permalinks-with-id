@@ -18,5 +18,8 @@
         "psr-4": {
             "Korobochkin\\BBPressPermalinksWithID\\": "source/"
         }
+    },
+    "require-dev": {
+        "escapestudios/symfony2-coding-standard": "^2.9"
     }
 }
