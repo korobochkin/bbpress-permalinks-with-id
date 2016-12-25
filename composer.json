@@ -12,9 +12,6 @@
     "minimum-stability": "dev",
     "require": {},
     "autoload": {
-        "files": [
-            "source/other/common.php"
-        ],
         "psr-4": {
             "Korobochkin\\BBPressPermalinksWithID\\": "source/"
         }
