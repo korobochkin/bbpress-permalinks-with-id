@@ -1,9 +1,9 @@
-sudo: false
 language: php
 
 notifications:
-  on_success: never
-  on_failure: change
+  email:
+    on_success: never
+    on_failure: change
 
 php:
   - 5.6
@@ -19,11 +19,18 @@ matrix:
     - php: nightly
 
 before_script:
-  - bash bin/install-wp-tests.sh test root '' localhost $WP_VERSION
-
-install:
-  - composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader --classmap-authoritative
+  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - |
+    if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.0" ]]; then
+      composer global require "phpunit/phpunit=5.6.*"
+    else
+      composer global require "phpunit/phpunit=4.8.*"
+    fi
+  - |
+    composer global require wp-coding-standards/wpcs
+    phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
 
 script:
-  - phpunit -c phpunit.xml.dist
-  - vendor/bin/phpcs source/
+  - vendor/bin/phpcs --standard=phpcs.ruleset.xml $(find . -name '*.php')
+  - phpunit
