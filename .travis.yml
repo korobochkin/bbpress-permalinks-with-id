@@ -22,5 +22,10 @@ before_script:
   - git clone https://github.com/Seravo/wordpress-test-template wp-tests
   - bash wp-tests/bin/install-wp-tests.sh test root '' localhost $WP_VERSION
 
+install:
+  - composer self-update
+  - composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader --classmap-authoritative
+
+
 script:
   - cd wp-tests/spec && bundle exec rspec test.rb
