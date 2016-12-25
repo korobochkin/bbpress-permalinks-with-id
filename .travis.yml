@@ -12,19 +12,18 @@ php:
   - hhvm
 
 env:
-  - WP_PROJECT_TYPE=plugin WP_VERSION=latest WP_MULTISITE=0 WP_TEST_URL=http://localhost:12000 WP_TEST_USER=test WP_TEST_USER_PASS=test
+  - WP_VERSION=latest WP_MULTISITE=0
 
 matrix:
   allow_failures:
     - php: nightly
 
 before_script:
-  - git clone https://github.com/Seravo/wordpress-test-template wp-tests
-  - bash wp-tests/bin/install-wp-tests.sh test root '' localhost $WP_VERSION
+  - bash bin/install-wp-tests.sh test root '' localhost $WP_VERSION
 
 install:
   - composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader --classmap-authoritative
 
 
 script:
-  - cd wp-tests/spec && bundle exec rspec test.rb
+  - phpunit -c phpunit.xml.dist
