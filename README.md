@@ -1,5 +1,7 @@
 # bbPress Permalinks with ID
 
+[![WordPress](https://img.shields.io/wordpress/plugin/dt/bbpress-permalinks-with-id.svg)](https://wordpress.org/plugins/bbpress-permalinks-with-id/) [![WordPress](https://img.shields.io/wordpress/v/bbpress-permalinks-with-id.svg)](https://wordpress.org/plugins/bbpress-permalinks-with-id/) [![Packagist](https://img.shields.io/packagist/v/korobochkin/bbpress-permalinks-with-id.svg)](https://packagist.org/packages/korobochkin/bbpress-permalinks-with-id)
+
 Stable version on WordPress.org — [wordpress.org/plugins/bbpress-permalinks-with-id/](https://wordpress.org/plugins/bbpress-permalinks-with-id/).
 
 You can install this plugin with Composer from this repository.
