@@ -34,7 +34,7 @@ before_script:
 
 install:
   - composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader --classmap-authoritative
-  - vendor/bin/phpcs/ --config-set installed_paths vendor/escapestudios/symfony2-coding-standard
+  - vendor/bin/phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard
 
 
 script:
