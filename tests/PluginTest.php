@@ -5,6 +5,7 @@ use Korobochkin\BBPressPermalinksWithID\Plugin;
 
 class PluginTest extends \WP_UnitTestCase {
 
+
 	/**
 	 * @var \ReflectionClass Reflection instance for a \Setka\Editor\Plugin class.
 	 */
@@ -15,7 +16,8 @@ class PluginTest extends \WP_UnitTestCase {
 	 */
 	protected $pluginRootPath;
 
-	public function setUp() {
+	public function setUp()
+    {
 		parent::setUp();
 
 		$this->pluginReflection = new \ReflectionClass('Korobochkin\BBPressPermalinksWithID\Plugin');

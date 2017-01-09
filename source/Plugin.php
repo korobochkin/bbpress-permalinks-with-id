@@ -6,10 +6,9 @@ namespace Korobochkin\BBPressPermalinksWithID;
  */
 class Plugin
 {
+    const NAME = 'bbpress-permalinks-with-id';
 
-    const NAME    = 'bbpress-permalinks-with-id';
-
-    const _NAME_  = 'bbpress_permalinks_with_id';
+    const _NAME_ = 'bbpress_permalinks_with_id';
 
     const VERSION = '2.0.0-alpha';
 

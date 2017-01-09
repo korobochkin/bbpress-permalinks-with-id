@@ -28,13 +28,15 @@ before_script:
       composer global require "phpunit/phpunit=4.8.*"
     fi
   - |
-    composer global require wp-coding-standards/wpcs
-    phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
+#    composer global require wp-coding-standards/wpcs
+#    phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
+    phpcs --config-set installed_paths vendor/escapestudios/symfony2-coding-standard
 
 install:
   - composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader --classmap-authoritative
 
 
 script:
-  - vendor/bin/phpcs --standard=phpcs.ruleset.xml $(find . -name '*.php')
+  #- vendor/bin/phpcs source/ --standard=phpcs.ruleset.xml $(find . -name '*.php')
+  - vendor/bin/phpcs source/ --standard=phpcs.ruleset.xml
   - phpunit

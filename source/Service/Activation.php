@@ -28,11 +28,11 @@ class Activation
             $structure = get_option('permalink_structure');
             if ($structure) {
                 // Run (add rewrite rules) only if WordPress permalink settings not default (site.com/?p=123)
-                // bbp_permalinks_rewrites_init();
+                // bbp_permalinks_rewrites_init();.
                 flush_rewrite_rules(false);
             }
         }
     }
     // This stuff not working (Currently in progress)
-    //register_activation_hook( __FILE__, 'bbp_permalinks_activate' );
+    // register_activation_hook( __FILE__, 'bbp_permalinks_activate' );.
 }
