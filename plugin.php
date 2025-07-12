@@ -194,4 +194,3 @@ function bbp_permalinks_deactivate() {
 }
 // This stuff not working (Currently in progress)
 // register_deactivation_hook( __FILE__, 'bbp_permalinks_deactivate' );
-?>
