@@ -101,7 +101,9 @@ function bbp_permalinks_rewrites_init() {
 	$edit_id = bbp_get_edit_rewrite_id(); // for edit links
 
 
-	/* From bbpress/bbpress.php (816 line)
+	/**
+	 * From bbpress/bbpress.php
+     * @see \bbPress::add_rewrite_rules
 	 * Edit Forum|Topic|Reply|Topic-tag
 	 * forums/forum/ID/edit/
 	 */
