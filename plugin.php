@@ -13,7 +13,7 @@
  * License: GPLv2 or later
  */
 
-/*
+/**
  * Add plugin actions and filters at bbp_init action which triggered only if bbPress activated.
  *
  * @since 1.0.0
@@ -33,7 +33,7 @@ function bbp_permalinks_init() {
 }
 add_action( 'bbp_init', 'bbp_permalinks_init' );
 
-/*
+/**
  * Generate pretty permalinks for forums and topics.
  *
  * @since 1.0.0
@@ -56,7 +56,7 @@ function bbp_permalinks_post_type_link_pretty( $link, $post = 0 ) {
 	return $link;
 }
 
-/*
+/**
  * Generate default permalinks for forums and topics.
  *
  * @since 1.0.0
@@ -75,7 +75,7 @@ function bbp_permalinks_post_type_link_not_pretty( $link, $post = 0 ) {
 	return $link;
 }
 
-/*
+/**
  * Generate rewrite rules for forums and topics based on bbPress settings.
  *
  * @since 1.0.0
@@ -103,7 +103,7 @@ function bbp_permalinks_rewrites_init() {
 
 	/**
 	 * From bbpress/bbpress.php
-     * @see \bbPress::add_rewrite_rules
+	 * @see \bbPress::add_rewrite_rules
 	 * Edit Forum|Topic|Reply|Topic-tag
 	 * forums/forum/ID/edit/
 	 */
@@ -126,7 +126,8 @@ function bbp_permalinks_rewrites_init() {
 	);
 
 
-	/* Forums
+	/**
+	 * Forums
 	 * /forums/forum/ID/page/2
 	 */
 	add_rewrite_rule(
@@ -142,7 +143,8 @@ function bbp_permalinks_rewrites_init() {
 	);
 
 
-	/* Topics
+	/**
+	 * Topics
 	 * /forums/topic/ID/page/2/
 	 */
 	add_rewrite_rule(
