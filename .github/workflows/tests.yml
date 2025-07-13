@@ -11,6 +11,8 @@ concurrency:
   group: '${{ github.ref }}'
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   php-syntax-check:
     name: 'PHP ${{ matrix.php-versions }} Syntax Check'
@@ -22,6 +24,8 @@ jobs:
           - '8.2'
           - '8.3'
           - '8.4'
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

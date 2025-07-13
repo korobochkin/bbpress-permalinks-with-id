@@ -6,6 +6,8 @@ concurrency:
   group: 'ci-debug'
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   ci-debug:
     name: 'Debug environment variables'
