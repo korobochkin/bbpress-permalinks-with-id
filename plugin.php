@@ -13,7 +13,7 @@
  * License: GPLv2 or later
  */
 
-/*
+/**
  * Add plugin actions and filters at bbp_init action which triggered only if bbPress activated.
  *
  * @since 1.0.0
@@ -33,7 +33,7 @@ function bbp_permalinks_init() {
 }
 add_action( 'bbp_init', 'bbp_permalinks_init' );
 
-/*
+/**
  * Generate pretty permalinks for forums and topics.
  *
  * @since 1.0.0
@@ -56,7 +56,7 @@ function bbp_permalinks_post_type_link_pretty( $link, $post = 0 ) {
 	return $link;
 }
 
-/*
+/**
  * Generate default permalinks for forums and topics.
  *
  * @since 1.0.0
@@ -75,7 +75,7 @@ function bbp_permalinks_post_type_link_not_pretty( $link, $post = 0 ) {
 	return $link;
 }
 
-/*
+/**
  * Generate rewrite rules for forums and topics based on bbPress settings.
  *
  * @since 1.0.0
@@ -101,7 +101,9 @@ function bbp_permalinks_rewrites_init() {
 	$edit_id = bbp_get_edit_rewrite_id(); // for edit links
 
 
-	/* From bbpress/bbpress.php (816 line)
+	/**
+	 * From bbpress/bbpress.php
+	 * @see \bbPress::add_rewrite_rules
 	 * Edit Forum|Topic|Reply|Topic-tag
 	 * forums/forum/ID/edit/
 	 */
@@ -124,7 +126,8 @@ function bbp_permalinks_rewrites_init() {
 	);
 
 
-	/* Forums
+	/**
+	 * Forums
 	 * /forums/forum/ID/page/2
 	 */
 	add_rewrite_rule(
@@ -140,7 +143,8 @@ function bbp_permalinks_rewrites_init() {
 	);
 
 
-	/* Topics
+	/**
+	 * Topics
 	 * /forums/topic/ID/page/2/
 	 */
 	add_rewrite_rule(
@@ -155,43 +159,3 @@ function bbp_permalinks_rewrites_init() {
 		$priority
 	);
 }
-
-/*
- * Activation callback. Check if bbPress activated. Check permalink structure settings in WordPress.
- * If both of conditions comes to true then add new rewrite rules and flush it.
- *
- * @since 1.0.0
- */
-function bbp_permalinks_activate() {
-	/* 
-	 * We need add new rewrite rules first and only after this call flush_rewrite_rules
-	 * In other ways flush_rewrite_rules doesn't work.
-	 */
-	if( function_exists( 'bbpress' ) ) {
-		/*
-		 * Check if bbPress plugin activated
-		 * bbp_permalinks_rewrites_init use bbPress links and if bbPress not activated we call undefined functions
-		 * and got a fatal error.
-		 */
-		$structure = get_option( 'permalink_structure' );
-		if( $structure ) {
-			// Run (add rewrite rules) only if WordPress permalink settings not default (site.com/?p=123)
-			bbp_permalinks_rewrites_init();
-			flush_rewrite_rules( false );
-		}
-	}
-}
-// This stuff not working (Currently in progress)
-//register_activation_hook( __FILE__, 'bbp_permalinks_activate' );
-
-/*
- * Deactivation callback. Flush rewrite rules.
- *
- * @since 1.0.0
- */
-function bbp_permalinks_deactivate() {
-	flush_rewrite_rules( false );
-}
-// This stuff not working (Currently in progress)
-// register_deactivation_hook( __FILE__, 'bbp_permalinks_deactivate' );
-?>
