@@ -1,0 +1,42 @@
+name: Code Testing
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'develop'
+      - 'feature/**'
+
+concurrency:
+  group: '${{ github.ref }}'
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  php-syntax-check:
+    name: 'PHP ${{ matrix.php-versions }} Syntax Check'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions:
+          - '8.1'
+          - '8.2'
+          - '8.3'
+          - '8.4'
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          extensions: none
+          tools: none
+          ini-file: development
+          php-version: ${{ matrix.php-versions }}
+
+      - name: Run PHP Syntax Check
+        run: 'find . -type f -name "*.php" -print0 | xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check'

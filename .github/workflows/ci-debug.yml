@@ -1,0 +1,20 @@
+name: CI Debug
+
+on: workflow_dispatch
+
+concurrency:
+  group: 'ci-debug'
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  ci-debug:
+    name: 'Debug environment variables'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug GITHUB_ Variables
+        run: env | grep GITHUB_
+
+      - name: Dump github Variable
+        run: echo '${{ toJson(github) }}'
