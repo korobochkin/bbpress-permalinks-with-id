@@ -22,3 +22,28 @@ jobs:
 
       - name: Dump github Variable
         run: echo '${{ toJson(github) }}'
+
+  php-syntax-check:
+    name: 'PHP ${{ matrix.php-versions }} Syntax Check'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions:
+          - '8.1'
+          - '8.2'
+          - '8.3'
+          - '8.4'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          extensions: none
+          tools: none
+          ini-file: development
+          php-version: ${{ matrix.php-versions }}
+
+      - name: Run PHP Syntax Check
+        run: 'find . -name "*.php" -exec php --syntax-check {} \;'
