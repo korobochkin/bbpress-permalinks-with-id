@@ -40,3 +40,26 @@ jobs:
 
       - name: Run PHP Syntax Check
         run: 'find . -type f -name "*.php" -print0 | xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check'
+
+  phpcs:
+    name: 'PHP Coding Standards and Compatibility'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          ini-file: development
+          extensions: filter, libxml, tokenizer, xmlreader, iconv, mbstring
+          tools: composer
+
+      - name: Composer Install
+        run: 'cd .github/phpcs && composer install --no-progress --classmap-authoritative'
+
+      - name: Run PHP Coding Standards and Compatibility
+        run: '.github/phpcs/vendor/bin/phpcs --standard=.github/phpcs/phpcs.xml'
