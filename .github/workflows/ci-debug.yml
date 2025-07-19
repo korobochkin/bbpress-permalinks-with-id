@@ -18,3 +18,6 @@ jobs:
 
       - name: Dump github Variable
         run: echo '${{ toJson(github) }}'
+
+      - name: Dump runner Variable
+        run: echo '${{ toJson(runner) }}'
