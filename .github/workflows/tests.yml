@@ -58,6 +58,20 @@ jobs:
           extensions: filter, libxml, tokenizer, xmlreader, iconv, mbstring
           tools: composer
 
+      - name: Detect Composer Cache Directory
+        id: composer-cache
+        run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
+
+      - name: Composer Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.composer-cache.outputs.cache-files-dir }}
+            .github/phpcs/vendor
+          key: ${{ runner.os }}-composer-phpcs-${{ hashFiles('.github/phpcs/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-phpcs-
+
       - name: Composer Install
         run: 'cd .github/phpcs && composer install --no-progress --classmap-authoritative'
 
