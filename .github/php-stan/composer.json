@@ -6,6 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require-dev": {
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "php-stubs/generator": "^0.8.5"
     }
 }
