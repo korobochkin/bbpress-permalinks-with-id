@@ -1,0 +1,20 @@
+includes:
+	- vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+	level: 10
+	stubFiles:
+		- './.cache/stubs/wordpress.stub'
+		- './.cache/stubs/bbpress.stub'
+	scanDirectories:
+		- './.cache/wordpress'
+		- './.cache/bbpress'
+	paths:
+		- './../../plugin.php'
+	fileExtensions:
+		- php
+	phpVersion:
+		min: 70100
+		max: 80499
+	errorFormat: github
+	tipsOfTheDay: false
