@@ -84,8 +84,21 @@ jobs:
     strategy:
       matrix:
         config:
+          # Lowest supported versions of WordPress and bbPress
           - wordpress: 4.1-branch
             bbpress: 2.5
+
+          # Latest WordPress 5.*
+          - wordpress: 5.9-branch
+            bbpress: 2.5
+
+          # WordPress 6.0.*
+          - wordpress: 6.0-branch
+            bbpress: 2.6
+
+          # Latest versions of WordPress and bbPress
+          - wordpress: 6.8-branch
+            bbpress: 2.6
     permissions:
       contents: read
     steps:
