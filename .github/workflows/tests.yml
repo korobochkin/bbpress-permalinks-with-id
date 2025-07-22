@@ -137,9 +137,9 @@ jobs:
         with:
           path: |
             .github/php-stan/.cache
-          key: ${{ runner.os }}-php-stan-stubs-${{ matrix.config.wordpress }}--${{ matrix.config.bbpress }}
+          key: php-stan-stubs-${{ matrix.config.wordpress }}--${{ matrix.config.bbpress }}
           restore-keys: |
-            ${{ runner.os }}-php-stan-stubs-
+            php-stan-stubs-
 
       - name: Checkout WordPress
         uses: actions/checkout@v4
