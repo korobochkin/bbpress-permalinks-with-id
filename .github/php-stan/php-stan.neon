@@ -13,6 +13,7 @@ parameters:
 		- './../../plugin.php'
 	fileExtensions:
 		- php
+	tmpDir: './.cache/analyze-tmp'
 	phpVersion:
 		min: 70100
 		max: 80499
