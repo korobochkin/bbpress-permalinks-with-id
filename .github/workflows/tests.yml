@@ -77,3 +77,98 @@ jobs:
 
       - name: Run PHP Coding Standards and Compatibility
         run: '.github/phpcs/vendor/bin/phpcs --standard=.github/phpcs/phpcs.xml'
+
+  php-stan:
+    name: 'PHP Stan. WordPress ${{ matrix.config.wordpress }}. bbPress ${{ matrix.config.bbpress }}'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          # Lowest supported versions of WordPress and bbPress
+          - wordpress: 4.1-branch
+            bbpress: 2.5
+
+          # Latest WordPress 5.*
+          - wordpress: 5.9-branch
+            bbpress: 2.5
+
+          # WordPress 6.0.*
+          - wordpress: 6.0-branch
+            bbpress: 2.6
+
+          # Latest versions of WordPress and bbPress
+          - wordpress: 6.8-branch
+            bbpress: 2.6
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          ini-file: development
+          extensions: ''
+          tools: composer
+
+      - name: Detect Composer Cache Directory
+        id: composer-cache
+        run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
+
+      - name: Composer Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.composer-cache.outputs.cache-files-dir }}
+            .github/php-stan/vendor
+          key: ${{ runner.os }}-composer-php-stan-${{ hashFiles('.github/php-stan/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-php-stan-
+
+      - name: Composer Install
+        working-directory: .github/php-stan
+        run: 'composer install --no-progress --classmap-authoritative'
+
+      - name: Cache PHP Stan Stubs
+        id: 'cache-php-stan-stubs'
+        uses: actions/cache@v4
+        with:
+          path: |
+            .github/php-stan/.cache
+          key: php-stan-stubs-${{ matrix.config.wordpress }}--${{ matrix.config.bbpress }}
+          restore-keys: |
+            php-stan-stubs-
+
+      - name: Checkout WordPress
+        uses: actions/checkout@v4
+        if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
+        with:
+          repository: WordPress/WordPress
+          ref: ${{ matrix.config.wordpress }}
+          path: .github/php-stan/.cache/wordpress
+          show-progress: false
+
+      - name: Checkout bbPress
+        uses: actions/checkout@v4
+        if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
+        with:
+          repository: bbpress/bbPress
+          ref: ${{ matrix.config.bbpress }}
+          path: .github/php-stan/.cache/bbpress
+          show-progress: false
+
+      - name: Generate PHP Stan Stubs. WordPress ${{ matrix.config.wordpress }}
+        if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
+        working-directory: .github/php-stan
+        run: 'vendor/bin/generate-stubs --no-interaction ./.cache/wordpress --out=./.cache/stubs/wordpress.stub'
+
+      - name: Generate PHP Stan Stubs. bbPress ${{ matrix.config.bbpress }}
+        if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
+        working-directory: .github/php-stan
+        run: 'vendor/bin/generate-stubs --no-interaction ./.cache/bbpress --out=./.cache/stubs/bbpress.stub'
+
+      - name: Run PHP Stan
+        run: '.github/php-stan/vendor/bin/phpstan analyse --no-interaction --no-progress --configuration=.github/php-stan/php-stan.neon'
+        continue-on-error: true # TODO: remove this parameter after fixing the code
