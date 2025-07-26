@@ -14,6 +14,7 @@
 >
     <extraFiles>
         <directory name=".github/psalm/.cache/bbpress" />
+        <directory name=".github/psalm/.cache/wordpress" />
     </extraFiles>
     <projectFiles>
         <file name="plugin.php" />
@@ -23,7 +24,7 @@
     </projectFiles>
     <plugins>
         <pluginClass class="PsalmWordPress\Plugin">
-            <!--<useDefaultStubs value="false" />-->
+            <useDefaultStubs value="false" />
         </pluginClass>
     </plugins>
 </psalm>
