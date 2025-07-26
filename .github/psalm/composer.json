@@ -5,5 +5,8 @@
     "license": "GPL-2.0-or-later",
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "require": {}
+    "require-dev": {
+        "vimeo/psalm": "^6.13",
+        "humanmade/psalm-plugin-wordpress": "^3.1"
+    }
 }
