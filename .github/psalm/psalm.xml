@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="1"
+    resolveFromConfigFile="false"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+    allFunctionsGlobal="true"
+    allowStringToStandInForClass="false"
+    checkForThrowsDocblock="true"
+    ensureArrayStringOffsetsExist="true"
+>
+    <extraFiles>
+        <directory name=".github/psalm/.cache/bbpress" />
+    </extraFiles>
+    <projectFiles>
+        <file name="plugin.php" />
+        <ignoreFiles>
+            <directory name=".github/psalm/vendor" />
+        </ignoreFiles>
+    </projectFiles>
+    <plugins>
+        <pluginClass class="PsalmWordPress\Plugin">
+            <!--<useDefaultStubs value="false" />-->
+        </pluginClass>
+    </plugins>
+</psalm>
