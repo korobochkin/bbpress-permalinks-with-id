@@ -1,11 +1,11 @@
 {
     "name": "korobochkin/bbpress-permalinks-with-id--hooks-generator",
-    "description": "",
     "type": "project",
     "license": "GPL-2.0-or-later",
     "minimum-stability": "stable",
     "require-dev": {
-        "wp-hooks/generator": "^0.9.0"
+        "wp-hooks/generator": "^0.9.0",
+        "php": "^7.0"
     },
     "config": {
         "allow-plugins": {
