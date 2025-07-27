@@ -11,6 +11,7 @@
     allowStringToStandInForClass="false"
     checkForThrowsDocblock="true"
     ensureArrayStringOffsetsExist="true"
+    cacheDirectory=".github/psalm/.cache/psalm"
 >
     <extraFiles>
         <directory name=".github/psalm/.cache/bbpress" />
