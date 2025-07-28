@@ -1,0 +1,82 @@
+name: Hooks Generator (for Psalm)
+
+on:
+  workflow_call:
+    inputs:
+      wordpress:
+        description: 'Branch or tag for checkout WordPress'
+        required: true
+        type: string
+      bbpress:
+        description: 'Branch or tag for checkout bbPress'
+        required: true
+        type: string
+
+jobs:
+  hooks-generator:
+    name: 'Hooks Generator. WordPress ${{ inputs.wordpress }}. bbPress ${{ inputs.bbpress }}'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.0
+          ini-file: development
+          extensions: ''
+          tools: composer
+
+      - name: Detect Composer Cache Directory
+        id: composer-cache
+        run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
+
+      - name: Composer Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.composer-cache.outputs.cache-files-dir }}
+            .github/hooks-generator/vendor
+          key: ${{ runner.os }}-hooks-generator-composer-${{ hashFiles('.github/hooks-generator/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-hooks-generator-composer-
+
+      - name: Composer Install
+        working-directory: .github/hooks-generator
+        run: 'composer install --no-progress --classmap-authoritative'
+
+      - name: Checkout WordPress
+        uses: actions/checkout@v4
+        with:
+          repository: WordPress/WordPress
+          ref: ${{ inputs.wordpress }}
+          path: .github/hooks-generator/.cache/wordpress
+          show-progress: false
+
+      - name: Checkout bbPress
+        uses: actions/checkout@v4
+        with:
+          repository: bbpress/bbPress
+          ref: ${{ inputs.bbpress }}
+          path: .github/hooks-generator/.cache/bbpress
+          show-progress: false
+
+      - name: Generate WordPress hooks
+        working-directory: .github/hooks-generator
+        run: vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/wordpress-hooks
+
+      - name: Generate bbPress hooks
+        working-directory: .github/hooks-generator
+        run: vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/bbpress-hooks
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        working-directory: .github/hooks-generator
+        with:
+          name: 'hooks-generator-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}'
+          path: |
+            .cache/wordpress-hooks
+            .cache/bbpress-hooks

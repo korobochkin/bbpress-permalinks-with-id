@@ -175,3 +175,46 @@ jobs:
       - name: Run PHP Stan
         run: '.github/php-stan/vendor/bin/phpstan analyse --no-interaction --no-progress --configuration=.github/php-stan/php-stan.neon'
         continue-on-error: true # TODO: remove this parameter after fixing the code
+
+  psalm-pre:
+    name: Prepare Psalm
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          # Lowest supported versions of WordPress and bbPress
+          - wordpress: 4.1-branch
+            bbpress: 2.5
+
+          # Latest WordPress 5.*
+          - wordpress: 5.9-branch
+            bbpress: 2.5
+
+          # WordPress 6.0.*
+          - wordpress: 6.0-branch
+            bbpress: 2.6
+
+          # Latest versions of WordPress and bbPress
+          - wordpress: 6.8-branch
+            bbpress: 2.6
+    permissions:
+      contents: read
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        id: download-artifact
+        with:
+          name: 'hooks-generator-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}'
+          path: .github/hooks-generator/.cache
+        continue-on-error: true
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        if: steps.download-artifact.outcome != 'success'
+
+      - name: Build artifact
+        uses: './.github/actions/hooks-generator'
+        if: steps.download-artifact.outcome != 'success'
+        with:
+          wordpress: '${{ matrix.config.wordpress }}'
+          bbpress: '${{ matrix.config.bbpress }}'
