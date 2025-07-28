@@ -200,21 +200,122 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        id: download-artifact
+      - name: Hooks cache
+        id: hooks-cache
+        uses: actions/cache@v4
         with:
-          name: 'hooks-generator-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}'
-          path: .github/hooks-generator/.cache
-        continue-on-error: true
+          path: |
+            .github/hooks-generator/.cache/wordpress-hooks
+            .github/hooks-generator/.cache/bbpress-hooks
+          key: 'hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}'
+          restore-keys: |
+            hooks-generator-hooks-
 
       - name: Checkout code
         uses: actions/checkout@v4
-        if: steps.download-artifact.outcome != 'success'
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
 
-      - name: Build artifact
+      - name: Run Hooks Generator
         uses: './.github/actions/hooks-generator'
-        if: steps.download-artifact.outcome != 'success'
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
         with:
           wordpress: '${{ matrix.config.wordpress }}'
           bbpress: '${{ matrix.config.bbpress }}'
+
+  psalm:
+    needs: psalm-pre
+    name: Psalm
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config:
+          # Lowest supported versions of WordPress and bbPress
+          - wordpress: 4.1-branch
+            bbpress: 2.5
+
+          # Latest WordPress 5.*
+          - wordpress: 5.9-branch
+            bbpress: 2.5
+
+          # WordPress 6.0.*
+          - wordpress: 6.0-branch
+            bbpress: 2.6
+
+          # Latest versions of WordPress and bbPress
+          - wordpress: 6.8-branch
+            bbpress: 2.6
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          ini-file: development
+          extensions: ''
+          tools: composer
+
+      - name: Detect Composer Cache Directory
+        id: composer-cache
+        shell: bash
+        run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
+
+      - name: Composer Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.composer-cache.outputs.cache-files-dir }}
+            .github/psalm/vendor
+          key: ${{ runner.os }}-psalm-composer-${{ hashFiles('.github/psalm/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-psalm-composer-
+
+      - name: Composer Install
+        working-directory: .github/psalm
+        run: 'composer install --no-progress --classmap-authoritative'
+
+      - name: Hooks Cache
+        id: hooks-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .github/hooks-generator/.cache/wordpress-hooks
+            .github/hooks-generator/.cache/bbpress-hooks
+          key: 'hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}'
+          restore-keys: |
+            hooks-generator-hooks-
+
+      - name: Dependencies cache
+        id: dependencies-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .github/hooks-generator/.cache/wordpress
+            .github/hooks-generator/.cache/bbpress
+          key: 'hooks-generator-dependencies-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}'
+          restore-keys: |
+            hooks-generator-dependencies-
+
+      - name: Checkout WordPress
+        if: steps.dependencies-cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: WordPress/WordPress
+          ref: ${{ matrix.config.wordpress }}
+          path: .github/hooks-generator/.cache/wordpress
+          show-progress: false
+
+      - name: Checkout bbPress
+        if: steps.dependencies-cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: bbpress/bbPress
+          ref: ${{ matrix.config.bbpress }}
+          path: .github/hooks-generator/.cache/bbpress
+          show-progress: false
+
+      - name: Psalm
+        run: .github/psalm/vendor/bin/psalm --no-cache --config=".github/psalm/psalm.xml"

@@ -14,8 +14,8 @@
     cacheDirectory=".github/psalm/.cache/psalm"
 >
     <extraFiles>
-        <directory name=".github/psalm/.cache/bbpress" />
-        <directory name=".github/psalm/.cache/wordpress" />
+        <directory name=".github/hooks-generator/.cache/bbpress" />
+        <directory name=".github/hooks-generator/.cache/wordpress" />
     </extraFiles>
     <projectFiles>
         <file name="plugin.php" />
@@ -26,6 +26,11 @@
     <plugins>
         <pluginClass class="PsalmWordPress\Plugin">
             <useDefaultStubs value="false" />
+            <useDefaultHooks value="false" />
+            <hooks>
+                <file name=".github/hooks-generator/.cache/bbpress-hooks/actions.json" />
+                <file name=".github/hooks-generator/.cache/wordpress-hooks/actions.json" />
+            </hooks>
         </pluginClass>
     </plugins>
 </psalm>
