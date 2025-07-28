@@ -11,9 +11,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
     - name: Set up the PHP
       uses: shivammathur/setup-php@v2
       with:
