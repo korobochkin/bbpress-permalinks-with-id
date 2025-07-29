@@ -46,7 +46,7 @@ runs:
         path: |
           .github/hooks-generator/.cache/wordpress
           .github/hooks-generator/.cache/bbpress
-        key: 'hooks-generator-dependencies-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}'
+        key: 'hooks-generator-dependencies-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}'
         restore-keys: |
           hooks-generator-dependencies-
 
@@ -69,13 +69,22 @@ runs:
         show-progress: false
 
     - name: Generate WordPress hooks
-      if: steps.dependencies-cache.outputs.cache-hit != 'true'
       working-directory: .github/hooks-generator
       shell: bash
       run: vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/wordpress-hooks
 
     - name: Generate bbPress hooks
-      if: steps.dependencies-cache.outputs.cache-hit != 'true'
       working-directory: .github/hooks-generator
       shell: bash
       run: vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/bbpress-hooks
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'hooks-generator-hooks-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}'
+        path: |
+          .github/hooks-generator/.cache/wordpress-hooks
+          .github/hooks-generator/.cache/bbpress-hooks
+        if-no-files-found: error
+        retention-days: 15
+        overwrite: false
