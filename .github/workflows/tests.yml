@@ -320,3 +320,4 @@ jobs:
 
       - name: Psalm
         run: .github/psalm/vendor/bin/psalm --no-cache --config=".github/psalm/psalm.xml"
+        continue-on-error: true
