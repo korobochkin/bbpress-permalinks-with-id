@@ -29,7 +29,9 @@
             <useDefaultHooks value="false" />
             <hooks>
                 <file name=".github/hooks-generator/.cache/bbpress-hooks/actions.json" />
+                <file name=".github/hooks-generator/.cache/bbpress-hooks/filters.json" />
                 <file name=".github/hooks-generator/.cache/wordpress-hooks/actions.json" />
+                <file name=".github/hooks-generator/.cache/wordpress-hooks/filters.json" />
             </hooks>
         </pluginClass>
     </plugins>
