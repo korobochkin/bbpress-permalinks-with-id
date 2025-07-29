@@ -71,7 +71,7 @@ runs:
     - name: Generate WordPress hooks
       working-directory: .github/hooks-generator
       shell: bash
-      run: vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/wordpress-hooks
+      run: vendor/bin/wp-hooks-generator --input=.cache/wordpress --output=.cache/wordpress-hooks
 
     - name: Generate bbPress hooks
       working-directory: .github/hooks-generator
