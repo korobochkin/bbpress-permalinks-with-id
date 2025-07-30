@@ -16,6 +16,10 @@
     <extraFiles>
         <directory name=".github/hooks-generator/.cache/bbpress" />
         <directory name=".github/hooks-generator/.cache/wordpress" />
+        <ignoreFiles>
+            <file name=".github/hooks-generator/.cache/wordpress/wp-admin/load-scripts.php" />
+            <file name=".github/hooks-generator/.cache/wordpress/wp-admin/load-styles.php" />
+        </ignoreFiles>
     </extraFiles>
     <projectFiles>
         <file name="plugin.php" />
