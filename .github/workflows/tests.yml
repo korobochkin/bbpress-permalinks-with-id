@@ -20,6 +20,9 @@ jobs:
     strategy:
       matrix:
         php-versions:
+          - '5.6'
+          - '7.4'
+          - '8.0'
           - '8.1'
           - '8.2'
           - '8.3'
@@ -39,7 +42,7 @@ jobs:
           php-version: ${{ matrix.php-versions }}
 
       - name: Run PHP Syntax Check
-        run: 'find . -type f -name "*.php" -print0 | xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check'
+        run: 'find . -type f -name "*.php" -not -path "./.github/*" -print0 | xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check'
 
   phpcs:
     name: 'PHP Coding Standards and Compatibility'
