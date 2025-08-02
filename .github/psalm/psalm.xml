@@ -19,6 +19,7 @@
         <ignoreFiles allowMissingFiles="true">
             <file name=".github/hooks-generator/.cache/wordpress/wp-admin/load-scripts.php" />
             <file name=".github/hooks-generator/.cache/wordpress/wp-admin/load-styles.php" />
+            <file name=".github/hooks-generator/.cache/wordpress/wp-admin/includes/noop.php" />
             <directory name=".github/hooks-generator/.cache/bbpress/tests" />
         </ignoreFiles>
     </extraFiles>
