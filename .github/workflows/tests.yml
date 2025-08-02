@@ -318,6 +318,13 @@ jobs:
           path: .github/hooks-generator/.cache/bbpress
           show-progress: false
 
+      - name: Psalm Cache
+        uses: actions/cache@v4
+        with:
+          path: .github/psalm/.cache/psalm
+          key: psalm-cache-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
+          restore-keys: psalm-cache-
+
       - name: Psalm
-        run: .github/psalm/vendor/bin/psalm --no-cache --config=".github/psalm/psalm.xml"
+        run: .github/psalm/vendor/bin/psalm --config=".github/psalm/psalm.xml"
         continue-on-error: true
