@@ -295,24 +295,7 @@ jobs:
             .github/hooks-generator/.cache/bbpress
           key: hooks-generator-dependencies-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
           restore-keys: hooks-generator-dependencies-
-
-      - name: Checkout WordPress
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v4
-        with:
-          repository: WordPress/WordPress
-          ref: ${{ matrix.config.wordpress }}
-          path: .github/hooks-generator/.cache/wordpress
-          show-progress: false
-
-      - name: Checkout bbPress
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
-        uses: actions/checkout@v4
-        with:
-          repository: bbpress/bbPress
-          ref: ${{ matrix.config.bbpress }}
-          path: .github/hooks-generator/.cache/bbpress
-          show-progress: false
+          fail-on-cache-miss: true
 
       - name: Psalm Cache
         uses: actions/cache@v4
