@@ -31,8 +31,7 @@ runs:
           ${{ steps.composer-cache.outputs.cache-files-dir }}
           .github/hooks-generator/vendor
         key: ${{ runner.os }}-hooks-generator-composer-${{ hashFiles('.github/hooks-generator/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-hooks-generator-composer-
+        restore-keys: ${{ runner.os }}-hooks-generator-composer-
 
     - name: Composer Install
       shell: bash
@@ -46,9 +45,8 @@ runs:
         path: |
           .github/hooks-generator/.cache/wordpress
           .github/hooks-generator/.cache/bbpress
-        key: 'hooks-generator-dependencies-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}'
-        restore-keys: |
-          hooks-generator-dependencies-
+        key: hooks-generator-dependencies-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}
+        restore-keys: hooks-generator-dependencies-
 
     - name: Checkout WordPress
       if: steps.dependencies-cache.outputs.cache-hit != 'true'
@@ -81,7 +79,7 @@ runs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: 'hooks-generator-hooks-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}'
+        name: hooks-generator-hooks-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}
         path: |
           .github/hooks-generator/.cache/wordpress-hooks
           .github/hooks-generator/.cache/bbpress-hooks

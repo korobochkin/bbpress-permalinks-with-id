@@ -207,20 +207,19 @@ jobs:
           path: |
             .github/hooks-generator/.cache/wordpress-hooks
             .github/hooks-generator/.cache/bbpress-hooks
-          key: 'hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}'
-          restore-keys: |
-            hooks-generator-hooks-
+          key: hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
+          restore-keys: hooks-generator-hooks-
 
       - name: Checkout code
         uses: actions/checkout@v4
         if: steps.hooks-cache.outputs.cache-hit != 'true'
 
       - name: Run Hooks Generator
-        uses: './.github/actions/hooks-generator'
+        uses: ./.github/actions/hooks-generator
         if: steps.hooks-cache.outputs.cache-hit != 'true'
         with:
-          wordpress: '${{ matrix.config.wordpress }}'
-          bbpress: '${{ matrix.config.bbpress }}'
+          wordpress: ${{ matrix.config.wordpress }}
+          bbpress: ${{ matrix.config.bbpress }}
 
   psalm:
     needs: psalm-pre
@@ -270,8 +269,7 @@ jobs:
             ${{ steps.composer-cache.outputs.cache-files-dir }}
             .github/psalm/vendor
           key: ${{ runner.os }}-psalm-composer-${{ hashFiles('.github/psalm/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-psalm-composer-
+          restore-keys: ${{ runner.os }}-psalm-composer-
 
       - name: Composer Install
         working-directory: .github/psalm
@@ -284,9 +282,8 @@ jobs:
           path: |
             .github/hooks-generator/.cache/wordpress-hooks
             .github/hooks-generator/.cache/bbpress-hooks
-          key: 'hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}'
-          restore-keys: |
-            hooks-generator-hooks-
+          key: hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
+          restore-keys: hooks-generator-hooks-
           fail-on-cache-miss: true
 
       - name: Dependencies cache
@@ -296,9 +293,8 @@ jobs:
           path: |
             .github/hooks-generator/.cache/wordpress
             .github/hooks-generator/.cache/bbpress
-          key: 'hooks-generator-dependencies-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}'
-          restore-keys: |
-            hooks-generator-dependencies-
+          key: hooks-generator-dependencies-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
+          restore-keys: hooks-generator-dependencies-
 
       - name: Checkout WordPress
         if: steps.dependencies-cache.outputs.cache-hit != 'true'
