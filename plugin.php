@@ -1,16 +1,19 @@
 <?php
 /**
  * Plugin Name: bbPress Permalinks with ID
- * Plugin URI: https://wordpress.org/plugins/bbpress-permalinks-with-id/
- * Description: ID instead of slug in bbPress topic and forum links.
- * Author: Kolya Korobochkin
- * Author URI: http://korobochkin.com/
+ * Plugin URI: https://github.com/korobochkin/bbpress-permalinks-with-id
+ * Description: Transforms default bbPress permalinks (URLs) that use slugs into permalinks that use numeric IDs.
+ * Author: Nicolas Korobochkin
+ * Author URI: https://korobochkin.wordpress.com/
  * Version: 1.0.5
  * Text Domain: bbpress-permalinks-with-id
  * Domain Path: /languages/
  * Requires at least: 4.1.1
  * Tested up to: 4.5.0
+ * Requires PHP: 5.6
+ * Requires Plugins: bbpress
  * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 /**

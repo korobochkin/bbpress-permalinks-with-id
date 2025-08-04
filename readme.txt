@@ -1,53 +1,39 @@
 === bbPress Permalinks with ID ===
 Contributors: korobochkin
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=me%40korobochkin%2ecom&item_name=bbPress%20Permalinks%20with%20ID&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted
 Tags: bbpress, permalinks, links, url, rewrite rule, id, forums, topics, slugs, characters
 Requires at least: 4.1.1
 Tested up to: 4.5.0
 Stable tag: 1.0.5
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-ID instead of slug in bbPress topic and forum links.
+Transforms default bbPress permalinks (URLs) that use slugs into permalinks that use numeric IDs.
 
 == Description ==
 
-**Attention!**
+This plugin transforms default bbPress permalinks (URLs) that use slugs into permalinks that use numeric IDs.
 
-You need **manually flush rewrite rules** after activating bbPress and this plugin. You can do it by visiting `/wp-admin/options-permalink.php` page. Or use wp cli (`wp rewrite flush` command).
-
-By default bbPress URLs contains slugs. It's not good if your slugs (titles) contains something that not present in english alphabet. Sometimes links doesn't open or you can't send the link to your friend because URL contains this mystery symbols like cyrillic or chinese letters. Search engines also not love this types of URLs.
-
-The bad URL examples:
-
-* `korobochkin.com/forums/forum/привет-заголовок`
-* `korobochkin.com/forums/topic/название-топика-с-кириллицей`
-
-This plugin automatically adds custom rewrite rules to WordPress and your links rocks.
-
-The good URL examples (after plugin activation):
-
-* `korobochkin.com/forums/forum/123/`
-* `korobochkin.com/forums/topic/456/`
-
-The plugin works with any configuration of permalinks.
-
-* `korobochkin.com/forums/forum/123/`
-* `korobochkin.com/?post_type=forum&p=123`
-
-The plugin featured and starred on Github by Stephen Edgar — bbPress core developer. [Discussion about this plugin](https://bbpress.org/forums/topic/topic-id-instead-of-slugs/) at bbPress official support forum.
-
-[Plugin on Github](https://github.com/korobochkin/bbpress-permalinks-with-id)
-
-Photo on banner created by [Jay Mantri](https://stocksnap.io/photo/BD7R33PKME).
+Please star the [GitHub repository](https://github.com/korobochkin/bbpress-permalinks-with-id/) to support continued development of this project.
 
 == Installation ==
 
-1. Install bbPress Permalinks with ID either via the WordPress.org plugin directory, or by uploading the files to your server.
-2. Activate bbPress and after it activate bbPress Permalinks with ID.
-3. Flush rewrite rules. You can do it by visiting `/wp-admin/options-permalink.php` page. Or use wp cli (`wp rewrite flush` command).
+### How to install the plugin? ###
 
-P. S. I'm currently working on automatically flushing rules on activation and deactivation.
+1. Download the plugin via the WordPress admin interface or execute `wp plugin install bbpress-permalinks-with-id`.
+2. Activate bbPress and this plugin via the WordPress admin interface or execute `wp plugin activate bbpress-permalinks-with-id`.
+3. Flush rewrite rules using one of the following methods:
+   - Visit the `/wp-admin/options-permalink.php` page. WordPress automatically flushes rewrite rules every time you access this page, without requiring you to press the "Save Changes" button.
+   - Alternatively, execute the `wp rewrite flush` command from WP-CLI.
+
+### How to uninstall the plugin? ###
+
+1. Deactivate the plugin via the WordPress admin interface or execute `wp plugin deactivate bbpress-permalinks-with-id`.
+2. Delete the plugin via the WordPress admin interface or execute `wp plugin delete bbpress-permalinks-with-id`.
+3. Flush rewrite rules using one of the following methods:
+   - Visit the `/wp-admin/options-permalink.php` page. WordPress automatically flushes rewrite rules every time you access this page, without requiring you to press the "Save Changes" button.
+   - Alternatively, execute the `wp rewrite flush` command from WP-CLI.
+
+**Important:** URLs with IDs may have been shared on the internet, indexed by search engines, or referenced in your forum content. After uninstalling this plugin, those links will no longer function.
 
 == Screenshots ==
 
@@ -56,9 +42,60 @@ P. S. I'm currently working on automatically flushing rules on activation and de
 
 == Frequently Asked Questions ==
 
-= That this plugin do? =
+### What URLs are supported? ###
 
-Simply adds few rewrite rules. If you deactivate or remove plugin and after that flush rewrite rules there is no stuff (garbage) after this plugin in database.
+The following table shows currently supported URL structures and their original counterparts. Note that the original URLs remain accessible.
+
+The URL components `forums`, `forum`, `topic`, `reply`, and `paged` are dynamic values that can be modified through bbPress settings.
+
+| URL + ID                          | URL + slug (bbPress default)           |
+|:----------------------------------|:---------------------------------------|
+| `/forums/forum/`                  | `/forums/forum/`                       |
+| `/forums/forum/111/`              | `/forums/forum/test/`                  |
+| `/forums/forum/111/edit/`         | `/forums/forum/test/edit/`             |
+| `/forums/forum/111/page/2/`       | `/forums/forum/test/page/2/`           |
+|                                   |                                        |
+| `/forums/topic/222/`              | `/forums/topic/test/`                  |
+| `/forums/topic/222/edit/`         | `/forums/topic/test/edit/`             |
+| `/forums/topic/222/page/2/`       | `/forums/topic/test/page/2/`           |
+|                                   |                                        |
+| `/forums/reply/333/`              | `/forums/reply/test/`                  |
+| `/forums/reply/333/edit/`         | `/forums/reply/test/edit/`             |
+|                                   |                                        |
+| `/?post_type=forum`               | `/?post_type=forum`                    |
+| `/?post_type=forum&p=111`         | `/?post_type=forum&forum=test`         |
+| `/?post_type=forum&p=111&edit=1`  | `/?post_type=forum&forum=test&edit=1`  |
+| `/?post_type=forum&p=111&paged=2` | `/?post_type=forum&forum=test&paged=2` |
+|                                   |                                        |
+| `/?post_type=topic&p=222`         | `/?post_type=topic&forum=test`         |
+| `/?post_type=topic&p=222&edit=1`  | `/?post_type=topic&forum=test&edit=1`  |
+| `/?post_type=topic&p=222&paged=2` | `/?post_type=topic&forum=test&paged=2` |
+|                                   |                                        |
+| `/?reply=333`                     | `/post_type=reply&reply=test`          |
+| `/?reply=333&edit=1`              | `/post_type=reply&reply=test&edit=1`   |
+
+### Does the plugin change URLs in the interface? ###
+
+Yes. URLs within theme templates that are generated using the `get_post_permalink()` function will adopt the ID-based structure.
+
+### Do the old URLs in static content change? ###
+
+No. Static content stored within the `wp_posts` table remains unaltered. The plugin only modifies the code responsible for generating and handling URLs.
+
+### Do the default URLs with slugs continue to work? ###
+
+Yes. The original URLs with slugs remain accessible. However, the plugin does not provide automatic redirection from slug-based URLs to ID-based URLs.
+
+### How is the plugin tested? ###
+
+The plugin undergoes manual testing with the latest WordPress and bbPress versions using the official Twenty Twelve (`twentytwelve`) theme. Additionally, automated code analysis tools test compatibility with both legacy and current versions, including Psalm and PHP Code Style validation (see `.github/workflows/tests.yml`).
+
+### Why use URLs with IDs instead of slugs? ###
+
+* Your forum operates in a language other than English and contains non-Latin characters.
+* Forum and topic titles include non-letter symbols (emojis, special characters such as `<`).
+* You frequently update slugs and titles of forums and topics and require more reliable and permanent URLs.
+* Shorter, cleaner URLs that are easier to share and remember.
 
 == Changelog ==
 
