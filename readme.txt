@@ -1,6 +1,6 @@
 === bbPress Permalinks with ID ===
 Contributors: korobochkin
-Tags: bbpress, permalinks, links, url, rewrite rule, id, forums, topics, slugs, characters
+Tags: bbpress, permalink, url, rewrite rule
 Requires at least: 4.1.1
 Tested up to: 4.5.0
 Stable tag: 1.0.5
