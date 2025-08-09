@@ -307,3 +307,55 @@ jobs:
       - name: Psalm
         run: .github/psalm/vendor/bin/psalm --config=".github/psalm/psalm.xml"
         continue-on-error: true
+
+  phpmd:
+    name: 'PHP Mess Detector'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          ini-file: development
+          extensions: ''
+          tools: composer
+
+      - name: Detect Composer Cache Directory
+        id: composer-cache
+        run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
+
+      - name: Composer Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.composer-cache.outputs.cache-files-dir }}
+            .github/phpmd/vendor
+          key: ${{ runner.os }}-composer-phpmd-${{ hashFiles('.github/phpmd/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-phpmd-
+
+      - name: Composer Install
+        working-directory: .github/phpmd
+        run: 'composer install --no-progress --classmap-authoritative'
+
+      - name: PHP Mess Detector Cache
+        uses: actions/cache@v4
+        with:
+          path: .github/phpmd/.cache
+          key: phpmd-cache-${{ github.ref_type == 'branch' && github.ref_name || 'main' }}
+          restore-keys: phpmd-cache-
+
+      - name: Run PHP Mess Detector
+        run: |
+          .github/phpmd/vendor/bin/phpmd \
+          	plugin.php \
+          	github \
+          	.github/phpmd/phpmd.xml \
+          	-vvv \
+            --cache \
+            --cache-file=.github/phpmd/.cache/.phpmd.result-cache.php
+        continue-on-error: true # TODO: remove this parameter after fixing the code
