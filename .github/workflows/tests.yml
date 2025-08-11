@@ -31,7 +31,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -51,7 +51,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -106,7 +106,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -145,7 +145,7 @@ jobs:
             php-stan-stubs-
 
       - name: Checkout WordPress
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
         with:
           repository: WordPress/WordPress
@@ -154,7 +154,7 @@ jobs:
           show-progress: false
 
       - name: Checkout bbPress
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
         with:
           repository: bbpress/bbPress
@@ -211,7 +211,7 @@ jobs:
           restore-keys: hooks-generator-hooks-
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         if: steps.hooks-cache.outputs.cache-hit != 'true'
 
       - name: Run Hooks Generator
@@ -247,7 +247,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -315,7 +315,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
