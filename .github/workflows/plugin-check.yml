@@ -1,0 +1,30 @@
+name: Plugin Check
+
+on:
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+concurrency:
+  group: '${{ github.ref }}'
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  plugin-check:
+    name: Plugin Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Run Plugin Check
+        uses: wordpress/plugin-check-action@v1
+        with:
+          exclude-directories: .github,.wordpress-org
+          exclude-files: .gitignore
+          ignore-codes: trademarked_term
+          checks: code_obfuscation,file_type,plugin_header_fields,plugin_updater,plugin_uninstall,plugin_readme,localhost,no_unfiltered_uploads,trademarks,offloading_files
