@@ -1,0 +1,12 @@
+{
+    "name": "korobochkin/bbpress-permalinks-with-id--tests-application",
+    "description": "",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require-dev": {
+        "symfony/test-pack": "^1.2",
+        "symfony/symfony": "^7.3"
+    }
+}
