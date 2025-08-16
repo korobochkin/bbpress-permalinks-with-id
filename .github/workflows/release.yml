@@ -5,6 +5,7 @@ on:
     types:
       - published
   workflow_dispatch:
+  workflow_call:
 
 concurrency:
   group: release
@@ -13,18 +14,9 @@ concurrency:
 permissions: {}
 
 jobs:
-  check-prerelease:
-    name: 'Check prerelease'
-    runs-on: ubuntu-latest
-    permissions: {}
-    if: ${{ !github.event.release.prerelease }}
-    steps:
-      - name: 'It it a prerelease'
-        run: 'echo "It is a prerelease. The jobs should not be executed."'
-
   tests:
     name: 'Tests'
-    needs: check-prerelease
     uses: ./.github/workflows/tests.yml
+    if: ${{ !github.event.release.prerelease }}
     permissions:
       contents: read
