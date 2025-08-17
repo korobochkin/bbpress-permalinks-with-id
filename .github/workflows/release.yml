@@ -17,13 +17,13 @@ jobs:
   tests:
     name: 'Tests'
     uses: ./.github/workflows/tests.yml
-    if: ${{ !github.event.release.prerelease }}
+    if: ${{ !github.event.release.prerelease && github.ref_type == 'tag' }}
     permissions:
       contents: read
 
   plugin-check:
     name: 'Plugin Check'
     uses: ./.github/workflows/plugin-check.yml
-    if: ${{ !github.event.release.prerelease }}
+    if: ${{ !github.event.release.prerelease && github.ref_type == 'tag' }}
     permissions:
       contents: read
