@@ -1,13 +1,8 @@
 name: Plugin Check
 
 on:
-  pull_request:
   workflow_dispatch:
   workflow_call:
-
-concurrency:
-  group: '${{ github.ref }}'
-  cancel-in-progress: true
 
 permissions: {}
 
