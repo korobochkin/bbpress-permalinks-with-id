@@ -20,3 +20,10 @@ jobs:
     if: ${{ !github.event.release.prerelease }}
     permissions:
       contents: read
+
+  plugin-check:
+    name: 'Plugin Check'
+    uses: ./.github/workflows/plugin-check.yml
+    if: ${{ !github.event.release.prerelease }}
+    permissions:
+      contents: read
