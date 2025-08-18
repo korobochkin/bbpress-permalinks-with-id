@@ -14,16 +14,41 @@ concurrency:
 permissions: {}
 
 jobs:
+  precheck:
+    name: 'Precheck'
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.release.prerelease && github.ref_type == 'tag' }}
+    outputs:
+      version: ${{ steps.find-version.outputs.version }}
+    steps:
+      - name: 'Find version'
+        id: find-version
+        run: 'echo "version=$(${GITHUB_REF#refs/tags/v})" >> $GITHUB_OUTPUT'
+
   tests:
     name: 'Tests'
     uses: ./.github/workflows/tests.yml
-    if: ${{ !github.event.release.prerelease && github.ref_type == 'tag' }}
+    needs:
+      - precheck
     permissions:
       contents: read
 
   plugin-check:
     name: 'Plugin Check'
     uses: ./.github/workflows/plugin-check.yml
-    if: ${{ !github.event.release.prerelease && github.ref_type == 'tag' }}
+    needs:
+      - precheck
     permissions:
       contents: read
+
+  deploy:
+    name: 'Deploy'
+    uses: ./.github/workflows/deploy.yml
+    needs:
+      - precheck
+      - tests
+      - plugin-check
+    permissions:
+      contents: read
+    with:
+      version: ${{ needs.precheck.outputs.version }}
