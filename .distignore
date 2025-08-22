@@ -1,5 +1,8 @@
+.git
 .github
 .wordpress-org
+.distignore
+.gitattributes
 .gitignore
 Makefile
 README.md
