@@ -21,19 +21,3 @@ jobs:
 
       - name: Dump runner Variable
         run: echo '${{ toJson(runner) }}'
-
-  run-workflow:
-    name: 'Run another Workflow'
-    needs: ci-debug
-    uses: ./.github/workflows/release.yml
-    permissions:
-      contents: read
-
-#  after-run-workflow:
-#    name: 'Check environment'
-#    needs: run-workflow
-#    environment: 'WordPress.org Production'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Slug
-#        run: echo '${{ vars.SLUG }}'
