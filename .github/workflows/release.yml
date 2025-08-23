@@ -23,7 +23,10 @@ jobs:
     steps:
       - name: 'Find version'
         id: find-version
-        run: 'echo "version=$(${GITHUB_REF#refs/tags/v})" >> $GITHUB_OUTPUT'
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/}"
+          VERSION="${VERSION#v}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
   tests:
     name: 'Tests'
