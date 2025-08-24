@@ -6,6 +6,7 @@ on:
     branches:
       - 'develop'
       - 'feature/**'
+  workflow_call:
 
 concurrency:
   group: '${{ github.ref }}'
