@@ -5,10 +5,10 @@
  * Description: Transforms default bbPress permalinks (URLs) that use slugs into permalinks that use numeric IDs.
  * Author: Nicolas Korobochkin
  * Author URI: https://korobochkin.wordpress.com/
- * Version: 1.0.5
+ * Version: 1.0.6
  * Text Domain: bbpress-permalinks-with-id
  * Requires at least: 4.1.1
- * Tested up to: 6.8.2
+ * Tested up to: 6.8
  * Requires PHP: 5.6
  * Requires Plugins: bbpress
  * License: GPLv2 or later

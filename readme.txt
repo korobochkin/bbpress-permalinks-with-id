@@ -2,8 +2,8 @@
 Contributors: korobochkin
 Tags: bbpress, permalink, url, rewrite rule
 Requires at least: 4.1.1
-Tested up to: 6.8.2
-Stable tag: 1.0.5
+Tested up to: 6.8
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,35 +44,7 @@ Please star the [GitHub repository](https://github.com/korobochkin/bbpress-perma
 
 ### What URLs are supported? ###
 
-The following table shows currently supported URL structures and their original counterparts. Note that the original URLs remain accessible.
-
-The URL components `forums`, `forum`, `topic`, `reply`, and `paged` are dynamic values that can be modified through bbPress settings.
-
-| URL + ID                          | URL + slug (bbPress default)           |
-|:----------------------------------|:---------------------------------------|
-| `/forums/forum/`                  | `/forums/forum/`                       |
-| `/forums/forum/111/`              | `/forums/forum/test/`                  |
-| `/forums/forum/111/edit/`         | `/forums/forum/test/edit/`             |
-| `/forums/forum/111/page/2/`       | `/forums/forum/test/page/2/`           |
-|                                   |                                        |
-| `/forums/topic/222/`              | `/forums/topic/test/`                  |
-| `/forums/topic/222/edit/`         | `/forums/topic/test/edit/`             |
-| `/forums/topic/222/page/2/`       | `/forums/topic/test/page/2/`           |
-|                                   |                                        |
-| `/forums/reply/333/`              | `/forums/reply/test/`                  |
-| `/forums/reply/333/edit/`         | `/forums/reply/test/edit/`             |
-|                                   |                                        |
-| `/?post_type=forum`               | `/?post_type=forum`                    |
-| `/?post_type=forum&p=111`         | `/?post_type=forum&forum=test`         |
-| `/?post_type=forum&p=111&edit=1`  | `/?post_type=forum&forum=test&edit=1`  |
-| `/?post_type=forum&p=111&paged=2` | `/?post_type=forum&forum=test&paged=2` |
-|                                   |                                        |
-| `/?post_type=topic&p=222`         | `/?post_type=topic&forum=test`         |
-| `/?post_type=topic&p=222&edit=1`  | `/?post_type=topic&forum=test&edit=1`  |
-| `/?post_type=topic&p=222&paged=2` | `/?post_type=topic&forum=test&paged=2` |
-|                                   |                                        |
-| `/?reply=333`                     | `/post_type=reply&reply=test`          |
-| `/?reply=333&edit=1`              | `/post_type=reply&reply=test&edit=1`   |
+You can find a detailed table of supported URL structures in the [README.md on GitHub](https://github.com/korobochkin/bbpress-permalinks-with-id/).
 
 ### Does the plugin change URLs in the interface? ###
 
@@ -98,6 +70,10 @@ The plugin undergoes manual testing with the latest WordPress and bbPress versio
 * Shorter, cleaner URLs that are easier to share and remember.
 
 == Changelog ==
+
+= 1.0.6 =
+
+No code changes, but a few unused functions were removed for cleaner code. This version was manually tested with WordPress 6.8.2, bbPress 2.6.14, and Twenty Twelve theme 4.6. Additionally, several PHP compatibility and code quality tools were added to the GitHub repository for automated validation (supporting PHP 5.6+). Thank you for continuing to use this plugin! The previous release was made almost 10 years ago. It is wonderful that the plugin continues to work reliably without requiring maintenance.
 
 = 1.0.5 =
 
