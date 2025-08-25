@@ -20,6 +20,6 @@ plugin-check:
 	@wp plugin check \
 		bbpress-permalinks-with-id \
 		--exclude-directories='.github,.wordpress-org,.idea' \
-		--exclude-files='.gitignore,.distignore' \
+		--exclude-files='.distignore,.gitattributes,.gitignore' \
 		--ignore-codes=trademarked_term \
 		--checks=code_obfuscation,file_type,plugin_header_fields,plugin_updater,plugin_uninstall,plugin_readme,localhost,no_unfiltered_uploads,trademarks,offloading_files
