@@ -39,7 +39,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="bbpress_permalinks_with_id"/>
+				<element value="bbpress-permalinks-with-id"/>
 			</property>
 		</properties>
 	</rule>
