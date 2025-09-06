@@ -1,4 +1,5 @@
 name: Hooks Generator (for Psalm)
+description: 'Generates WordPress and bbPress hook information for Psalm static analysis'
 
 inputs:
   wordpress:
