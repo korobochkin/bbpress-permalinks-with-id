@@ -2,9 +2,16 @@
 WORDPRESS_BRANCH ?= '6.8-branch'
 BBPRESS_BRANCH ?= '2.6'
 
-generate:
+generate: vendor/bin/wp-hooks-generator .cache/wordpress .cache/bbpress
 	vendor/bin/wp-hooks-generator --input=.cache/wordpress --output=.cache/wordpress-hooks
 	vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/bbpress-hooks
+
+vendor/bin/wp-hooks-generator:
+	composer install
+
+.cache/wordpress: download_wordpress
+
+.cache/bbpress: download_bbpress
 
 download_wordpress:
 	@if [ ! -d .cache/wordpress ] || [ ! -d .cache/wordpress/.git ]; then \
