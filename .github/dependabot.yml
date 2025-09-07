@@ -10,7 +10,7 @@ updates:
     versioning-strategy: increase
     cooldown:
       default-days: 10
-    open-pull-requests-limit: 0
+    open-pull-requests-limit: 3
     schedule:
       interval: weekly
 
@@ -18,3 +18,4 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 3
