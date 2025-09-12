@@ -29,7 +29,7 @@ jobs:
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SLUG: ${{ inputs.SLUG }}
+          SLUG: ${{ vars.SLUG }}
           VERSION: ${{ inputs.version }}
-          INPUT_DRY_RUN: ${{ inputs.INPUT_DRY_RUN }}
-          INPUT_GENERATE_ZIP: ${{ inputs.INPUT_GENERATE_ZIP }}
+          INPUT_DRY_RUN: ${{ vars.INPUT_DRY_RUN }}
+          INPUT_GENERATE_ZIP: ${{ vars.INPUT_GENERATE_ZIP }}
