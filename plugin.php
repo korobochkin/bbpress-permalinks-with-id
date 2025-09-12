@@ -90,10 +90,8 @@ function bbp_permalinks_rewrites_init() {
 
 	$paged_slug = bbp_get_paged_slug(); // string 'page'
 
-	$paged_rule     = '/([^/]+)/' . $paged_slug . '/?([0-9]{1,})/?$';
 	$paged_rule_ids = $ids_regex . $paged_slug . '/?([0-9]{1,})/?$';
 
-	$view_id  = bbp_get_view_rewrite_id();
 	$paged_id = bbp_get_paged_rewrite_id();
 
 	$edit_rule = $ids_regex . $edit_slug . '/?$'; // for edit links
