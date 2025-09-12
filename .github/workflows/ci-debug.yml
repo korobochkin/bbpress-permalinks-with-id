@@ -21,3 +21,11 @@ jobs:
 
       - name: Dump runner Variable
         run: echo '${{ toJson(runner) }}'
+
+  deploy:
+    name: 'Deploy'
+    uses: ./.github/workflows/deploy.yml
+    permissions:
+      contents: read
+    with:
+      version: 1.0.6

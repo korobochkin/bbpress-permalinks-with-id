@@ -24,6 +24,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Check the environment defined variables
+        run: echo ${{ vars.SLUG }} ${{ vars.INPUT_DRY_RUN }} ${{ vars.TEST_SECRET }} ${{ secrets.TEST_SECRET }}
+
       - name: Deploy to WordPress.org
         uses: 10up/action-wordpress-plugin-deploy@stable
         env:
