@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
+	<!--
+	#############################################################################
+	COMMAND LINE ARGUMENTS
+	https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Annotated-Ruleset
+	#############################################################################
+	-->
+
+	<arg name="basepath" value="./../../"/>
+
+	<arg name="parallel" value="20"/>
+
+	<arg name="cache" value=".cache/phpcs-cache.json"/>
+
+	<arg name="extensions" value="php"/>
+
+	<arg value="ps"/>
+
+	<arg name="colors"/>
+
+	<file>./../../plugin.php</file>
+
+	<exclude-pattern>.github/*</exclude-pattern>
+
+	<exclude-pattern>/vendor/*</exclude-pattern>
+
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+
+	<exclude-pattern>*.min.js</exclude-pattern>
+
+	<!--
+	#############################################################################
+	SET UP THE RULESETS
+	#############################################################################
+	-->
+
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="bbpress-permalinks-with-id"/>
+			</property>
+		</properties>
+	</rule>
+
+	<config name="testVersion" value="5.3-"/>
+	<rule ref="PHPCompatibilityWP"/>
+</ruleset>

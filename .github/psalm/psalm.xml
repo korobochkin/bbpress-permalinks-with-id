@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="1"
+    resolveFromConfigFile="false"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+    allFunctionsGlobal="true"
+    allowStringToStandInForClass="false"
+    checkForThrowsDocblock="true"
+    ensureArrayStringOffsetsExist="true"
+    cacheDirectory=".github/psalm/.cache/psalm"
+>
+    <extraFiles>
+        <directory name=".github/hooks-generator/.cache/bbpress" />
+        <directory name=".github/hooks-generator/.cache/wordpress" />
+        <ignoreFiles allowMissingFiles="true">
+            <file name=".github/hooks-generator/.cache/wordpress/wp-admin/load-scripts.php" />
+            <file name=".github/hooks-generator/.cache/wordpress/wp-admin/load-styles.php" />
+            <file name=".github/hooks-generator/.cache/wordpress/wp-admin/includes/noop.php" />
+            <directory name=".github/hooks-generator/.cache/bbpress/tests" />
+        </ignoreFiles>
+    </extraFiles>
+    <projectFiles>
+        <file name="plugin.php" />
+        <ignoreFiles>
+            <directory name=".github/psalm/vendor" />
+        </ignoreFiles>
+    </projectFiles>
+    <plugins>
+        <pluginClass class="PsalmWordPress\Plugin">
+            <useDefaultStubs value="false" />
+            <useDefaultHooks value="false" />
+            <hooks>
+                <file name=".github/hooks-generator/.cache/bbpress-hooks/actions.json" />
+                <file name=".github/hooks-generator/.cache/bbpress-hooks/filters.json" />
+                <file name=".github/hooks-generator/.cache/wordpress-hooks/actions.json" />
+                <file name=".github/hooks-generator/.cache/wordpress-hooks/filters.json" />
+            </hooks>
+        </pluginClass>
+    </plugins>
+</psalm>

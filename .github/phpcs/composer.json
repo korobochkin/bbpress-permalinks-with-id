@@ -1,0 +1,17 @@
+{
+    "name": "bbpress-permalinks-with-id/phpcs",
+    "description": "",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.2",
+        "phpcompatibility/phpcompatibility-wp": "^2.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

@@ -1,0 +1,89 @@
+name: Hooks Generator (for Psalm)
+description: 'Generates WordPress and bbPress hook information for Psalm static analysis'
+
+inputs:
+  wordpress:
+    description: 'Branch or tag for checkout WordPress'
+    required: true
+  bbpress:
+    description: 'Branch or tag for checkout bbPress'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up the PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.0
+        ini-file: development
+        extensions: ''
+        tools: composer
+
+    - name: Detect Composer Cache Directory
+      id: composer-cache
+      shell: bash
+      run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
+
+    - name: Composer Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ${{ steps.composer-cache.outputs.cache-files-dir }}
+          .github/hooks-generator/vendor
+        key: ${{ runner.os }}-hooks-generator-composer-${{ hashFiles('.github/hooks-generator/composer.lock') }}
+        restore-keys: ${{ runner.os }}-hooks-generator-composer-
+
+    - name: Composer Install
+      shell: bash
+      working-directory: .github/hooks-generator
+      run: 'composer install --no-progress --classmap-authoritative'
+
+    - name: Dependencies cache
+      id: dependencies-cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          .github/hooks-generator/.cache/wordpress
+          .github/hooks-generator/.cache/bbpress
+        key: hooks-generator-dependencies-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}
+        restore-keys: hooks-generator-dependencies-
+
+    - name: Checkout WordPress
+      if: steps.dependencies-cache.outputs.cache-hit != 'true'
+      uses: actions/checkout@v4
+      with:
+        repository: WordPress/WordPress
+        ref: ${{ inputs.wordpress }}
+        path: .github/hooks-generator/.cache/wordpress
+        show-progress: false
+
+    - name: Checkout bbPress
+      if: steps.dependencies-cache.outputs.cache-hit != 'true'
+      uses: actions/checkout@v4
+      with:
+        repository: bbpress/bbPress
+        ref: ${{ inputs.bbpress }}
+        path: .github/hooks-generator/.cache/bbpress
+        show-progress: false
+
+    - name: Generate WordPress hooks
+      working-directory: .github/hooks-generator
+      shell: bash
+      run: vendor/bin/wp-hooks-generator --input=.cache/wordpress --output=.cache/wordpress-hooks
+
+    - name: Generate bbPress hooks
+      working-directory: .github/hooks-generator
+      shell: bash
+      run: vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/bbpress-hooks
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: hooks-generator-hooks-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}
+        path: |
+          .github/hooks-generator/.cache/wordpress-hooks
+          .github/hooks-generator/.cache/bbpress-hooks
+        if-no-files-found: error
+        retention-days: 15
+        overwrite: false

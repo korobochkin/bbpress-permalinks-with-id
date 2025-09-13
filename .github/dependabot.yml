@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: composer
+    directories:
+      - .github/hooks-generator
+      - .github/php-stan
+      - .github/phpcs
+      - .github/phpmd
+      - .github/psalm
+    versioning-strategy: increase
+    cooldown:
+      default-days: 10
+    open-pull-requests-limit: 3
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3

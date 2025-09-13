@@ -1,0 +1,11 @@
+{
+    "name": "korobochkin/bbpress-permalinks-with-id--phpmd",
+    "description": "",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require-dev": {
+        "phpmd/phpmd": "^2.15"
+    }
+}
