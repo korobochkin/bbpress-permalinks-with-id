@@ -6,6 +6,11 @@ on:
       version:
         required: true
         type: string
+    secrets:
+      SVN_USERNAME:
+        required: true
+      SVN_PASSWORD:
+        required: true
 
 concurrency:
   group: deploy
@@ -23,9 +28,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-
-      - name: Check the environment defined variables
-        run: echo ${{ vars.SLUG }} ${{ vars.INPUT_DRY_RUN }} ${{ vars.TEST_SECRET }} ${{ secrets.TEST_SECRET }}
 
       - name: Deploy to WordPress.org
         uses: 10up/action-wordpress-plugin-deploy@stable

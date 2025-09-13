@@ -53,3 +53,5 @@ jobs:
       contents: read
     with:
       version: ${{ needs.precheck.outputs.version }}
+    environment: 'WordPress.org'
+    secrets: inherit
