@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: bbPress Permalinks with ID
+ * Plugin Name: Permalinks with ID for bbPress
  * Plugin URI: https://github.com/korobochkin/bbpress-permalinks-with-id
  * Description: Transforms default bbPress permalinks (URLs) that use slugs into permalinks that use numeric IDs.
  * Author: Nicolas Korobochkin

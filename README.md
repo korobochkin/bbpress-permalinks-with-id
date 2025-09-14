@@ -1,4 +1,4 @@
-# bbPress Permalinks with ID
+# Permalinks with ID for bbPress
 
 This plugin transforms default bbPress permalinks (URLs) that use slugs into permalinks that use numeric IDs.
 

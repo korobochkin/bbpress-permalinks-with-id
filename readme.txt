@@ -1,4 +1,4 @@
-=== bbPress Permalinks with ID ===
+=== Permalinks with ID for bbPress ===
 Contributors: korobochkin
 Tags: bbpress, permalink, url, rewrite rule
 Requires at least: 4.1.1
