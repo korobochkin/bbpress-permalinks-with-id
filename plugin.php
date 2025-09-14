@@ -7,7 +7,7 @@
  * Author URI: https://korobochkin.wordpress.com/
  * Version: 1.0.6
  * Text Domain: bbpress-permalinks-with-id
- * Requires at least: 4.1.1
+ * Requires at least: 4.1
  * Tested up to: 6.8
  * Requires PHP: 5.6
  * Requires Plugins: bbpress

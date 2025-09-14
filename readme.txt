@@ -1,7 +1,7 @@
 === Permalinks with ID for bbPress ===
 Contributors: korobochkin
 Tags: bbpress, permalink, url, rewrite rule
-Requires at least: 4.1.1
+Requires at least: 4.1
 Tested up to: 6.8
 Stable tag: 1.0.6
 License: GPLv2 or later
