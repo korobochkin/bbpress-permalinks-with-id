@@ -3,7 +3,7 @@ Contributors: korobochkin
 Tags: bbpress, permalink, url, rewrite rule
 Requires at least: 4.1
 Tested up to: 6.8
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,10 @@ The plugin undergoes manual testing with the latest WordPress and bbPress versio
 * Shorter, cleaner URLs that are easier to share and remember.
 
 == Changelog ==
+
+= 1.0.7 =
+
+No code changes. The plugin was renamed and the "Requires at least" version was updated to comply with new WordPress.org policies.
 
 = 1.0.6 =
 
