@@ -19,6 +19,7 @@
  * Add plugin actions and filters at bbp_init action which triggered only if bbPress activated.
  *
  * @since 1.0.0
+ * @return void
  */
 function bbp_permalinks_init() {
 	$structure = get_option( 'permalink_structure' );
@@ -40,6 +41,7 @@ add_action( 'bbp_init', 'bbp_permalinks_init' );
  * @since 1.0.0
  * @param string $link URL.
  * @param object $post An WordPress post object.
+ * @return string
  */
 function bbp_permalinks_post_type_link_pretty( $link, $post = 0 ) {
 	if ( bbp_get_forum_post_type() === $post->post_type ) {
@@ -62,6 +64,7 @@ function bbp_permalinks_post_type_link_pretty( $link, $post = 0 ) {
  * @since 1.0.0
  * @param string $link URL.
  * @param object $post An WordPress post object.
+ * @return string
  */
 function bbp_permalinks_post_type_link_not_pretty( $link, $post = 0 ) {
 	if ( bbp_get_forum_post_type() === $post->post_type ) {
@@ -78,6 +81,7 @@ function bbp_permalinks_post_type_link_not_pretty( $link, $post = 0 ) {
  * Generate rewrite rules for forums and topics based on bbPress settings.
  *
  * @since 1.0.0
+ * @return void
  */
 function bbp_permalinks_rewrites_init() {
 	$priority  = 'top';
