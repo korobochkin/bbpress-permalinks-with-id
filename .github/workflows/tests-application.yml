@@ -1,0 +1,43 @@
+name: Application Tests
+
+on:
+  workflow_call:
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: testuser
+          MYSQL_PASSWORD: testpass
+        ports:
+          - 127.0.0.1:3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+
+    - name: Wait for MySQL
+      run: |
+        until mysqladmin ping -h"127.0.0.1" -P"3306" -u"root" -p"password" --silent; do
+          echo 'Waiting for MySQL...'
+          sleep 2
+        done
+        echo 'MySQL is ready!'
+
+    - name: Hello World
+      run: |
+        echo "Hello World!"
+        echo "MySQL is running and ready for connections"
+        echo "Database: testdb"
+        echo "User: testuser"
