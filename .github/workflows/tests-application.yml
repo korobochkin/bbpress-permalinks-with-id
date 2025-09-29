@@ -23,6 +23,21 @@ jobs:
           --health-timeout=5s
           --health-retries=3
 
+      wordpress:
+        image: wordpress:latest
+        env:
+          WORDPRESS_DB_HOST: mysql:3306
+          WORDPRESS_DB_USER: testuser
+          WORDPRESS_DB_PASSWORD: testpass
+          WORDPRESS_DB_NAME: testdb
+        ports:
+          - 127.0.0.1:8080:80
+        options: >-
+          --health-cmd="curl -f http://localhost || exit 1"
+          --health-interval=30s
+          --health-timeout=10s
+          --health-retries=5
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
@@ -35,9 +50,19 @@ jobs:
         done
         echo 'MySQL is ready!'
 
+    - name: Wait for WordPress
+      run: |
+        until curl -f http://localhost:8080 > /dev/null 2>&1; do
+          echo 'Waiting for WordPress...'
+          sleep 5
+        done
+        echo 'WordPress is ready!'
+
     - name: Hello World
       run: |
         echo "Hello World!"
         echo "MySQL is running and ready for connections"
         echo "Database: testdb"
         echo "User: testuser"
+        echo "WordPress is running on port 8080"
+        echo "WordPress URL: http://localhost:8080"
