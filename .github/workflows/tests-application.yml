@@ -21,7 +21,7 @@ jobs:
 
     - name: Docker Compose Up
       working-directory: .github/tests/application
-      run: docker compose up --build --detach --quiet-pull --remove-orphans --wait --yes
+      run: make up
 
     - name: Wait for WordPress
       run: |
@@ -33,4 +33,4 @@ jobs:
 
     - name: Docker Compose Down
       working-directory: .github/tests/application
-      run: docker compose down --remove-orphans --volumes
+      run: make down
