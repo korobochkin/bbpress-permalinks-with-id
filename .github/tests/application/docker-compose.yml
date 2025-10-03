@@ -1,6 +1,7 @@
 ---
 services:
   wordpress:
+    container_name: wordpress
     image: wordpress:latest
     ports:
       - '127.0.0.1:8080:80'
@@ -15,6 +16,7 @@ services:
       - db
 
   db:
+    container_name: db
     image: mysql:8.0
     environment:
       MYSQL_DATABASE: wordpress
