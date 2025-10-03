@@ -14,16 +14,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v5
 
-    - name: Set up Docker Compose
+    - name: Docker Buildx
       uses: docker/setup-buildx-action@v3
-
-    - name: Docker Compose Build
-      working-directory: .github/tests/application
-      run: docker compose build
+      with:
+        cleanup: true
 
     - name: Docker Compose Up
       working-directory: .github/tests/application
-      run: docker compose up --detach --wait
+      run: docker compose up --build --detach --quiet-pull --quiet-build --remove-orphans --wait --yes
 
     - name: Wait for WordPress
       run: |
