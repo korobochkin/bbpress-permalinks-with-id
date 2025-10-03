@@ -9,15 +9,21 @@ concurrency:
 permissions: {}
 
 jobs:
-  ci-debug:
-    name: 'Debug environment variables'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug GITHUB_ Variables
-        run: env | grep GITHUB_
+  tests-application:
+    name: Run Application Tests
+    uses: ./.github/workflows/tests-application.yml
+    permissions:
+      contents: read
 
-      - name: Dump github Variable
-        run: echo '${{ toJson(github) }}'
-
-      - name: Dump runner Variable
-        run: echo '${{ toJson(runner) }}'
+#  ci-debug:
+#    name: 'Debug environment variables'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Debug GITHUB_ Variables
+#        run: env | grep GITHUB_
+#
+#      - name: Dump github Variable
+#        run: echo '${{ toJson(github) }}'
+#
+#      - name: Dump runner Variable
+#        run: echo '${{ toJson(runner) }}'
