@@ -21,7 +21,7 @@ services:
       db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "--fail", "--http2", "--silent", "--head", "--header", "Connection: close", "http://127.0.0.1/"]
+      test: ["CMD", "test", "-f", "/var/www/html/wp-config.php"]
       start_period: 5s
       start_interval: 10s
       timeout: 5s
