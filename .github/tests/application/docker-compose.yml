@@ -10,8 +10,13 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DEBUG: true
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_DEBUG_LOG', true );
+        define( 'WP_DEBUG_DISPLAY', false );
     volumes:
       - wordpress_data:/var/www/html
+      - ../../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id
     depends_on:
       - db
 
@@ -23,8 +28,33 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
       MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - '127.0.0.1:3306:3306'
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "--host=127.0.0.1", "--user=$MYSQL_USER", "--password=$MYSQL_PASSWORD" ]
+      start_period: 5s
+      start_interval: 10s
+      timeout: 5s
+      retries: 3
     volumes:
       - db_data:/var/lib/mysql
+
+  cli:
+    container_name: cli
+    image: wordpress:cli
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes_from:
+      - wordpress
+    depends_on:
+      wordpress:
+        condition: service_started
+      db:
+        condition: service_healthy
+    command: wp core install --url=http://127.0.0.1:8080 --title="Test Site" --admin_user=admin --admin_password=12345 --admin_email=admin@127.0.0.1 --locale=en_US --skip-email
 
 volumes:
   wordpress_data:
