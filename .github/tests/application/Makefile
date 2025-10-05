@@ -6,3 +6,6 @@ down:
 
 config:
 	@docker compose config --quiet
+
+run_tests:
+	 vendor/bin/phpunit --no-progress --testsuite=default
