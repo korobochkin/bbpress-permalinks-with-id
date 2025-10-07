@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Common;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractHttpTestCase;
+use PHPUnit\Framework\Attributes;
 
 /**
  * @internal
- *
- * @coversNothing
  */
+#[Attributes\CoversNothing]
 class HomePageTest extends AbstractHttpTestCase
 {
     public function setUp(): void
