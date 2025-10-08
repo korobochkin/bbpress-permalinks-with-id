@@ -59,14 +59,17 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+    user: '33:33'
     volumes_from:
       - wordpress
+    volumes:
+      - ./shells/:/tmp/shells/:ro
     depends_on:
       wordpress:
         condition: service_healthy
       db:
         condition: service_healthy
-    command: wp core install --url=http://one.wordpress.test --title="Test Site" --admin_user=admin --admin_password=12345 --admin_email=admin@one.wordpress.test --locale=en_US --skip-email
+    command: [ "bash", "/tmp/shells/install-wordpress.sh" ]
 
   php:
     container_name: php
