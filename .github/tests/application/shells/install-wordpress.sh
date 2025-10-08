@@ -15,3 +15,6 @@ wp core install \
 
 wp plugin activate \
   bbpress
+
+wp theme activate \
+  twentytwelve
