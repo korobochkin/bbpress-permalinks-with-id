@@ -18,6 +18,7 @@ services:
       WORDPRESS_CONFIG_EXTRA: |
         define( 'WP_DEBUG_LOG', true );
         define( 'WP_DEBUG_DISPLAY', false );
+        define( 'DISABLE_WP_CRON', true );
     volumes:
       - wordpress_data:/var/www/html
       - ../../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id
@@ -70,7 +71,7 @@ services:
   php:
     container_name: php
     build:
-      dockerfile: Dockerfile
+      dockerfile: php.Dockerfile
     tty: true
     init: true
     volumes:
