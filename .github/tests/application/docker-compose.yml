@@ -2,7 +2,9 @@
 services:
   wordpress:
     container_name: wordpress
-    image: wordpress:latest
+    build:
+      context: .
+      dockerfile: wordpress.Dockerfile
     networks:
       default:
         aliases:
@@ -59,7 +61,6 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
-    user: '33:33'
     volumes_from:
       - wordpress
     volumes:

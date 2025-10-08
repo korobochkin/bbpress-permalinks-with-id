@@ -13,7 +13,5 @@ wp core install \
   --locale=en_US \
   --skip-email
 
-wp plugin install \
-  bbpress \
-  --version=2.6.0 \
-  --activate
+wp plugin activate \
+  bbpress
