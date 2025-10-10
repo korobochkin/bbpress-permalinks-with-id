@@ -10,7 +10,7 @@ services:
         aliases:
           - one.wordpress.test
     ports:
-      - '127.0.0.1:8080:80'
+      - '127.0.0.1:8080:8080'
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: wordpress
@@ -81,7 +81,7 @@ services:
     volumes:
       - ./:/root/tests-application
     environment:
-      TEST_SITE_HOME: http://one.wordpress.test
+      TEST_SITE_HOME: http://one.wordpress.test:8080
       TEST_SITE_ADMIN_LOGIN: admin
       TEST_SITE_ADMIN_PASSWORD: 12345
     depends_on:

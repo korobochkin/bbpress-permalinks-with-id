@@ -5,7 +5,7 @@ set -Eeuo pipefail
 cd /var/www/html || exit 1
 
 wp core install \
-  --url=http://one.wordpress.test \
+  --url=http://one.wordpress.test:8080 \
   --title="Test Site" \
   --admin_user=admin \
   --admin_password=12345 \
