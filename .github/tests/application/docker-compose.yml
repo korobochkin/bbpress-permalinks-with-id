@@ -61,6 +61,12 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+      TEST_SITE_HOME: http://one.wordpress.test:8080
+      TEST_SITE_TITLE: Test Site
+      TEST_SITE_ADMIN_LOGIN: admin
+      TEST_SITE_ADMIN_PASSWORD: 12345
+      TEST_SITE_ADMIN_EMAIL: admin@one.wordpress.test
+      TEST_SITE_LOCALE: en_US
     volumes_from:
       - wordpress
     volumes:

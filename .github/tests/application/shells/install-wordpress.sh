@@ -5,12 +5,12 @@ set -Eeuo pipefail
 cd /var/www/html || exit 1
 
 wp core install \
-  --url=http://one.wordpress.test:8080 \
-  --title="Test Site" \
-  --admin_user=admin \
-  --admin_password=12345 \
-  --admin_email=admin@one.wordpress.test \
-  --locale=en_US \
+  --url="${TEST_SITE_HOME}" \
+  --title="${TEST_SITE_TITLE}" \
+  --admin_user="${TEST_SITE_ADMIN_LOGIN}" \
+  --admin_password="${TEST_SITE_ADMIN_PASSWORD}" \
+  --admin_email="${TEST_SITE_ADMIN_EMAIL}" \
+  --locale="${TEST_SITE_LOCALE}" \
   --skip-email
 
 wp plugin activate \
