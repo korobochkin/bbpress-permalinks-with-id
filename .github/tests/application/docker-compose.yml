@@ -21,6 +21,24 @@ services:
         define( 'WP_DEBUG_LOG', true );
         define( 'WP_DEBUG_DISPLAY', false );
         define( 'DISABLE_WP_CRON', true );
+        define( 'WP_AUTO_UPDATE_CORE', false );
+        define( 'AUTOMATIC_UPDATER_DISABLED', true );
+        add_filter( 'auto_update_translation', '__return_false' );
+        add_filter( 'automatic_updater_disabled', '__return_true' );
+        add_filter( 'allow_minor_auto_core_updates', '__return_false' );
+        add_filter( 'allow_major_auto_core_updates', '__return_false' );
+        add_filter( 'allow_dev_auto_core_updates', '__return_false' );
+        add_filter( 'auto_update_core', '__return_false' );
+        add_filter( 'wp_auto_update_core', '__return_false' );
+        add_filter( 'auto_core_update_send_email', '__return_false' );
+        add_filter( 'send_core_update_notification_email', '__return_false' );
+        add_filter( 'auto_update_plugin', '__return_false' );
+        add_filter( 'auto_update_theme', '__return_false' );
+        add_filter( 'automatic_updates_send_debug_email', '__return_false' );
+        add_filter( 'automatic_updates_is_vcs_checkout', '__return_true' );
+        
+        remove_action( 'init', 'wp_schedule_update_checks' );
+        remove_all_filters( 'plugins_api' );
     volumes:
       - wordpress_data:/var/www/html
       - ../../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id
