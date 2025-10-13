@@ -43,9 +43,9 @@ class BrowsersService
         $this->guest->request('GET', $home);
     }
 
-    public function createPage(array $details): object
+    public function createPostViaWPAdmin(HttpBrowser $browser): object
     {
-        $crawler = $this->admin->request('GET', '/wp-admin/post-new.php?post_type=forum');
+        $crawler = $browser->request('GET', '/wp-admin/post-new.php?post_type=forum');
 
         $nonce = $crawler->filterXPath('//form//input[(@id="_wpnonce" or name="_wp_nonce") and @type="hidden"]');
         $postID = $crawler->filterXPath('//form//input[(@id="post_ID" or name="post_ID") and @type="hidden"]');
@@ -58,7 +58,7 @@ class BrowsersService
 
         // XPath for a form element with all required fields: //form[input[(@id="_wpnonce" or @name="_wp_nonce") and @type="hidden"]]
 
-        $this->admin->request(
+        $browser->request(
             'POST',
             '/wp-admin/post.php',
             [
@@ -78,7 +78,7 @@ class BrowsersService
             ],
         );
 
-        return $this->admin->getResponse();
+        return $browser->getResponse();
     }
 
     private function getHomePageURL(): string

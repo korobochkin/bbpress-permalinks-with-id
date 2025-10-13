@@ -25,7 +25,7 @@ class HomePageTest extends AbstractHttpTestCase
 
     public function testForumsPageCreation(): void
     {
-        $response = $this->browsers->createPage([]);
+        $response = $this->browsers->createPostViaWPAdmin($this->browsers->admin);
         $this->assertEquals(200, $response->getStatusCode());
     }
 }
