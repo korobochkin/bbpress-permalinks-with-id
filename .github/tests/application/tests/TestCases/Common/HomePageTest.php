@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Common;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractHttpTestCase;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowserActions;
 use PHPUnit\Framework\Attributes;
 
 /**
@@ -25,7 +26,8 @@ class HomePageTest extends AbstractHttpTestCase
 
     public function testForumsPageCreation(): void
     {
-        $response = $this->browsers->createPostViaWPAdmin($this->browsers->admin);
-        $this->assertEquals(200, $response->getStatusCode());
+        BrowserActions::createPostViaWPAdmin($this->browsers->admin);
+
+        $this->assertEquals(200, $this->browsers->admin->getResponse()->getStatusCode());
     }
 }
