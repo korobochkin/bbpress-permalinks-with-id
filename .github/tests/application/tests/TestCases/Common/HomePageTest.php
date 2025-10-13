@@ -15,11 +15,17 @@ class HomePageTest extends AbstractHttpTestCase
 {
     public function setUp(): void
     {
-        var_dump($this->browsers->guest->getResponse()->getHeaders());
+        //        var_dump($this->browsers->guest->getResponse()->getHeaders());
     }
 
     public function testSomething()
     {
         $this->assertTrue(true);
+    }
+
+    public function testForumsPageCreation(): void
+    {
+        $response = $this->browsers->createPage([]);
+        $this->assertEquals(200, $response->getStatusCode());
     }
 }
