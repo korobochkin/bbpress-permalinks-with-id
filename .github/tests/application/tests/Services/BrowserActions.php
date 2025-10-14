@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
 use Symfony\Component\BrowserKit\HttpBrowser;
 
 final class BrowserActions
 {
-    public static function createPostViaWPAdmin(HttpBrowser $browser): void
+    public static function createPostViaWPAdmin(HttpBrowser $browser, Post $post): void
     {
-        $crawler = $browser->request('GET', '/wp-admin/post-new.php?post_type=forum');
+        $crawler = $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
 
         $nonce = $crawler->filterXPath('//form//input[(@id="_wpnonce" or name="_wp_nonce") and @type="hidden"]');
         $postID = $crawler->filterXPath('//form//input[(@id="post_ID" or name="post_ID") and @type="hidden"]');
@@ -22,6 +23,9 @@ final class BrowserActions
         $referredBy = $crawler->filterXPath('//form//input[(@id="referredby" or name="referredby") and @type="hidden"]');
 
         // XPath for a form element with all required fields: //form[input[(@id="_wpnonce" or @name="_wp_nonce") and @type="hidden"]]
+
+        $post->setId((int) $postID->attr('value'));
+        $post->setAuthorId((int) $userID->attr('value'));
 
         $browser->request(
             'POST',
@@ -36,10 +40,10 @@ final class BrowserActions
                 'original_post_status' => $originalPostStatus->attr('value'),
                 'referredby' => $referredBy->attr('value'),
                 'post_ID' => $postID->attr('value'),
-                'post_title' => 'My custom title 333',
-                'content' => 'My custom content 333',
-                'post_status' => 'publish', // 'draft'
-                'post_name' => 'my-custom-slug-'.random_int(1000, PHP_INT_MAX), // slug
+                'post_title' => $post->getTitle(),
+                'content' => $post->getContent(),
+                'post_status' => $post->getStatus()->value, // 'draft'
+                'post_name' => $post->getName(), // slug
             ],
         );
     }
