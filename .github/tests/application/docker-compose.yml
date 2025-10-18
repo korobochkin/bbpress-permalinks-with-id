@@ -23,6 +23,7 @@ services:
         define( 'DISABLE_WP_CRON', true );
         define( 'WP_AUTO_UPDATE_CORE', false );
         define( 'AUTOMATIC_UPDATER_DISABLED', true );
+        define( 'WP_POST_REVISIONS', false );
     volumes:
       - wordpress_data:/var/www/html
       - ../../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id
