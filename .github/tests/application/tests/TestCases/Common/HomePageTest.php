@@ -6,10 +6,10 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Co
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractHttpTestCase;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowserActions;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\ForumsPage;
 use PHPUnit\Framework\Attributes;
+use Symfony\Component\BrowserKit\HttpBrowser;
 
 /**
  * @internal
@@ -17,26 +17,55 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 class HomePageTest extends AbstractHttpTestCase
 {
-    public function setUp(): void
-    {
-        //        var_dump($this->browsers->guest->getResponse()->getHeaders());
-    }
+    private Post $forumsPage;
 
-    public function testSomething()
+    protected function setUp(): void
     {
-        $this->assertTrue(true);
+        parent::setUp();
+        $this->forumsPage = ForumsPage::get();
     }
 
     public function testForumsPageCreation(): void
     {
-        $post = new Post();
-        $post->setType(Type::Page);
-        $post->setTitle('Custom title. '.random_int(0, PHP_INT_MAX));
-        $post->setStatus(Status::Publish);
-        $post->setName('custom-name-'.random_int(0, PHP_INT_MAX));
+        $this->browsers->admin->followRedirects(true);
 
-        BrowserActions::createPostViaWPAdmin($this->browsers->admin, $post);
+        BrowserActions::createPostViaWPAdmin($this->browsers->admin, $this->forumsPage);
 
         $this->assertEquals(200, $this->browsers->admin->getResponse()->getStatusCode());
+    }
+
+    #[Attributes\Depends('testForumsPageCreation')]
+    public function testForumsPageAsGuest(): void
+    {
+        $this->browsers->guest->followRedirects(false);
+        $this->assertForumsPageAccessible($this->browsers->guest);
+    }
+
+    #[Attributes\Depends('testForumsPageAsGuest')]
+    public function testForumsPageAsAdmin(): void
+    {
+        $this->browsers->admin->followRedirects(false);
+        $this->assertForumsPageAccessible($this->browsers->admin);
+    }
+
+    private function assertForumsPageAccessible(HttpBrowser $browser): void
+    {
+        // TODO: check HTML closing tag
+        // no error output
+        // no redirect was made
+        // URL matches the requested one
+        $crawler = $browser->request('GET', '/forums/');
+
+        $this->assertPageStatusIs200($browser->getResponse());
+
+        $this->assertEquals(
+            $this->forumsPage->getTitle(),
+            $crawler->filterXPath('//html/body/div[@id="page"]//article/header/h1')->innerText()
+        );
+
+        $this->assertStringContainsStringIgnoringCase(
+            'No forums were found',
+            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[@class="bbp-template-notice"]/ul/li')->innerText()
+        );
     }
 }

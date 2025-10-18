@@ -6,6 +6,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowsersService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\BrowserKit\Response;
 
 abstract class AbstractHttpTestCase extends TestCase
 {
@@ -19,5 +20,10 @@ abstract class AbstractHttpTestCase extends TestCase
 
             throw new \Exception();
         }
+    }
+
+    protected function assertPageStatusIs200(Response $response): void
+    {
+        $this->assertEquals(200, $response->getStatusCode());
     }
 }
