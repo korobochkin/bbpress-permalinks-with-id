@@ -90,7 +90,7 @@ services:
       - ./:/root/tests-application
       - ./php-configs/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
     ports:
-      - '127.0.0.1:9003:9003/tcp'
+      - '127.0.0.1:9009:9009'
     environment:
       TEST_SITE_HOME: http://one.wordpress.test:8080
       TEST_SITE_ADMIN_LOGIN: admin
