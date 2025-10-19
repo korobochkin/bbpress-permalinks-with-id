@@ -4,7 +4,9 @@ EXPOSE 8080/tcp
 
 RUN sed --in-place 's/\*:80>/\*:8080>/g' /etc/apache2/sites-available/* \
 	&& \
-    sed --in-place 's/^Listen\s80$/Listen 8080/g' /etc/apache2/ports.conf
+    sed --in-place 's/^Listen\s80$/Listen 8080/g' /etc/apache2/ports.conf \
+    && \
+    sed --in-place 's/#ServerName www\.example\.com/ServerName one\.wordpress\.test/g' /etc/apache2/sites-available/*.conf
 
 ADD https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip /usr/src/bbpress.zip
 ADD https://downloads.wordpress.org/theme/twentytwelve.4.6.zip /usr/src/twentytwelve.zip
