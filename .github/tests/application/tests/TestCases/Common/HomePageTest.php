@@ -50,10 +50,6 @@ class HomePageTest extends AbstractHttpTestCase
 
     private function assertForumsPageAccessible(HttpBrowser $browser): void
     {
-        // TODO: check HTML closing tag
-        // no error output
-        // no redirect was made
-        // URL matches the requested one
         $crawler = $browser->request('GET', '/forums/');
 
         $this->assertPageStatusIs200($browser->getResponse());
