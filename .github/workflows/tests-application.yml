@@ -23,13 +23,9 @@ jobs:
       working-directory: .github/tests/application
       run: make up
 
-    - name: Wait for WordPress
-      run: |
-        until curl -f http://localhost:8080 > /dev/null 2>&1; do
-          echo 'Waiting for WordPress...'
-          sleep 5
-        done
-        echo 'WordPress is ready!'
+    - name: Run tests
+      working-directory: .github/tests/application
+      run: make run_tests
 
     - name: Docker Compose Down
       working-directory: .github/tests/application
