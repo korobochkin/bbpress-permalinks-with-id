@@ -7,7 +7,10 @@ down:
 config:
 	@docker compose config --quiet
 
-run_tests:
+vendor/bin/phpunit:
+	composer install --no-interaction --no-progress
+
+run_tests: vendor/bin/phpunit
 	 vendor/bin/phpunit --no-progress --testsuite=default
 
 php_cs_fixer:
