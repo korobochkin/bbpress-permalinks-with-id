@@ -23,9 +23,9 @@ jobs:
       working-directory: .github/tests/application
       run: make up
 
-    - name: Run tests
+    - name: Run Application Tests
       working-directory: .github/tests/application
-      run: make run_tests
+      run: docker compose run php make run_tests
 
     - name: Docker Compose Down
       working-directory: .github/tests/application
