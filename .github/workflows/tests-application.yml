@@ -29,4 +29,5 @@ jobs:
 
     - name: Docker Compose Down
       working-directory: .github/tests/application
+      if: always()
       run: make down
