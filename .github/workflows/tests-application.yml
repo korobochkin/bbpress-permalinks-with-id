@@ -27,6 +27,10 @@ jobs:
       working-directory: .github/tests/application
       run: make up
 
+    - name: Composer Install
+      working-directory: .github/tests/application
+      run: make composer_install_from_host
+
     - name: Run Application Tests
       working-directory: .github/tests/application
       run: make run_tests_from_host
