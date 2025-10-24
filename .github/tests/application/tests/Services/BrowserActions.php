@@ -6,10 +6,11 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
 use Symfony\Component\BrowserKit\HttpBrowser;
+use Symfony\Component\DomCrawler\Crawler;
 
 final class BrowserActions
 {
-    public static function createPostViaWPAdmin(HttpBrowser $browser, Post $post): void
+    public static function createPostViaWPAdmin(HttpBrowser $browser, Post $post): Crawler
     {
         $crawler = $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
 
@@ -27,7 +28,7 @@ final class BrowserActions
         $post->setId((int) $postID->attr('value'));
         $post->setAuthorId((int) $userID->attr('value'));
 
-        $browser->request(
+        return $browser->request(
             'POST',
             '/wp-admin/post.php',
             [

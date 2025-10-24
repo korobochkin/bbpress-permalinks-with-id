@@ -31,7 +31,7 @@ class HomePageTest extends AbstractHttpTestCase
 
         BrowserActions::createPostViaWPAdmin($this->browsers->admin, $this->forumsPage);
 
-        $this->assertEquals(200, $this->browsers->admin->getResponse()->getStatusCode());
+        $this->assertPageStatusIs200($this->browsers->admin->getResponse());
     }
 
     #[Attributes\Depends('testForumsPageCreation')]

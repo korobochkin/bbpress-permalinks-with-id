@@ -25,7 +25,11 @@ class ActivatePluginTest extends AbstractHttpTestCase
             ->link()
         ;
 
+        $this->assertPageStatusIs200($this->browsers->admin->getResponse());
+
         $crawler = $this->browsers->admin->click($link);
+
+        $this->assertPageStatusIs200($this->browsers->admin->getResponse());
 
         $this->assertStringContainsStringIgnoringCase(
             'Plugin activated',
