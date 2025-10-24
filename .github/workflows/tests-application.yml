@@ -29,7 +29,7 @@ jobs:
 
     - name: Run Application Tests
       working-directory: .github/tests/application
-      run: docker compose run php make run_tests
+      run: make run_tests_from_host
 
     - name: Docker Compose Down
       working-directory: .github/tests/application
