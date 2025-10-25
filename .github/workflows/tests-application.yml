@@ -49,9 +49,9 @@ jobs:
       with:
         cleanup: true
 
-    - name: Docker Compose Up --help
+    - name: Docker Compose Build --help
       working-directory: .github/tests/application
-      run: docker compose up --help
+      run: docker compose build --help
 
     - name: Docker Compose Up
       working-directory: .github/tests/application
