@@ -15,8 +15,8 @@ RUN apt update --quiet --assume-yes \
     \
 	&& rm -rf /usr/src/wordpress/wp-content/plugins/* \
     \
-	&& unzip /usr/src/bbpress.zip -d /usr/src/wordpress/wp-content/plugins/ \
-	&& unzip /usr/src/twentytwelve.zip -d /usr/src/wordpress/wp-content/themes/ \
+	&& unzip -q /usr/src/bbpress.zip -d /usr/src/wordpress/wp-content/plugins/ \
+	&& unzip -q /usr/src/twentytwelve.zip -d /usr/src/wordpress/wp-content/themes/ \
     \
     && rm /usr/src/php* \
 	&& rm /usr/src/bbpress.zip \
