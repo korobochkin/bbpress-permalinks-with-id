@@ -3,6 +3,36 @@ name: Application Tests
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      MYSQL_DATABASE:
+        required: true
+      MYSQL_USER:
+        required: true
+      MYSQL_PASSWORD:
+        required: true
+      MYSQL_ROOT_PASSWORD:
+        required: true
+
+      TEST_SITE_ADMIN_LOGIN:
+        required: true
+      TEST_SITE_ADMIN_PASSWORD:
+        required: true
+      TEST_SITE_ADMIN_EMAIL:
+        required: true
+
+    inputs:
+      TEST_SITE_DOMAIN:
+        type: string
+        default: 'one.wordpress.test'
+        required: true
+      TEST_SITE_TITLE:
+        type: string
+        default: 'Test Site'
+        required: true
+      TEST_SITE_LOCALE:
+        type: string
+        default: 'en_US'
+        required: true
 
 jobs:
   application-tests:
@@ -26,6 +56,17 @@ jobs:
     - name: Docker Compose Up
       working-directory: .github/tests/application
       run: make up
+      env:
+        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+        MYSQL_USER: ${{ secrets.MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        TEST_SITE_ADMIN_LOGIN: ${{ secrets.TEST_SITE_ADMIN_LOGIN }}
+        TEST_SITE_ADMIN_PASSWORD: ${{ secrets.TEST_SITE_ADMIN_PASSWORD }}
+        TEST_SITE_ADMIN_EMAIL: ${{ secrets.TEST_SITE_ADMIN_EMAIL }}
+        TEST_SITE_DOMAIN: ${{ inputs.TEST_SITE_DOMAIN }}
+        TEST_SITE_TITLE: ${{ inputs.TEST_SITE_TITLE }}
+        TEST_SITE_LOCALE: ${{ inputs.TEST_SITE_LOCALE }}
 
     - name: Composer Install
       working-directory: .github/tests/application

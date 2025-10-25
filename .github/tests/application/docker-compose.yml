@@ -8,14 +8,14 @@ services:
     networks:
       default:
         aliases:
-          - one.wordpress.test
+          - "${TEST_SITE_DOMAIN}"
     ports:
       - '127.0.0.1:8080:8080'
     environment:
       WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_NAME: "${MYSQL_DATABASE}"
+      WORDPRESS_DB_USER: "${MYSQL_USER}"
+      WORDPRESS_DB_PASSWORD: "${MYSQL_PASSWORD}"
       WORDPRESS_DEBUG: true
       WORDPRESS_CONFIG_EXTRA: |
         define( 'WP_DEBUG_LOG', true );
@@ -41,10 +41,10 @@ services:
     container_name: db
     image: mysql:8.0
     environment:
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
-      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
     ports:
       - '127.0.0.1:3306:3306'
     healthcheck:
@@ -61,15 +61,15 @@ services:
     image: wordpress:cli
     environment:
       WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
-      WORDPRESS_DB_NAME: wordpress
-      TEST_SITE_HOME: http://one.wordpress.test:8080
-      TEST_SITE_TITLE: Test Site
-      TEST_SITE_ADMIN_LOGIN: admin
-      TEST_SITE_ADMIN_PASSWORD: 12345
-      TEST_SITE_ADMIN_EMAIL: admin@one.wordpress.test
-      TEST_SITE_LOCALE: en_US
+      WORDPRESS_DB_NAME: "${MYSQL_DATABASE}"
+      WORDPRESS_DB_USER: "${MYSQL_USER}"
+      WORDPRESS_DB_PASSWORD: "${MYSQL_PASSWORD}"
+      TEST_SITE_HOME: "http://${TEST_SITE_DOMAIN}:8080"
+      TEST_SITE_TITLE: "${TEST_SITE_TITLE}"
+      TEST_SITE_ADMIN_LOGIN: "${TEST_SITE_ADMIN_LOGIN}"
+      TEST_SITE_ADMIN_PASSWORD: "${TEST_SITE_ADMIN_PASSWORD}"
+      TEST_SITE_ADMIN_EMAIL: "${TEST_SITE_ADMIN_EMAIL}"
+      TEST_SITE_LOCALE: "${TEST_SITE_LOCALE}"
     volumes_from:
       - wordpress
     volumes:
@@ -93,9 +93,9 @@ services:
     ports:
       - '127.0.0.1:9009:9009'
     environment:
-      TEST_SITE_HOME: http://one.wordpress.test:8080
-      TEST_SITE_ADMIN_LOGIN: admin
-      TEST_SITE_ADMIN_PASSWORD: 12345
+      TEST_SITE_HOME: "http://${TEST_SITE_DOMAIN}:8080"
+      TEST_SITE_ADMIN_LOGIN: "${TEST_SITE_ADMIN_LOGIN}"
+      TEST_SITE_ADMIN_PASSWORD: "${TEST_SITE_ADMIN_PASSWORD}"
     depends_on:
       wordpress:
         condition: service_healthy

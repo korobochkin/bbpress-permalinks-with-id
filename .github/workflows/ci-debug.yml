@@ -14,6 +14,18 @@ jobs:
     uses: ./.github/workflows/tests-application.yml
     permissions:
       contents: read
+    secrets:
+      MYSQL_DATABASE: ${{ secrets.APPLICATION_TESTS_MYSQL_DATABASE }}
+      MYSQL_USER: ${{ secrets.APPLICATION_TESTS_MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.APPLICATION_TESTS_MYSQL_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.APPLICATION_TESTS_MYSQL_ROOT_PASSWORD }}
+      TEST_SITE_ADMIN_LOGIN: ${{ secrets.APPLICATION_TESTS_TEST_SITE_ADMIN_LOGIN }}
+      TEST_SITE_ADMIN_PASSWORD: ${{ secrets.APPLICATION_TESTS_TEST_SITE_ADMIN_PASSWORD }}
+      TEST_SITE_ADMIN_EMAIL: ${{ secrets.APPLICATION_TESTS_TEST_SITE_ADMIN_EMAIL }}
+    with:
+      TEST_SITE_DOMAIN: 'one.wordpress.test'
+      TEST_SITE_TITLE: 'Test Site'
+      TEST_SITE_LOCALE: 'en_US'
 
 #  ci-debug:
 #    name: 'Debug environment variables'
