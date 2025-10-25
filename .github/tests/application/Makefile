@@ -1,5 +1,8 @@
+build:
+	docker compose build --quiet
+
 up:
-	@docker compose up --build --detach --quiet-pull --remove-orphans --timeout=120 --wait --yes
+	docker compose up --detach --no-build --quiet-pull --remove-orphans --timeout=120 --wait --yes
 
 down:
 	@docker compose down --remove-orphans --volumes

@@ -40,6 +40,17 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    env:
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      TEST_SITE_ADMIN_LOGIN: ${{ secrets.TEST_SITE_ADMIN_LOGIN }}
+      TEST_SITE_ADMIN_PASSWORD: ${{ secrets.TEST_SITE_ADMIN_PASSWORD }}
+      TEST_SITE_ADMIN_EMAIL: ${{ secrets.TEST_SITE_ADMIN_EMAIL }}
+      TEST_SITE_DOMAIN: ${{ inputs.TEST_SITE_DOMAIN }}
+      TEST_SITE_TITLE: ${{ inputs.TEST_SITE_TITLE }}
+      TEST_SITE_LOCALE: ${{ inputs.TEST_SITE_LOCALE }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
@@ -49,24 +60,13 @@ jobs:
       with:
         cleanup: true
 
-    - name: Docker Compose Build --help
+    - name: Docker Compose Build
       working-directory: .github/tests/application
-      run: docker compose build --help
+      run: make build
 
     - name: Docker Compose Up
       working-directory: .github/tests/application
       run: make up
-      env:
-        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-        MYSQL_USER: ${{ secrets.MYSQL_USER }}
-        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-        MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-        TEST_SITE_ADMIN_LOGIN: ${{ secrets.TEST_SITE_ADMIN_LOGIN }}
-        TEST_SITE_ADMIN_PASSWORD: ${{ secrets.TEST_SITE_ADMIN_PASSWORD }}
-        TEST_SITE_ADMIN_EMAIL: ${{ secrets.TEST_SITE_ADMIN_EMAIL }}
-        TEST_SITE_DOMAIN: ${{ inputs.TEST_SITE_DOMAIN }}
-        TEST_SITE_TITLE: ${{ inputs.TEST_SITE_TITLE }}
-        TEST_SITE_LOCALE: ${{ inputs.TEST_SITE_LOCALE }}
 
     - name: Composer Install
       working-directory: .github/tests/application
