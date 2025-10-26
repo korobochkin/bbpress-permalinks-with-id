@@ -21,6 +21,18 @@ on:
         required: true
 
     inputs:
+      WORDPRESS_ARG_BASE_IMAGE:
+        type: string
+        default: 'wordpress:latest'
+        required: true
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL:
+        type: string
+        default: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
+        required: true
+      WORDPRESS_ARG_THEME_ZIP_URL:
+        type: string
+        default: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
+        required: true
       TEST_SITE_DOMAIN:
         type: string
         default: 'one.wordpress.test'
@@ -48,6 +60,9 @@ jobs:
       TEST_SITE_ADMIN_LOGIN: ${{ secrets.TEST_SITE_ADMIN_LOGIN }}
       TEST_SITE_ADMIN_PASSWORD: ${{ secrets.TEST_SITE_ADMIN_PASSWORD }}
       TEST_SITE_ADMIN_EMAIL: ${{ secrets.TEST_SITE_ADMIN_EMAIL }}
+      WORDPRESS_ARG_BASE_IMAGE: ${{ inputs.WORDPRESS_ARG_BASE_IMAGE }}
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: ${{ inputs.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL }}
+      WORDPRESS_ARG_THEME_ZIP_URL: ${{ inputs.WORDPRESS_ARG_THEME_ZIP_URL }}
       TEST_SITE_DOMAIN: ${{ inputs.TEST_SITE_DOMAIN }}
       TEST_SITE_TITLE: ${{ inputs.TEST_SITE_TITLE }}
       TEST_SITE_LOCALE: ${{ inputs.TEST_SITE_LOCALE }}

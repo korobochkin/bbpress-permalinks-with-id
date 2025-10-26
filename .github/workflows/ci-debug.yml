@@ -23,6 +23,9 @@ jobs:
       TEST_SITE_ADMIN_PASSWORD: ${{ secrets.APPLICATION_TESTS_TEST_SITE_ADMIN_PASSWORD }}
       TEST_SITE_ADMIN_EMAIL: ${{ secrets.APPLICATION_TESTS_TEST_SITE_ADMIN_EMAIL }}
     with:
+      WORDPRESS_ARG_BASE_IMAGE: 'wordpress:latest'
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
+      WORDPRESS_ARG_THEME_ZIP_URL: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
       TEST_SITE_DOMAIN: 'one.wordpress.test'
       TEST_SITE_TITLE: 'Test Site'
       TEST_SITE_LOCALE: 'en_US'
