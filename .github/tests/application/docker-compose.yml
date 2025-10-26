@@ -4,7 +4,7 @@ services:
     container_name: wordpress
     build:
       context: .
-      dockerfile: wordpress.Dockerfile
+      dockerfile: ./containers/wordpress/wordpress.Dockerfile
     networks:
       default:
         aliases:
@@ -84,7 +84,7 @@ services:
   php:
     container_name: php
     build:
-      dockerfile: php.Dockerfile
+      dockerfile: ./containers/php/php.Dockerfile
     tty: true
     init: true
     volumes:
