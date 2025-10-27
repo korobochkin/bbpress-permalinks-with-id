@@ -3,8 +3,8 @@ services:
   wordpress:
     container_name: wordpress
     build:
-      context: .
-      dockerfile: ./containers/wordpress/wordpress.Dockerfile
+      context: ./containers/wordpress
+      dockerfile: ./wordpress.Dockerfile
       args:
         WORDPRESS_ARG_BASE_IMAGE: "${WORDPRESS_ARG_BASE_IMAGE}"
         WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: "${WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL}"

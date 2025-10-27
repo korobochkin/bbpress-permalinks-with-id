@@ -34,5 +34,6 @@ RUN sed --in-place 's/\*:80>/\*:8080>/g' /etc/apache2/sites-available/* \
     && \
     sed --in-place 's/#ServerName www\.example\.com/ServerName one\.wordpress\.test/g' /etc/apache2/sites-available/*.conf
 
+COPY --chown=www-data:www-data ./mu-plugins /usr/src/wordpress/wp-content/mu-plugins
 COPY --from=plugins --chown=www-data:www-data /tmp/plugins /usr/src/wordpress/wp-content/plugins/
 COPY --from=themes --chown=www-data:www-data /tmp/themes /usr/src/wordpress/wp-content/themes/
