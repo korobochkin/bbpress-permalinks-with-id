@@ -45,6 +45,10 @@ on:
         type: string
         default: 'en_US'
         required: true
+      CLI_ARG_BASE_IMAGE:
+        type: string
+        default: 'wordpress:cli'
+        required: true
 
 jobs:
   application-tests:
@@ -66,6 +70,7 @@ jobs:
       WORDPRESS_DOMAIN: ${{ inputs.WORDPRESS_DOMAIN }}
       WORDPRESS_SITE_TITLE: ${{ inputs.WORDPRESS_SITE_TITLE }}
       WORDPRESS_SITE_LOCALE: ${{ inputs.WORDPRESS_SITE_LOCALE }}
+      CLI_ARG_BASE_IMAGE: ${{ inputs.CLI_ARG_BASE_IMAGE }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v5

@@ -62,7 +62,7 @@ services:
 
   cli:
     container_name: cli
-    image: wordpress:cli
+    image: "${CLI_ARG_BASE_IMAGE}"
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_NAME: "${MYSQL_DATABASE}"

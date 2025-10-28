@@ -26,6 +26,7 @@ jobs:
       WORDPRESS_ARG_BASE_IMAGE: 'wordpress:latest'
       WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
       WORDPRESS_ARG_THEME_ZIP_URL: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
+      CLI_ARG_BASE_IMAGE: 'wordpress:cli'
       WORDPRESS_DOMAIN: 'one.wordpress.test'
       WORDPRESS_SITE_TITLE: 'Test Site'
       WORDPRESS_SITE_LOCALE: 'en_US'
