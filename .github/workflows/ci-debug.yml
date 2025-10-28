@@ -19,16 +19,16 @@ jobs:
       MYSQL_USER: ${{ secrets.APPLICATION_TESTS_MYSQL_USER }}
       MYSQL_PASSWORD: ${{ secrets.APPLICATION_TESTS_MYSQL_PASSWORD }}
       MYSQL_ROOT_PASSWORD: ${{ secrets.APPLICATION_TESTS_MYSQL_ROOT_PASSWORD }}
-      TEST_SITE_ADMIN_LOGIN: ${{ secrets.APPLICATION_TESTS_TEST_SITE_ADMIN_LOGIN }}
-      TEST_SITE_ADMIN_PASSWORD: ${{ secrets.APPLICATION_TESTS_TEST_SITE_ADMIN_PASSWORD }}
-      TEST_SITE_ADMIN_EMAIL: ${{ secrets.APPLICATION_TESTS_TEST_SITE_ADMIN_EMAIL }}
+      WORDPRESS_ADMIN_LOGIN: ${{ secrets.APPLICATION_TESTS_WORDPRESS_ADMIN_LOGIN }}
+      WORDPRESS_ADMIN_PASSWORD: ${{ secrets.APPLICATION_TESTS_WORDPRESS_ADMIN_PASSWORD }}
+      WORDPRESS_ADMIN_EMAIL: ${{ secrets.APPLICATION_TESTS_WORDPRESS_ADMIN_EMAIL }}
     with:
       WORDPRESS_ARG_BASE_IMAGE: 'wordpress:latest'
       WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
       WORDPRESS_ARG_THEME_ZIP_URL: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
-      TEST_SITE_DOMAIN: 'one.wordpress.test'
-      TEST_SITE_TITLE: 'Test Site'
-      TEST_SITE_LOCALE: 'en_US'
+      WORDPRESS_DOMAIN: 'one.wordpress.test'
+      WORDPRESS_SITE_TITLE: 'Test Site'
+      WORDPRESS_SITE_LOCALE: 'en_US'
 
 #  ci-debug:
 #    name: 'Debug environment variables'

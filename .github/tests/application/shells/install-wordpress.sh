@@ -6,12 +6,12 @@ cd /var/www/html || exit 1
 
 if ! wp core is-installed 2>/dev/null; then
   wp core install \
-    --url="${TEST_SITE_HOME}" \
-    --title="${TEST_SITE_TITLE}" \
-    --admin_user="${TEST_SITE_ADMIN_LOGIN}" \
-    --admin_password="${TEST_SITE_ADMIN_PASSWORD}" \
-    --admin_email="${TEST_SITE_ADMIN_EMAIL}" \
-    --locale="${TEST_SITE_LOCALE}" \
+    --url="${WORDPRESS_SITE_HOME}" \
+    --title="${WORDPRESS_SITE_TITLE}" \
+    --admin_user="${WORDPRESS_ADMIN_LOGIN}" \
+    --admin_password="${WORDPRESS_ADMIN_PASSWORD}" \
+    --admin_email="${WORDPRESS_ADMIN_EMAIL}" \
+    --locale="${WORDPRESS_SITE_LOCALE}" \
     --skip-email
 fi
 

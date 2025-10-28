@@ -13,11 +13,11 @@ on:
       MYSQL_ROOT_PASSWORD:
         required: true
 
-      TEST_SITE_ADMIN_LOGIN:
+      WORDPRESS_ADMIN_LOGIN:
         required: true
-      TEST_SITE_ADMIN_PASSWORD:
+      WORDPRESS_ADMIN_PASSWORD:
         required: true
-      TEST_SITE_ADMIN_EMAIL:
+      WORDPRESS_ADMIN_EMAIL:
         required: true
 
     inputs:
@@ -33,15 +33,15 @@ on:
         type: string
         default: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
         required: true
-      TEST_SITE_DOMAIN:
+      WORDPRESS_DOMAIN:
         type: string
         default: 'one.wordpress.test'
         required: true
-      TEST_SITE_TITLE:
+      WORDPRESS_SITE_TITLE:
         type: string
         default: 'Test Site'
         required: true
-      TEST_SITE_LOCALE:
+      WORDPRESS_SITE_LOCALE:
         type: string
         default: 'en_US'
         required: true
@@ -57,15 +57,15 @@ jobs:
       MYSQL_USER: ${{ secrets.MYSQL_USER }}
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
       MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-      TEST_SITE_ADMIN_LOGIN: ${{ secrets.TEST_SITE_ADMIN_LOGIN }}
-      TEST_SITE_ADMIN_PASSWORD: ${{ secrets.TEST_SITE_ADMIN_PASSWORD }}
-      TEST_SITE_ADMIN_EMAIL: ${{ secrets.TEST_SITE_ADMIN_EMAIL }}
+      WORDPRESS_ADMIN_LOGIN: ${{ secrets.WORDPRESS_ADMIN_LOGIN }}
+      WORDPRESS_ADMIN_PASSWORD: ${{ secrets.WORDPRESS_ADMIN_PASSWORD }}
+      WORDPRESS_ADMIN_EMAIL: ${{ secrets.WORDPRESS_ADMIN_EMAIL }}
       WORDPRESS_ARG_BASE_IMAGE: ${{ inputs.WORDPRESS_ARG_BASE_IMAGE }}
       WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: ${{ inputs.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL }}
       WORDPRESS_ARG_THEME_ZIP_URL: ${{ inputs.WORDPRESS_ARG_THEME_ZIP_URL }}
-      TEST_SITE_DOMAIN: ${{ inputs.TEST_SITE_DOMAIN }}
-      TEST_SITE_TITLE: ${{ inputs.TEST_SITE_TITLE }}
-      TEST_SITE_LOCALE: ${{ inputs.TEST_SITE_LOCALE }}
+      WORDPRESS_DOMAIN: ${{ inputs.WORDPRESS_DOMAIN }}
+      WORDPRESS_SITE_TITLE: ${{ inputs.WORDPRESS_SITE_TITLE }}
+      WORDPRESS_SITE_LOCALE: ${{ inputs.WORDPRESS_SITE_LOCALE }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
