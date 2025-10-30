@@ -25,6 +25,10 @@ jobs:
             cli_arg_base_image: 'wordpress:cli'
             wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
             wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
+          - wordpress_arg_base_image: 'wordpress:4.1.2' # Latest available Docker image despite WordPress has more 4.1.X releases.
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.5.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
     secrets:
       MYSQL_DATABASE: ${{ secrets.APPLICATION_TESTS_MYSQL_DATABASE }}
       MYSQL_USER: ${{ secrets.APPLICATION_TESTS_MYSQL_USER }}
