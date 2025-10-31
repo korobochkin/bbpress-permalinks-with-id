@@ -61,7 +61,7 @@ class HomePageTest extends AbstractHttpTestCase
 
         $this->assertStringContainsStringIgnoringCase(
             'No forums were found',
-            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[@class="bbp-template-notice"]/ul/li')->innerText()
+            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[@class="bbp-template-notice"]')->text()
         );
     }
 }
