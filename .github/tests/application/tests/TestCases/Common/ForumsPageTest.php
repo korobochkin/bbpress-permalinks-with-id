@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class HomePageTest extends AbstractForumsPageTest
+class ForumsPageTest extends AbstractForumsPageTest
 {
     #[Attributes\DependsOnClass(AdminPagesTest::class)]
     public function testForumsPageCreation(): void
