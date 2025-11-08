@@ -20,7 +20,7 @@ class ForumsPageTest extends AbstractForumsPageTest
         parent::testForumsPageAsGuest();
     }
 
-    #[Attributes\Depends('testForumsPageAsGuest')]
+	#[Attributes\DependsOnClass(ActivatePluginTest::class)]
     public function testForumsPageAsAdmin(): void
     {
         parent::testForumsPageAsAdmin();
