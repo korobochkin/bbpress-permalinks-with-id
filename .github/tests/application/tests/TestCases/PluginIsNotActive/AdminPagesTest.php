@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Common;
+namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\PluginIsNotActive;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractAdminPagesTest;
 use PHPUnit\Framework\Attributes;
