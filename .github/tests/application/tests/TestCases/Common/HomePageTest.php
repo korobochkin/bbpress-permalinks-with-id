@@ -13,6 +13,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 class HomePageTest extends AbstractForumsPageTest
 {
+    #[Attributes\DependsOnClass(AdminPagesTest::class)]
     public function testForumsPageCreation(): void
     {
         $this->browsers->admin->followRedirects(true);

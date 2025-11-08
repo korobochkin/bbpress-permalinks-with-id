@@ -14,9 +14,7 @@ final class BrowserActions
     {
         $crawler = $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
 
-		var_dump($crawler->outerHtml());
-
-		$nonce = $crawler->filterXPath('//form//input[(@id="_wpnonce" or name="_wp_nonce") and @type="hidden"]');
+        $nonce = $crawler->filterXPath('//form//input[(@id="_wpnonce" or name="_wp_nonce") and @type="hidden"]');
 
         // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
         $postID = $crawler->filterXPath('//input[(@id="post_ID" or name="post_ID") and @type="hidden"]');

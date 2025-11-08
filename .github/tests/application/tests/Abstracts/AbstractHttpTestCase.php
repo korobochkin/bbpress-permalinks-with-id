@@ -26,4 +26,23 @@ abstract class AbstractHttpTestCase extends TestCase
     {
         $this->assertEquals(200, $response->getStatusCode());
     }
+
+    protected function assertPageStatusIs200OrRedirect(Response $response): void
+    {
+        $this->assertThat(
+            $response->getStatusCode(),
+            $this->logicalOr(
+                $this->logicalAnd(
+                    $this->greaterThanOrEqual(300),
+                    $this->lessThan(400),
+                ),
+                $this->equalTo(200),
+            ),
+        );
+    }
+
+    protected function assertIsRedirect(Response $response): void
+    {
+        $this->assertThat($response->getStatusCode(), $this->logicalAnd($this->greaterThanOrEqual(300), $this->lessThan(400)));
+    }
 }
