@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Common;
+namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractHttpTestCase;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\HttpUtilities;
 
 abstract class AbstractAdminPagesTest extends AbstractHttpTestCase

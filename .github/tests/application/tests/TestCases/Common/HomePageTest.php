@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Common;
 
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractForumsPageTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowserActions;
 use PHPUnit\Framework\Attributes;
 

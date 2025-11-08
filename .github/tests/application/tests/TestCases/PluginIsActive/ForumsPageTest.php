@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\PluginIsActive;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Common\AbstractForumsPageTest;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractForumsPageTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Common\ActivatePluginTest;
 use PHPUnit\Framework\Attributes;
 
