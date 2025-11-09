@@ -23,31 +23,31 @@ on:
     inputs:
       WORDPRESS_ARG_BASE_IMAGE:
         type: string
-        default: 'wordpress:latest'
+        description: 'wordpress:latest'
         required: true
       WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL:
         type: string
-        default: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
+        description: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
         required: true
       WORDPRESS_ARG_THEME_ZIP_URL:
         type: string
-        default: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
+        description: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
         required: true
       WORDPRESS_DOMAIN:
         type: string
         default: 'one.wordpress.test'
-        required: true
+        required: false
       WORDPRESS_SITE_TITLE:
         type: string
         default: 'Test Site'
-        required: true
+        required: false
       WORDPRESS_SITE_LOCALE:
         type: string
         default: 'en_US'
-        required: true
+        required: false
       CLI_ARG_BASE_IMAGE:
         type: string
-        default: 'wordpress:cli'
+        description: 'wordpress:cli'
         required: true
 
 jobs:
