@@ -36,7 +36,7 @@ final class BrowserActions
             '/wp-admin/post.php',
             [
                 '_wpnonce' => $nonce->attr('value'),
-                '_wp_http_referer' => '/wp-admin/post-new.php?post_type=post',
+                '_wp_http_referer' => '/wp-admin/post-new.php?post_type=' . $post->getType()->value,
                 'action' => $action->attr('value'),
                 'originalaction' => $originalAction->attr('value'),
                 'post_author' => $userID->attr('value'),
