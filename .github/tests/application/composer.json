@@ -1,0 +1,24 @@
+{
+    "name": "korobochkin/bbpress-permalinks-with-id--tests-application",
+    "description": "",
+    "type": "project",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Korobochkin\\BBPressPermalinksWithIdTestsApplication\\": "source/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Korobochkin\\BBPressPermalinksWithIdTestsApplication\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require-dev": {
+        "phpunit/phpunit": "^12.4",
+        "symfony/browser-kit": "^7.3",
+        "symfony/http-client": "^7.3",
+        "symfony/mime": "^7.3",
+        "friendsofphp/php-cs-fixer": "^3.88"
+    }
+}
