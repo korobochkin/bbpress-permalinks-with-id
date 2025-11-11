@@ -18,7 +18,7 @@ abstract class AbstractHttpTestCase extends TestCase
                 return $GLOBALS['BROWSERS_SERVICE'];
             }
 
-			throw new \RuntimeException('BROWSERS_SERVICE not found in $GLOBALS. Ensure phpunit-bootstrap.php is loaded.');
+            throw new \RuntimeException('BROWSERS_SERVICE not found in $GLOBALS. Ensure phpunit-bootstrap.php is loaded.');
         }
     }
 
