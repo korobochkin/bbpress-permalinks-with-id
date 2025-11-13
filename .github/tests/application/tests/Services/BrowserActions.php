@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -12,17 +13,26 @@ final class BrowserActions
 {
     public static function createPostViaWPAdmin(HttpBrowser $browser, Post $post): Crawler
     {
-        $crawler = $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
+        return match ($post->getType()) {
+            Type::Page, Type::Post => self::createNativePostTypes($browser, $post),
+            Type::Forum, Type::Topic => self::createBbPressPostTypes($browser, $post),
+            default => throw new \LogicException('Not supported post type'),
+        };
+    }
+
+    private static function createNativePostTypes(HttpBrowser $browser, Post $post): Crawler
+    {
+        $crawler = self::requestPostNewPage($browser, $post);
 
         $nonce = $crawler->filterXPath('//form//input[(@id="_wpnonce" or name="_wp_nonce") and @type="hidden"]');
 
         // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
-        $postID = $crawler->filterXPath('//input[(@id="post_ID" or name="post_ID") and @type="hidden"]');
+        $postID = self::getPostId($crawler);
 
         $postType = $crawler->filterXPath('//form//input[(@id="post_type" or name="post_type") and @type="hidden"]');
         $action = $crawler->filterXPath('//form//input[(@id="hiddenaction" or name="action") and @type="hidden"]');
         $originalAction = $crawler->filterXPath('//form//input[(@id="originalaction" or name="originalaction") and @type="hidden"]');
-        $userID = $crawler->filterXPath('//form//input[(@id="user-id" or name="user_ID") and @type="hidden"]');
+        $userID = self::getUserId($crawler);
         $originalPostStatus = $crawler->filterXPath('//form//input[(@id="original_post_status" or name="original_post_status") and @type="hidden"]');
         $referredBy = $crawler->filterXPath('//form//input[(@id="referredby" or name="referredby") and @type="hidden"]');
 
@@ -50,5 +60,36 @@ final class BrowserActions
                 'post_name' => $post->getName(), // slug
             ],
         );
+    }
+
+    private static function createBbPressPostTypes(HttpBrowser $browser, Post $post): Crawler
+    {
+        $crawler = self::requestPostNewPage($browser, $post);
+
+        $form = $crawler->selectButton('Publish')->form();
+
+        $post->setId((int) self::getPostId($crawler)->attr('value'));
+        $post->setAuthorId((int) self::getUserId($crawler)->attr('value'));
+
+        return $browser->submit($form, [
+            'post_title' => $post->getTitle(),
+            'content' => $post->getContent(),
+        ]);
+    }
+
+    private static function requestPostNewPage(HttpBrowser $browser, Post $post): Crawler
+    {
+        return $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
+    }
+
+    private static function getPostId(Crawler $crawler): Crawler
+    {
+        // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
+        return $crawler->filterXPath('//input[(@id="post_ID" or name="post_ID") and @type="hidden"]');
+    }
+
+    private static function getUserId(Crawler $crawler): Crawler
+    {
+        return $crawler->filterXPath('//form//input[(@id="user-id" or name="user_ID") and @type="hidden"]');
     }
 }

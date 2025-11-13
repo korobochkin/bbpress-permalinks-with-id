@@ -11,14 +11,14 @@ class Random
         return random_int(1, PHP_INT_MAX);
     }
 
-    public static function word(): string
+    public static function word(int $maxLetters = 10, int $minLetters = 1): string
     {
-        return bin2hex(random_bytes(random_int(1, 10)));
+        return bin2hex(random_bytes(random_int($minLetters, $maxLetters)));
     }
 
-    public static function sentence(): string
+    public static function sentence(int $maxWords = 12, int $minWords = 1): string
     {
-        $length = random_int(0, 12);
+        $length = random_int($minWords, $maxWords);
         $sentence = [];
 
         for ($i = 0; $i < $length; ++$i) {
