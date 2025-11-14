@@ -63,11 +63,15 @@ abstract class AbstractHttpTestCase extends TestCase
         );
     }
 
-    protected function assertPageContainsNotice(string $notice, Crawler $crawler): void
+    protected function assertPageContainsNotice(string $needle, Crawler $pageCrawler): void
     {
-        $this->assertStringContainsStringIgnoringCase(
-            $notice,
-            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[@class="bbp-template-notice"]')->text()
-        );
+        $noticeCrawler = $pageCrawler->filterXPath('//html/body/div[@id="page"]//article//div[contains(@class, "bbp-template-notice")]');
+
+        $noticesOnPage = [];
+        foreach ($noticeCrawler as $node) {
+            $noticesOnPage[] = trim($node->textContent);
+        }
+
+        $this->assertStringContainsStringIgnoringCase($needle, implode(PHP_EOL, $noticesOnPage));
     }
 }

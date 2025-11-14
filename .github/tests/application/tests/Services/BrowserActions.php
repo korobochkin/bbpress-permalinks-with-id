@@ -75,6 +75,7 @@ final class BrowserActions
         $savedPostCrawler = $browser->submit($form, [
             'post_title' => $post->getTitle(),
             'content' => $post->getContent(),
+            'post_name' => $post->getName(),
         ]);
 
         $post->setStatus(Status::from(self::getPostStatus($savedPostCrawler)->attr('value')));

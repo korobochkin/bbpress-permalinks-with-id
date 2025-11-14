@@ -19,17 +19,24 @@ class ForumsTest extends AbstractForumsTest
 {
     #[Attributes\DependsOnClass(ForumsPage::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'get')]
-    public function testCreateForums(Post $forum): void
+    public function testCreateForum(Post $forum): void
     {
         $this->browsers->admin->followRedirects(true);
         BrowserActions::createPostViaWPAdmin($this->browsers->admin, $forum);
         $this->assertPageStatusIs200($this->browsers->admin->getResponse());
     }
 
-    #[Attributes\Depends('testCreateForums')]
+    #[Attributes\Depends('testCreateForum')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'get')]
-    public function testForumsAsGuest(Post $forum): void
+    public function testForumAsGuest(Post $forum): void
     {
-        parent::testForumsAsGuest($forum);
+        parent::testForumAsGuest($forum);
+    }
+
+    #[Attributes\Depends('testForumAsGuest')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'get')]
+    public function testForumAsAdmin(Post $forum): void
+    {
+        parent::testForumAsAdmin($forum);
     }
 }

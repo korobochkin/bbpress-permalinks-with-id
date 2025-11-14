@@ -31,10 +31,12 @@ class ForumDataProvider
     private static function buildPost(int $iteration): Post
     {
         $post = new Post();
+        $random = Random::positiveInteger();
         $post
             ->setType(Type::Forum)
-            ->setTitle('Forum # '.$iteration.'. '.Random::positiveInteger())
+            ->setTitle('Forum # '.$iteration.'. '.$random)
             ->setContent(Random::sentence())
+            ->setName('forum-slug-'.$iteration.'-'.$random)
         ;
 
         return $post;

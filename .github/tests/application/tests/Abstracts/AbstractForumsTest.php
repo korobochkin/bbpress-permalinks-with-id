@@ -6,26 +6,37 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
 use Symfony\Component\BrowserKit\HttpBrowser;
+use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractForumsTest extends AbstractHttpTestCase
 {
-    public function testForumsAsGuest(Post $forum): void
+    public function testForumAsGuest(Post $forum): void
     {
-        $this->testForum($this->browsers->guest, $forum);
+        $crawler = $this->testForum($this->browsers->guest, $forum);
+        $this->testNotLoggedIn($crawler);
     }
 
-    public function testForumsAsAdmin(Post $forum): void
+    public function testForumAsAdmin(Post $forum): void
     {
         $this->testForum($this->browsers->admin, $forum);
     }
 
-    protected function testForum(HttpBrowser $browser, Post $forum): void
+    protected function testForum(HttpBrowser $browser, Post $forum): Crawler
     {
         $browser->followRedirects(false);
-        $crawler = $browser->request('GET', '/forums/forum/'.$forum->getId().'/');
+        $crawler = $browser->request('GET', '/forums/forum/'.$forum->getName().'/');
 
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($forum->getTitle(), $crawler);
         $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
+        $this->assertPageContainsNotice('This forum is empty', $crawler);
+        $this->assertPageContainsNotice('No topics were found here', $crawler);
+
+        return $crawler;
+    }
+
+    protected function testNotLoggedIn(Crawler $crawler): void
+    {
+        $this->assertPageContainsNotice('You must be logged in', $crawler);
     }
 }
