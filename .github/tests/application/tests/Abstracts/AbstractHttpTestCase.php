@@ -7,6 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowsersService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractHttpTestCase extends TestCase
 {
@@ -44,5 +45,29 @@ abstract class AbstractHttpTestCase extends TestCase
     protected function assertIsRedirect(Response $response): void
     {
         $this->assertThat($response->getStatusCode(), $this->logicalAnd($this->greaterThanOrEqual(300), $this->lessThan(400)));
+    }
+
+    protected function assertPageTitleEquals(string $title, Crawler $crawler): void
+    {
+        $this->assertEquals(
+            $title,
+            $crawler->filterXPath('//html/body/div[@id="page"]//article/header/h1')->innerText(),
+        );
+    }
+
+    protected function assertBbPressBreadCrumbsContains(string $text, Crawler $crawler): void
+    {
+        $this->assertStringContainsString(
+            $text,
+            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[@class="bbp-breadcrumb"]')->text(),
+        );
+    }
+
+    protected function assertPageContainsNotice(string $notice, Crawler $crawler): void
+    {
+        $this->assertStringContainsStringIgnoringCase(
+            $notice,
+            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[@class="bbp-template-notice"]')->text()
+        );
     }
 }

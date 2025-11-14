@@ -11,16 +11,21 @@ abstract class AbstractForumsTest extends AbstractHttpTestCase
 {
     public function testForumsAsGuest(Post $forum): void
     {
-        $this->browsers->guest->followRedirects(false);
+        $this->testForum($this->browsers->guest, $forum);
     }
 
-    public function testForumsAsAdmin(): void
+    public function testForumsAsAdmin(Post $forum): void
     {
-        $this->browsers->admin->followRedirects(false);
+        $this->testForum($this->browsers->admin, $forum);
     }
 
-    protected function testForums(HttpBrowser $browser): void
+    protected function testForum(HttpBrowser $browser, Post $forum): void
     {
-        $crawler = $browser->request('GET', '/');
+        $browser->followRedirects(false);
+        $crawler = $browser->request('GET', '/forums/forum/'.$forum->getId().'/');
+
+        $this->assertPageStatusIs200($browser->getResponse());
+        $this->assertPageTitleEquals($forum->getTitle(), $crawler);
+        $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
     }
 }
