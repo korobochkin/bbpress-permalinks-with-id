@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
@@ -71,10 +72,14 @@ final class BrowserActions
         $post->setId((int) self::getPostId($crawler)->attr('value'));
         $post->setAuthorId((int) self::getUserId($crawler)->attr('value'));
 
-        return $browser->submit($form, [
+        $savedPostCrawler = $browser->submit($form, [
             'post_title' => $post->getTitle(),
             'content' => $post->getContent(),
         ]);
+
+        $post->setStatus(Status::from(self::getPostStatus($savedPostCrawler)->attr('value')));
+
+        return $savedPostCrawler;
     }
 
     private static function requestPostNewPage(HttpBrowser $browser, Post $post): Crawler
@@ -91,5 +96,10 @@ final class BrowserActions
     private static function getUserId(Crawler $crawler): Crawler
     {
         return $crawler->filterXPath('//form//input[(@id="user-id" or name="user_ID") and @type="hidden"]');
+    }
+
+    private static function getPostStatus(Crawler $crawler): Crawler
+    {
+        return $crawler->filterXPath('//form//input[(@id="original_post_status" or name="original_post_status") and @type="hidden"]');
     }
 }
