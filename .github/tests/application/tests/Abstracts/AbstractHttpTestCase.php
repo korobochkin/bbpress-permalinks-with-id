@@ -25,7 +25,7 @@ abstract class AbstractHttpTestCase extends TestCase
 
     protected function assertPageStatusIs200(Response $response): void
     {
-        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
     }
 
     protected function assertPageStatusIs200OrRedirect(Response $response): void
