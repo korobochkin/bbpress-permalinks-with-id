@@ -8,7 +8,6 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\Abstract
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowserActions;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\ForumsPage;
 use PHPUnit\Framework\Attributes;
 
 /**
@@ -17,7 +16,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 class ForumsTest extends AbstractForumsTest
 {
-    #[Attributes\DependsOnClass(ForumsPage::class)]
+    #[Attributes\DependsOnClass(ForumsPageTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'get')]
     public function testCreateForum(Post $forum): void
     {
