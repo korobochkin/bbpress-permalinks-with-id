@@ -47,19 +47,19 @@ abstract class AbstractHttpTestCase extends TestCase
         $this->assertThat($response->getStatusCode(), $this->logicalAnd($this->greaterThanOrEqual(300), $this->lessThan(400)));
     }
 
-    protected function assertPageTitleEquals(string $title, Crawler $crawler): void
+    protected function assertPageTitleEquals(string $expected, Crawler $crawler): void
     {
         $this->assertEquals(
-            $title,
+            $expected,
             $crawler->filterXPath('//html/body/div[@id="page"]//article/header/h1')->innerText(),
         );
     }
 
-    protected function assertBbPressBreadCrumbsContains(string $text, Crawler $crawler): void
+    protected function assertBbPressBreadCrumbsContains(string $needle, Crawler $crawler): void
     {
         $this->assertStringContainsString(
-            $text,
-            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[@class="bbp-breadcrumb"]')->text(),
+            $needle,
+            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[contains(@class, "bbp-breadcrumb")]')->text(),
         );
     }
 
