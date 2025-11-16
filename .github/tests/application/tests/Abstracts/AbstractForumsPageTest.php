@@ -20,21 +20,30 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
 
     public function testForumsPageAsGuest(): void
     {
+        $this->requestForumsPage($this->browsers->guest);
         $this->assertForumsPageAccessible($this->browsers->guest);
     }
 
     public function testForumsPageAsAdmin(): void
     {
+        $this->requestForumsPage($this->browsers->admin);
         $this->assertForumsPageAccessible($this->browsers->admin);
+    }
+
+    protected function requestForumsPage(HttpBrowser $browser): void
+    {
+        $browser->followRedirects(false);
+        $browser->request('GET', '/forums/');
     }
 
     protected function assertForumsPageAccessible(HttpBrowser $browser): void
     {
-        $browser->followRedirects(false);
-        $crawler = $browser->request('GET', '/forums/');
-
         $this->assertPageStatusIs200($browser->getResponse());
-        $this->assertPageTitleEquals($this->forumsPage->getTitle(), $crawler);
-        $this->assertPageContainsNotice('No forums were found', $crawler);
+        $this->assertPageTitleEquals($this->forumsPage->getTitle(), $browser->getCrawler());
+    }
+
+    protected function assertForumsPageHasNoForums(HttpBrowser $browser): void
+    {
+        $this->assertPageContainsNotice('No forums were found', $browser->getCrawler());
     }
 }
