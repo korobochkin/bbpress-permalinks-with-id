@@ -36,4 +36,13 @@ class ActivatePluginTest extends AbstractHttpTestCase
             $crawler->filterXPath('//html/body//div[contains(@class, "notice")]')->text(),
         );
     }
+
+    #[Attributes\Depends('testActivatePlugin')]
+    public function testFlushRewriteRules(): void
+    {
+        $this->browsers->admin->followRedirects(false);
+        $this->browsers->admin->request('GET', '/wp-admin/options-permalink.php');
+
+        $this->assertPageStatusIs200($this->browsers->admin->getResponse());
+    }
 }
