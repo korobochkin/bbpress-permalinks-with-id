@@ -36,7 +36,7 @@ class ForumDataProvider
             ->setType(Type::Forum)
             ->setTitle('Forum # '.$iteration.'. '.$random)
             ->setContent(Random::sentence())
-            ->setName('forum-slug-'.$iteration.'-'.$random)
+            ->setName('forum-slug-'.$iteration.'-'.$random.'-end')
         ;
 
         return $post;
