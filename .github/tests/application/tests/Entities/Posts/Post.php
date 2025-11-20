@@ -20,6 +20,8 @@ class Post
 
     private int $authorId;
 
+    private int $parentForumId;
+
     public function getId(): int
     {
         return $this->id;
@@ -102,5 +104,25 @@ class Post
         $this->authorId = $authorId;
 
         return $this;
+    }
+
+    public function getParentForumId(): int
+    {
+        if (Type::Topic === $this->type) {
+            return $this->parentForumId;
+        }
+
+        throw new \LogicException('Only Topics can have Parent Forum ID.');
+    }
+
+    public function setParentForumId(int $parentForumId): Post
+    {
+        if (Type::Topic === $this->type) {
+            $this->parentForumId = $parentForumId;
+
+            return $this;
+        }
+
+        throw new \LogicException('Only Topics can have Parent Forum ID.');
     }
 }

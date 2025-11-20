@@ -13,4 +13,6 @@ enum Type: string
     case Forum = 'forum';
 
     case Topic = 'topic';
+
+    case Reply = 'reply';
 }

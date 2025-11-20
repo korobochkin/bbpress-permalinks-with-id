@@ -16,7 +16,7 @@ final class BrowserActions
     {
         return match ($post->getType()) {
             Type::Page, Type::Post => self::createNativePostTypes($browser, $post),
-            Type::Forum, Type::Topic => self::createBbPressPostTypes($browser, $post),
+            Type::Forum, Type::Topic, Type::Reply => self::createBbPressPostTypes($browser, $post),
             default => throw new \LogicException('Not supported post type'),
         };
     }
@@ -72,11 +72,26 @@ final class BrowserActions
         $post->setId((int) self::getPostId($crawler)->attr('value'));
         $post->setAuthorId((int) self::getUserId($crawler)->attr('value'));
 
-        $savedPostCrawler = $browser->submit($form, [
+        $formData = [
             'post_title' => $post->getTitle(),
             'content' => $post->getContent(),
             'post_name' => $post->getName(),
-        ]);
+            ...(
+                Type::Topic === $post->getType()
+                ? [
+                    'parent_id' => $post->getParentForumId(),
+                ]
+                : []
+            ),
+        ];
+
+        //		switch ($post->getType()) {
+        //
+        //			case Type::Reply:
+        // //				$formData[]
+        //		}
+
+        $savedPostCrawler = $browser->submit($form, $formData);
 
         $post->setStatus(Status::from(self::getPostStatus($savedPostCrawler)->attr('value')));
 

@@ -13,7 +13,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 class ActivatePluginTest extends AbstractHttpTestCase
 {
-    #[Attributes\DependsOnClass(ForumsTest::class)]
+    #[Attributes\DependsOnClass(TopicsTest::class)]
     public function testActivatePlugin(): void
     {
         $this->browsers->admin->followRedirects(true);

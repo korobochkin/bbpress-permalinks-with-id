@@ -17,23 +17,25 @@ use PHPUnit\Framework\Attributes;
 class ForumsTest extends AbstractForumsTest
 {
     #[Attributes\DependsOnClass(ForumsPageTest::class)]
-    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'get')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testCreateForum(Post $forum): void
     {
         $this->browsers->admin->followRedirects(true);
         BrowserActions::createPostViaWPAdmin($this->browsers->admin, $forum);
         $this->assertPageStatusIs200($this->browsers->admin->getResponse());
+
+        $this->assertIsInt($forum->getId());
     }
 
     #[Attributes\Depends('testCreateForum')]
-    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'get')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsGuest(Post $forum): void
     {
         parent::testForumAsGuest($forum);
     }
 
     #[Attributes\Depends('testForumAsGuest')]
-    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'get')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsAdmin(Post $forum): void
     {
         parent::testForumAsAdmin($forum);
