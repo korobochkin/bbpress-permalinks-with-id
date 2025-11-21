@@ -4,24 +4,24 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractForumsTest extends AbstractHttpTestCase
 {
-    public function testForumAsGuest(Post $forum): void
+    public function testForumAsGuest(Forum $forum): void
     {
         $crawler = $this->testForum($this->browsers->guest, $forum);
         $this->testNotLoggedIn($crawler);
     }
 
-    public function testForumAsAdmin(Post $forum): void
+    public function testForumAsAdmin(Forum $forum): void
     {
         $this->testForum($this->browsers->admin, $forum);
     }
 
-    protected function testForum(HttpBrowser $browser, Post $forum): Crawler
+    protected function testForum(HttpBrowser $browser, Forum $forum): Crawler
     {
         $browser->followRedirects(false);
         $crawler = $browser->request('GET', '/forums/forum/'.$forum->getName().'/');

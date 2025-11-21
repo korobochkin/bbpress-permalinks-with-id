@@ -6,7 +6,8 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Pl
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractHttpTestCase;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowserActions;
 use PHPUnit\Framework\Attributes;
@@ -29,14 +30,18 @@ class TopicsTest extends AbstractHttpTestCase
     {
         parent::assertPreConditions();
 
-        foreach (ForumDataProvider::getTopics() as $forumsAndTopic) {
-            $forumsAndTopic[1]->setParentForumId($forumsAndTopic[0]->getId());
+        foreach (ForumDataProvider::getTopics() as [$forum, $topic]) {
+            /*
+             * @var Forum $forum
+             * @var Topic $topic
+             */
+            $topic->setParentForumId($forum->getId());
         }
     }
 
     #[Attributes\DependsOnClass(ForumsTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
-    public function testCreateTopic(Post $forum, Post $topic): void
+    public function testCreateTopic(Forum $forum, Topic $topic): void
     {
         $this->assertSame(Type::Forum, $forum->getType());
         $this->assertSame(Type::Topic, $topic->getType());

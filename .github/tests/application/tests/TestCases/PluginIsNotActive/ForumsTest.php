@@ -6,7 +6,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Pl
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractForumsTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowserActions;
 use PHPUnit\Framework\Attributes;
 
@@ -18,7 +18,7 @@ class ForumsTest extends AbstractForumsTest
 {
     #[Attributes\DependsOnClass(ForumsPageTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
-    public function testCreateForum(Post $forum): void
+    public function testCreateForum(Forum $forum): void
     {
         $this->browsers->admin->followRedirects(true);
         BrowserActions::createPostViaWPAdmin($this->browsers->admin, $forum);
@@ -29,14 +29,14 @@ class ForumsTest extends AbstractForumsTest
 
     #[Attributes\Depends('testCreateForum')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
-    public function testForumAsGuest(Post $forum): void
+    public function testForumAsGuest(Forum $forum): void
     {
         parent::testForumAsGuest($forum);
     }
 
     #[Attributes\Depends('testForumAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
-    public function testForumAsAdmin(Post $forum): void
+    public function testForumAsAdmin(Forum $forum): void
     {
         parent::testForumAsAdmin($forum);
     }

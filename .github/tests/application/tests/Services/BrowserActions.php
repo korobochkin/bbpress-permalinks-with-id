@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class BrowserActions
 {
-    public static function createPostViaWPAdmin(HttpBrowser $browser, Post $post): Crawler
+    public static function createPostViaWPAdmin(HttpBrowser $browser, AbstractPost $post): Crawler
     {
         return match ($post->getType()) {
             Type::Page, Type::Post => self::createNativePostTypes($browser, $post),
@@ -21,7 +24,7 @@ final class BrowserActions
         };
     }
 
-    private static function createNativePostTypes(HttpBrowser $browser, Post $post): Crawler
+    private static function createNativePostTypes(HttpBrowser $browser, Page $post): Crawler
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
@@ -63,7 +66,7 @@ final class BrowserActions
         );
     }
 
-    private static function createBbPressPostTypes(HttpBrowser $browser, Post $post): Crawler
+    private static function createBbPressPostTypes(HttpBrowser $browser, Forum|Topic $post): Crawler
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
@@ -98,7 +101,7 @@ final class BrowserActions
         return $savedPostCrawler;
     }
 
-    private static function requestPostNewPage(HttpBrowser $browser, Post $post): Crawler
+    private static function requestPostNewPage(HttpBrowser $browser, AbstractPost $post): Crawler
     {
         return $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
     }

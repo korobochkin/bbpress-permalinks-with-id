@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts;
 
-class Post
+abstract class AbstractPost
 {
     private int $id;
-
-    private Type $type;
 
     private Status $status;
 
@@ -20,38 +18,26 @@ class Post
 
     private int $authorId;
 
-    private int $parentForumId;
-
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId(int $id): Post
+    public function setId(int $id): self
     {
         $this->id = $id;
 
         return $this;
     }
 
-    public function getType(): Type
-    {
-        return $this->type;
-    }
-
-    public function setType(Type $type): Post
-    {
-        $this->type = $type;
-
-        return $this;
-    }
+    abstract public function getType(): Type;
 
     public function getStatus(): Status
     {
         return $this->status;
     }
 
-    public function setStatus(Status $status): Post
+    public function setStatus(Status $status): self
     {
         $this->status = $status;
 
@@ -63,7 +49,7 @@ class Post
         return $this->title;
     }
 
-    public function setTitle(string $title): Post
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -75,7 +61,7 @@ class Post
         return $this->content;
     }
 
-    public function setContent(string $content): Post
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -87,7 +73,7 @@ class Post
         return $this->name;
     }
 
-    public function setName(string $name): Post
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -99,30 +85,10 @@ class Post
         return $this->authorId;
     }
 
-    public function setAuthorId(int $authorId): Post
+    public function setAuthorId(int $authorId): self
     {
         $this->authorId = $authorId;
 
         return $this;
-    }
-
-    public function getParentForumId(): int
-    {
-        if (Type::Topic === $this->type) {
-            return $this->parentForumId;
-        }
-
-        throw new \LogicException('Only Topics can have Parent Forum ID.');
-    }
-
-    public function setParentForumId(int $parentForumId): Post
-    {
-        if (Type::Topic === $this->type) {
-            $this->parentForumId = $parentForumId;
-
-            return $this;
-        }
-
-        throw new \LogicException('Only Topics can have Parent Forum ID.');
     }
 }

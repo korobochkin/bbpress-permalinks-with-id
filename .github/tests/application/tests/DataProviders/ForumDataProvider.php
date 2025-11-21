@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Random;
 
 class ForumDataProvider
@@ -23,10 +23,13 @@ class ForumDataProvider
     private int $numberOfReplies = 2;
 
     /**
-     * @var array<int, array{0: Post, 1: Post[]}>
+     * @var array<int, array{0: Forum, 1: Topic[]}>
      */
     private array $data = [];
 
+    /**
+     * @return \Generator<int, array{Forum}, mixed, void>
+     */
     public static function getForums(): \Generator
     {
         if (!isset(self::$instance)) {
@@ -37,6 +40,9 @@ class ForumDataProvider
         return self::$instance->forumsGenerator();
     }
 
+    /**
+     * @return \Generator<int, array{Forum, Topic}, mixed, void>
+     */
     public static function getTopics(): \Generator
     {
         if (!isset(self::$instance)) {
@@ -63,12 +69,11 @@ class ForumDataProvider
         }
     }
 
-    private function buildForum(int $forumIteration): Post
+    private function buildForum(int $forumIteration): Forum
     {
-        $post = new Post();
+        $post = new Forum();
         $random = Random::positiveInteger();
         $post
-            ->setType(Type::Forum)
             ->setTitle('Forum # '.$forumIteration.'. '.$random)
             ->setContent(Random::sentence())
             ->setName('forum-slug-'.$forumIteration.'-'.$random.'-end')
@@ -77,13 +82,12 @@ class ForumDataProvider
         return $post;
     }
 
-    private function buildTopic(int $forumIteration, int $topicIteration): Post
+    private function buildTopic(int $forumIteration, int $topicIteration): Topic
     {
-        $topic = new Post();
+        $topic = new Topic();
         $random = Random::positiveInteger();
 
         $topic
-            ->setType(Type::Topic)
             ->setTitle('Topic # '.$forumIteration.'-'.$topicIteration.'. '.$random)
             ->setContent(Random::sentence())
             ->setName('topic-slug-'.$forumIteration.'-'.$topicIteration.'-'.$random.'-end')
@@ -92,6 +96,9 @@ class ForumDataProvider
         return $topic;
     }
 
+    /**
+     * @return \Generator<int, array{Forum}, mixed, void>
+     */
     private function forumsGenerator(): \Generator
     {
         foreach ($this->data as $i => $pair) {
@@ -99,6 +106,9 @@ class ForumDataProvider
         }
     }
 
+    /**
+     * @return \Generator<int, array{Forum, Topic}, mixed, void>
+     */
     private function topicsGenerator(): \Generator
     {
         foreach ($this->data as $forumAndTopics) {
