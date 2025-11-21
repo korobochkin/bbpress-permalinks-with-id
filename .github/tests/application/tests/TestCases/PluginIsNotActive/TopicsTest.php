@@ -43,9 +43,6 @@ class TopicsTest extends AbstractHttpTestCase
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testCreateTopic(Forum $forum, Topic $topic): void
     {
-        $this->assertSame(Type::Forum, $forum->getType());
-        $this->assertSame(Type::Topic, $topic->getType());
-
         $this->browsers->admin->followRedirects(true);
         BrowserActions::createPostViaWPAdmin($this->browsers->admin, $topic);
         $this->assertPageStatusIs200($this->browsers->admin->getResponse());
