@@ -7,6 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
@@ -15,13 +16,13 @@ use Symfony\Component\DomCrawler\Crawler;
 
 final class BrowserActions
 {
-    public static function createPostViaWPAdmin(HttpBrowser $browser, AbstractPost $post): Crawler
+    public static function createPostViaWPAdmin(HttpBrowser $browser, Forum|Page|Reply|Topic $post): Crawler
     {
-        return match ($post->getType()) {
-            Type::Page, Type::Post => self::createNativePostTypes($browser, $post),
-            Type::Forum, Type::Topic, Type::Reply => self::createBbPressPostTypes($browser, $post),
-            default => throw new \LogicException('Not supported post type'),
-        };
+        if ($post instanceof Page) {
+            return self::createNativePostTypes($browser, $post);
+        }
+
+        return self::createBbPressPostTypes($browser, $post);
     }
 
     private static function createNativePostTypes(HttpBrowser $browser, Page $post): Crawler
@@ -66,7 +67,7 @@ final class BrowserActions
         );
     }
 
-    private static function createBbPressPostTypes(HttpBrowser $browser, Forum|Topic $post): Crawler
+    private static function createBbPressPostTypes(HttpBrowser $browser, Forum|Reply|Topic $post): Crawler
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
