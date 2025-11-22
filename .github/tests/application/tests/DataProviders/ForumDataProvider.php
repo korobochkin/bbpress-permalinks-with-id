@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Random;
 
@@ -28,10 +29,7 @@ class ForumDataProvider
      */
     public static function getForums(): \Generator
     {
-        if (!isset(self::$instance)) {
-            self::$instance = new self();
-            self::$instance->build();
-        }
+        self::prepareInstance();
 
         return self::$instance->forumsGenerator();
     }
@@ -41,12 +39,24 @@ class ForumDataProvider
      */
     public static function getTopics(): \Generator
     {
+        self::prepareInstance();
+
+        return self::$instance->topicsGenerator();
+    }
+
+    public static function getReplies(): \Generator
+    {
+        self::prepareInstance();
+
+        return self::$instance->repliesGenerator();
+    }
+
+    private static function prepareInstance(): void
+    {
         if (!isset(self::$instance)) {
             self::$instance = new self();
             self::$instance->build();
         }
-
-        return self::$instance->topicsGenerator();
     }
 
     private function build(): void
@@ -101,6 +111,20 @@ class ForumDataProvider
         return $topic;
     }
 
+    private function buildReply(int $forumIteration, int $topicIteration, int $replyIteration): Reply
+    {
+        $reply = new Reply();
+        $random = Random::positiveInteger();
+
+        $reply
+            ->setTitle(implode(' ', ['Reply #', implode('_', [$forumIteration, $topicIteration, $replyIteration]), $random]))
+            ->setContent(Random::sentence())
+            ->setName(implode('-', ['topic-slug', $forumIteration, $topicIteration, $replyIteration, $random, 'end']))
+        ;
+
+        return $reply;
+    }
+
     /**
      * @return \Generator<int, array{Forum}, mixed, void>
      */
@@ -120,6 +144,21 @@ class ForumDataProvider
         foreach ($this->data as [$forum, $topicsAndReplies]) {
             foreach ($topicsAndReplies as [$topic, $replies]) {
                 yield $i++ => [$forum, $topic];
+            }
+        }
+    }
+
+    /**
+     * @return \Generator<int, array{Forum, Topic, Reply}, mixed, void>
+     */
+    private function repliesGenerator(): \Generator
+    {
+        $i = 0;
+        foreach ($this->data as [$forum, $topicsAndReplies]) {
+            foreach ($topicsAndReplies as [$topic, $replies]) {
+                foreach ($replies as $reply) {
+                    yield $i++ => [$forum, $topic, $reply];
+                }
             }
         }
     }

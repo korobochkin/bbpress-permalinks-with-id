@@ -10,7 +10,6 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Pag
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -71,7 +70,7 @@ final class BrowserActions
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
-        $form = $crawler->selectButton('Publish')->form();
+        $form = $crawler->filterXPath('//body//div[@id="wpbody"]//input[@id="publish"]')->form();
 
         $post->setId((int) self::getPostId($crawler)->attr('value'));
         $post->setAuthorId((int) self::getUserId($crawler)->attr('value'));
@@ -80,20 +79,14 @@ final class BrowserActions
             'post_title' => $post->getTitle(),
             'content' => $post->getContent(),
             'post_name' => $post->getName(),
-            ...(
-                Type::Topic === $post->getType()
-                ? [
-                    'parent_id' => $post->getParentForumId(),
-                ]
-                : []
-            ),
         ];
 
-        //		switch ($post->getType()) {
-        //
-        //			case Type::Reply:
-        // //				$formData[]
-        //		}
+        if ($post instanceof Topic) {
+            $formData['parent_id'] = $post->getParentForumId();
+        } elseif ($post instanceof Reply) {
+            $formData['bbp_forum_id'] = $post->getParentForumId();
+            $formData['parent_id'] = $post->getParentTopicId();
+        }
 
         $savedPostCrawler = $browser->submit($form, $formData);
 
