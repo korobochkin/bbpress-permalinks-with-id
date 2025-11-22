@@ -74,9 +74,9 @@ class ForumDataProvider
         $post = new Forum();
         $random = Random::positiveInteger();
         $post
-            ->setTitle('Forum # '.$forumIteration.'. '.$random)
+            ->setTitle(implode(' ', ['Forum #', $forumIteration, $random]))
             ->setContent(Random::sentence())
-            ->setName('forum-slug-'.$forumIteration.'-'.$random.'-end')
+            ->setName(implode('-', ['forum-slug', $forumIteration, $random, 'end']))
         ;
 
         return $post;
@@ -88,9 +88,9 @@ class ForumDataProvider
         $random = Random::positiveInteger();
 
         $topic
-            ->setTitle('Topic # '.$forumIteration.'-'.$topicIteration.'. '.$random)
+            ->setTitle(implode(' ', ['Topic #', implode('_', [$forumIteration, $topicIteration]), $random]))
             ->setContent(Random::sentence())
-            ->setName('topic-slug-'.$forumIteration.'-'.$topicIteration.'-'.$random.'-end')
+            ->setName(implode('-', ['topic-slug', $forumIteration, $topicIteration, $random, 'end']))
         ;
 
         return $topic;
