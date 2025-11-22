@@ -10,10 +10,6 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Random;
 
 class ForumDataProvider
 {
-    private const int KEY_FORUM = 0;
-
-    private const int KEY_TOPIC = 1;
-
     public static self $instance;
 
     private int $numberOfForums = 2;
@@ -56,15 +52,24 @@ class ForumDataProvider
     private function build(): void
     {
         for ($i = 0; $i < $this->numberOfForums; ++$i) {
-            $topics = [];
+            $topicsAndReplies = [];
 
             for ($j = 0; $j < $this->numberOfTopics; ++$j) {
-                $topics[] = $this->buildTopic($i, $j);
+                $replies = [];
+
+                for ($k = 0; $k < $this->numberOfReplies; ++$k) {
+                    $replies[] = $this->buildReply($i, $j, $k);
+                }
+
+                $topicsAndReplies[] = [
+                    $this->buildTopic($i, $j),
+                    $replies,
+                ];
             }
 
             $this->data[$i] = [
-                self::KEY_FORUM => $this->buildForum($i),
-                self::KEY_TOPIC => $topics,
+                $this->buildForum($i),
+                $topicsAndReplies,
             ];
         }
     }
@@ -101,8 +106,8 @@ class ForumDataProvider
      */
     private function forumsGenerator(): \Generator
     {
-        foreach ($this->data as $i => $pair) {
-            yield $i => [$pair[self::KEY_FORUM]];
+        foreach ($this->data as $i => [$forum]) {
+            yield $i => [$forum];
         }
     }
 
@@ -111,12 +116,10 @@ class ForumDataProvider
      */
     private function topicsGenerator(): \Generator
     {
-        foreach ($this->data as $forumAndTopics) {
-            foreach ($forumAndTopics[self::KEY_TOPIC] as $i => $topic) {
-                yield $i => [
-                    self::KEY_FORUM => $forumAndTopics[self::KEY_FORUM],
-                    self::KEY_TOPIC => $topic,
-                ];
+        $i = 0;
+        foreach ($this->data as [$forum, $topicsAndReplies]) {
+            foreach ($topicsAndReplies as [$topic, $replies]) {
+                yield $i++ => [$forum, $topic];
             }
         }
     }
