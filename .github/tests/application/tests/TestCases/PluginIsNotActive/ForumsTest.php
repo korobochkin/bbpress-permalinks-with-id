@@ -7,6 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Pl
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractForumsTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowserActions;
 use PHPUnit\Framework\Attributes;
 
@@ -25,6 +26,7 @@ class ForumsTest extends AbstractForumsTest
         $this->assertPageStatusIs200($this->browsers->admin->getResponse());
 
         $this->assertIsInt($forum->getId());
+        $this->assertSame(Status::Publish, $forum->getStatus());
     }
 
     #[Attributes\Depends('testCreateForum')]

@@ -7,8 +7,8 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Pl
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractHttpTestCase;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowserActions;
 use PHPUnit\Framework\Attributes;
 
@@ -46,5 +46,8 @@ class TopicsTest extends AbstractHttpTestCase
         $this->browsers->admin->followRedirects(true);
         BrowserActions::createPostViaWPAdmin($this->browsers->admin, $topic);
         $this->assertPageStatusIs200($this->browsers->admin->getResponse());
+
+        $this->assertIsInt($topic->getId());
+        $this->assertSame(Status::Publish, $topic->getStatus());
     }
 }
