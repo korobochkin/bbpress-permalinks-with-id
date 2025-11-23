@@ -27,6 +27,7 @@ class ForumsTest extends AbstractForumsTest
 
         $this->assertIsInt($forum->getId());
         $this->assertSame(Status::Publish, $forum->getStatus());
+        $this->assertSampleLinkIsOk($forum);
     }
 
     #[Attributes\Depends('testCreateForum')]

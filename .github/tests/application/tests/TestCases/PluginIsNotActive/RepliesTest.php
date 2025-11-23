@@ -47,5 +47,6 @@ class RepliesTest extends AbstractHttpTestCase
 
         $this->assertIsInt($reply->getId());
         $this->assertSame(Status::Publish, $reply->getStatus());
+        $this->assertSampleLinkIsOk($reply);
     }
 }

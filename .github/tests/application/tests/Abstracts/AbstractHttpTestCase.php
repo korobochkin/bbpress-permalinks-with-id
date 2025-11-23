@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowsersService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\BrowserKit\Response;
@@ -45,6 +48,21 @@ abstract class AbstractHttpTestCase extends TestCase
     protected function assertIsRedirect(Response $response): void
     {
         $this->assertThat($response->getStatusCode(), $this->logicalAnd($this->greaterThanOrEqual(300), $this->lessThan(400)));
+    }
+
+    protected function assertSampleLinkIsOk(AbstractPost $post): void
+    {
+        $this->assertThat(
+            $post->getSamplePermalink(),
+            $this->logicalAnd(
+                $this->stringStartsWith('http://'),
+                $this->stringContains($post->getType()->value),
+                $this->logicalOr(
+                    $this->stringContains((string) $post->getId()),
+                    $this->stringContains($post->getName()),
+                ),
+            ),
+        );
     }
 
     protected function assertPageTitleEquals(string $expected, Crawler $crawler): void

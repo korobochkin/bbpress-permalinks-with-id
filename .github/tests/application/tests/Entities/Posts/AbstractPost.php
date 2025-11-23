@@ -18,6 +18,8 @@ abstract class AbstractPost
 
     private int $authorId;
 
+    private string $samplePermalink;
+
     public function getId(): int
     {
         return $this->id;
@@ -88,6 +90,18 @@ abstract class AbstractPost
     public function setAuthorId(int $authorId): self
     {
         $this->authorId = $authorId;
+
+        return $this;
+    }
+
+    public function getSamplePermalink(): string
+    {
+        return $this->samplePermalink;
+    }
+
+    public function setSamplePermalink(string $samplePermalink): self
+    {
+        $this->samplePermalink = $samplePermalink;
 
         return $this;
     }

@@ -49,5 +49,6 @@ class TopicsTest extends AbstractHttpTestCase
 
         $this->assertIsInt($topic->getId());
         $this->assertSame(Status::Publish, $topic->getStatus());
+        $this->assertSampleLinkIsOk($topic);
     }
 }
