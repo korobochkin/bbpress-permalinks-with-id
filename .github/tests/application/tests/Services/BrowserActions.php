@@ -90,7 +90,7 @@ final class BrowserActions
 
         $savedPostCrawler = $browser->submit($form, $formData);
 
-        $post->setStatus(Status::from(self::getPostStatus($savedPostCrawler)->attr('value')));
+        $post->setStatus(self::getPostStatus($savedPostCrawler));
         $post->setSamplePermalink(self::getSamplePermalink($savedPostCrawler));
 
         return $savedPostCrawler;
@@ -112,9 +112,11 @@ final class BrowserActions
         return $crawler->filterXPath('//form//input[(@id="user-id" or name="user_ID") and @type="hidden"]');
     }
 
-    private static function getPostStatus(Crawler $crawler): Crawler
+    private static function getPostStatus(Crawler $crawler): Status
     {
-        return $crawler->filterXPath('//form//input[(@id="original_post_status" or name="original_post_status") and @type="hidden"]');
+        return Status::from(
+            $crawler->filterXPath('//form//input[(@id="original_post_status" or name="original_post_status") and @type="hidden"]')->attr('value')
+        );
     }
 
     private static function getSamplePermalink(Crawler $crawler): string
