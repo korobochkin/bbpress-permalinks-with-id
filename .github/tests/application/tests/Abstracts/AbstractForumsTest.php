@@ -24,7 +24,7 @@ abstract class AbstractForumsTest extends AbstractHttpTestCase
     protected function testForum(HttpBrowser $browser, Forum $forum): Crawler
     {
         $browser->followRedirects(false);
-        $crawler = $browser->request('GET', '/forums/forum/'.$forum->getName().'/');
+        $crawler = $browser->request('GET', $forum->getSamplePermalink());
 
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($forum->getTitle(), $crawler);
