@@ -92,4 +92,25 @@ abstract class AbstractHttpTestCase extends TestCase
 
         $this->assertStringContainsStringIgnoringCase($needle, implode(PHP_EOL, $noticesOnPage));
     }
+
+    protected function assertBbPressReplyContentContains(Reply|Topic $post, Crawler $crawler): void
+    {
+        $this->assertStringContainsString(
+            $post->getContent(),
+            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[contains(@class, "entry-content")]//div[contains(@class, "bbp-reply-content")]/p')->text(),
+        );
+    }
+
+    protected function assertBbPressReplyHasLink(Reply|Topic $post, Crawler $crawler): void
+    {
+        $link = $crawler->filterXPath('//html/body/div[@id="page"]//article//div[contains(@class, "entry-content")]//div[contains(@class, "bbp-reply-header")]//a[contains(@class, "bbp-reply-permalink")]');
+        $this->assertStringStartsWith(
+            $post->getSamplePermalink(),
+            $link->attr('href'),
+        );
+        $this->assertSame(
+            '#'.$post->getId(),
+            $link->text(),
+        );
+    }
 }

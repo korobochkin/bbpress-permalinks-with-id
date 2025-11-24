@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\PluginIsNotActive;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractHttpTestCase;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractTopicsTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicsTest extends AbstractHttpTestCase
+class TopicsTest extends AbstractTopicsTest
 {
     /**
      * Here I finalize building each Post instance with Type::Topic.
@@ -50,5 +50,19 @@ class TopicsTest extends AbstractHttpTestCase
         $this->assertIsInt($topic->getId());
         $this->assertSame(Status::Publish, $topic->getStatus());
         $this->assertSampleLinkIsOk($topic);
+    }
+
+    #[Attributes\Depends('testCreateTopic')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
+    public function testTopicAsGuest(Forum $forum, Topic $topic): void
+    {
+        parent::testTopicAsGuest($forum, $topic);
+    }
+
+    #[Attributes\Depends('testTopicAsGuest')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
+    public function testTopicAsAdmin(Forum $forum, Topic $topic): void
+    {
+        parent::testTopicAsAdmin($forum, $topic);
     }
 }
