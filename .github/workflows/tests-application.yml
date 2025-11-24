@@ -73,7 +73,7 @@ jobs:
       CLI_ARG_BASE_IMAGE: ${{ inputs.CLI_ARG_BASE_IMAGE }}
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Docker Buildx
       uses: docker/setup-buildx-action@v3
