@@ -105,4 +105,9 @@ abstract class AbstractPost
 
         return $this;
     }
+
+    public function getNumericPermalink(): string
+    {
+        return str_replace($this->name, (string) $this->id, $this->samplePermalink);
+    }
 }

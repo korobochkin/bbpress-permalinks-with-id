@@ -10,6 +10,10 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractForumsTest extends AbstractHttpTestCase
 {
+    protected bool $useNumericPermalinks = false;
+
+    protected bool $forumsAreEmpty = true;
+
     public function testForumAsGuest(Forum $forum): void
     {
         $crawler = $this->testForum($this->browsers->guest, $forum);
@@ -24,13 +28,19 @@ abstract class AbstractForumsTest extends AbstractHttpTestCase
     protected function testForum(HttpBrowser $browser, Forum $forum): Crawler
     {
         $browser->followRedirects(false);
-        $crawler = $browser->request('GET', $forum->getSamplePermalink());
+        $crawler = $browser->request('GET', $this->useNumericPermalinks ? $forum->getNumericPermalink() : $forum->getSamplePermalink());
 
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($forum->getTitle(), $crawler);
         $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
-        $this->assertPageContainsNotice('This forum is empty', $crawler);
-        $this->assertPageContainsNotice('No topics were found here', $crawler);
+
+        if ($this->forumsAreEmpty) {
+            $this->assertPageContainsNotice('This forum is empty', $crawler);
+            $this->assertPageContainsNotice('No topics were found here', $crawler);
+        } else {
+            $this->assertPageContainsNotice('This forum contains', $crawler);
+            $this->assertPageContainsNotice('and was last updated by', $crawler);
+        }
 
         return $crawler;
     }
