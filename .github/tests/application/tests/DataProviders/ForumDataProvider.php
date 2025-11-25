@@ -101,10 +101,11 @@ class ForumDataProvider
     {
         $topic = new Topic();
         $random = Random::positiveInteger();
+        $number = implode('_', [$forumIteration, $topicIteration]);
 
         $topic
-            ->setTitle(implode(' ', ['Topic #', implode('_', [$forumIteration, $topicIteration]), $random]))
-            ->setContent(Random::sentence())
+            ->setTitle(implode(' ', ['Topic #', $number, $random]))
+            ->setContent($number.' '.Random::sentence())
             ->setName(implode('-', ['topic-slug', $forumIteration, $topicIteration, $random, 'end']))
         ;
 
@@ -115,10 +116,11 @@ class ForumDataProvider
     {
         $reply = new Reply();
         $random = Random::positiveInteger();
+        $number = implode('_', [$forumIteration, $topicIteration, $replyIteration]);
 
         $reply
-            ->setTitle(implode(' ', ['Reply #', implode('_', [$forumIteration, $topicIteration, $replyIteration]), $random]))
-            ->setContent(Random::sentence())
+            ->setTitle(implode(' ', ['Reply #', $number, $random]))
+            ->setContent($number.' '.Random::sentence())
             ->setName(implode('-', ['topic-slug', $forumIteration, $topicIteration, $replyIteration, $random, 'end']))
         ;
 
