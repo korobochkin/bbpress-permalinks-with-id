@@ -31,7 +31,7 @@ abstract class AbstractTopicsTest extends AbstractHttpTestCase
         $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
         $this->assertBbPressBreadCrumbsContains($topic->getTitle(), $crawler);
         $this->assertBbPressReplyContentContains($topic, $crawler);
-        $this->assertBbPressReplyHasLink($topic, $crawler);
+        $this->assertBbPressTopicHasLink($topic, $crawler);
 
         return $crawler;
     }

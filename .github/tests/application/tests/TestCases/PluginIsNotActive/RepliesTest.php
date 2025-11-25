@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\PluginIsNotActive;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractHttpTestCase;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractRepliesTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class RepliesTest extends AbstractHttpTestCase
+class RepliesTest extends AbstractRepliesTest
 {
     /**
      * @see TopicsTest::assertPreConditions()
@@ -48,5 +48,19 @@ class RepliesTest extends AbstractHttpTestCase
         $this->assertIsInt($reply->getId());
         $this->assertSame(Status::Publish, $reply->getStatus());
         $this->assertSampleLinkIsOk($reply);
+    }
+
+    #[Attributes\Depends('testCreateReply')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
+    public function testReplyAsGuest(Forum $forum, Topic $topic, Reply $reply): void
+    {
+        parent::testReplyAsGuest($forum, $topic, $reply);
+    }
+
+    #[Attributes\Depends('testReplyAsGuest')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
+    public function testReplyAsAdmin(Forum $forum, Topic $topic, Reply $reply): void
+    {
+        parent::testReplyAsAdmin($forum, $topic, $reply);
     }
 }

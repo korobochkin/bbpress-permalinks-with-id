@@ -101,16 +101,38 @@ abstract class AbstractHttpTestCase extends TestCase
         );
     }
 
-    protected function assertBbPressReplyHasLink(Reply|Topic $post, Crawler $crawler): void
+    protected function assertBbPressTopicHasLink(Topic $topic, Crawler $crawler): void
     {
-        $link = $crawler->filterXPath('//html/body/div[@id="page"]//article//div[contains(@class, "entry-content")]//div[contains(@class, "bbp-reply-header")]//a[contains(@class, "bbp-reply-permalink")]');
+        $link = $this->getReplyPermalink($crawler);
         $this->assertStringStartsWith(
-            $post->getSamplePermalink(),
+            $topic->getSamplePermalink(),
             $link->attr('href'),
         );
         $this->assertSame(
-            '#'.$post->getId(),
+            '#'.$topic->getId(),
             $link->text(),
         );
+    }
+
+    protected function assertBbPressReplyHasLink(Topic $topic, Reply $reply, Crawler $crawler): void
+    {
+        $link = $this->getReplyPermalink($crawler);
+        $this->assertStringStartsWith(
+            $topic->getSamplePermalink(),
+            $link->attr('href'),
+        );
+        $this->assertStringEndsWith(
+            (string) $reply->getId(),
+            $link->attr('href'),
+        );
+        $this->assertSame(
+            '#'.$reply->getId(),
+            $link->text(),
+        );
+    }
+
+    private function getReplyPermalink(Crawler $crawler): Crawler
+    {
+        return $crawler->filterXPath('//html/body/div[@id="page"]//article//div[contains(@class, "entry-content")]//div[contains(@class, "bbp-reply-header")]//a[contains(@class, "bbp-reply-permalink")]');
     }
 }
