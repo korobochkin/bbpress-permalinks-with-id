@@ -19,7 +19,8 @@ class TopicsNumericTest extends AbstractTopicsTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->useNumericPermalinks = true;
+        $this->useNumericPermalinksRequests = true;
+        $this->useNumericPermalinksHTML = true;
     }
 
     #[Attributes\DependsOnClass(TopicsTest::class)]

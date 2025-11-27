@@ -24,7 +24,7 @@ abstract class AbstractTopicsTest extends AbstractHttpTestCase
     protected function testTopic(HttpBrowser $browser, Forum $forum, Topic $topic): Crawler
     {
         $browser->followRedirects(false);
-        $crawler = $browser->request('GET', $this->useNumericPermalinks ? $topic->getNumericPermalink() : $topic->getSamplePermalink());
+        $crawler = $browser->request('GET', $this->useNumericPermalinksRequests ? $topic->getNumericPermalink() : $topic->getSamplePermalink());
 
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($topic->getTitle(), $crawler);

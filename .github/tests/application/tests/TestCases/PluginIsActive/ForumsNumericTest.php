@@ -13,16 +13,17 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumsTest extends AbstractForumsTest
+class ForumsNumericTest extends AbstractForumsTest
 {
     protected function setUp(): void
     {
         parent::setUp();
+        $this->useNumericPermalinksRequests = true;
         $this->useNumericPermalinksHTML = true;
         $this->forumsAreEmpty = false;
     }
 
-    #[Attributes\DependsOnClass(ForumsPageTest::class)]
+    #[Attributes\DependsOnClass(ForumsTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsGuest(Forum $forum): void
     {

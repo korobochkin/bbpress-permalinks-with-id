@@ -26,7 +26,9 @@ abstract class AbstractHttpTestCase extends TestCase
         }
     }
 
-    protected bool $useNumericPermalinks = false;
+    protected bool $useNumericPermalinksRequests = false;
+
+    protected bool $useNumericPermalinksHTML = false;
 
     protected function assertPageStatusIs200(Response $response): void
     {
@@ -107,7 +109,7 @@ abstract class AbstractHttpTestCase extends TestCase
     {
         $link = $this->getReplyPermalink($crawler);
         $this->assertStringStartsWith(
-            $this->useNumericPermalinks ? $topic->getNumericPermalink() : $topic->getSamplePermalink(),
+            $this->useNumericPermalinksHTML ? $topic->getNumericPermalink() : $topic->getSamplePermalink(),
             $link->attr('href'),
         );
         $this->assertSame(
@@ -120,7 +122,7 @@ abstract class AbstractHttpTestCase extends TestCase
     {
         $link = $this->getReplyPermalink($crawler);
         $this->assertStringStartsWith(
-            $this->useNumericPermalinks ? $topic->getNumericPermalink() : $topic->getSamplePermalink(),
+            $this->useNumericPermalinksHTML ? $topic->getNumericPermalink() : $topic->getSamplePermalink(),
             $link->attr('href'),
         );
         $this->assertStringEndsWith(
