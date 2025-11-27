@@ -11,8 +11,6 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractTopicsTest extends AbstractHttpTestCase
 {
-    protected bool $useNumericPermalinks = false;
-
     public function testTopicAsGuest(Forum $forum, Topic $topic): void
     {
         $this->testTopic($this->browsers->guest, $forum, $topic);

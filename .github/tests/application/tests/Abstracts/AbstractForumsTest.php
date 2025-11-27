@@ -10,8 +10,6 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractForumsTest extends AbstractHttpTestCase
 {
-    protected bool $useNumericPermalinks = false;
-
     protected bool $forumsAreEmpty = true;
 
     public function testForumAsGuest(Forum $forum): void
