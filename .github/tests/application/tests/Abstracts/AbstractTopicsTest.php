@@ -11,6 +11,8 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractTopicsTest extends AbstractHttpTestCase
 {
+    protected bool $useNumericPermalinks = false;
+
     public function testTopicAsGuest(Forum $forum, Topic $topic): void
     {
         $this->testTopic($this->browsers->guest, $forum, $topic);
@@ -24,7 +26,7 @@ abstract class AbstractTopicsTest extends AbstractHttpTestCase
     protected function testTopic(HttpBrowser $browser, Forum $forum, Topic $topic): Crawler
     {
         $browser->followRedirects(false);
-        $crawler = $browser->request('GET', $topic->getSamplePermalink());
+        $crawler = $browser->request('GET', $this->useNumericPermalinks ? $topic->getNumericPermalink() : $topic->getSamplePermalink());
 
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($topic->getTitle(), $crawler);
