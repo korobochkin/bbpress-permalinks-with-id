@@ -84,7 +84,10 @@ final class BrowserActions
         if ($post instanceof Topic) {
             $formData['parent_id'] = $post->getParentForumId();
         } elseif ($post instanceof Reply) {
-            $formData['bbp_forum_id'] = $post->getParentForumId();
+            if ($form->has('bbp_forum_id')) {
+				// For bbPress 2.5. Newer versions 2.6 do not have this field.
+                $formData['bbp_forum_id'] = $post->getParentForumId();
+            }
             $formData['parent_id'] = $post->getParentTopicId();
         }
 
