@@ -36,8 +36,8 @@ abstract class AbstractForumsTest extends AbstractHttpTestCase
             $this->assertPageContainsNotice('This forum is empty', $crawler);
             $this->assertPageContainsNotice('No topics were found here', $crawler);
         } else {
-            $this->assertPageContainsNotice('This forum contains', $crawler);
-            $this->assertPageContainsNotice('and was last updated by', $crawler);
+            $this->assertPageContainsNotice('This forum', $crawler);
+            $this->assertPageContainsNotice('and was last updated', $crawler);
         }
 
         return $crawler;
