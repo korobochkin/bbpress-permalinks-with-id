@@ -28,19 +28,19 @@ final class BrowserActions
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
-        $nonce = $crawler->filterXPath('//form//input[(@id="_wpnonce" or name="_wp_nonce") and @type="hidden"]');
+        $nonce = $crawler->filterXPath('//form//input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]');
 
         // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
         $postID = self::getPostId($crawler);
 
-        $postType = $crawler->filterXPath('//form//input[(@id="post_type" or name="post_type") and @type="hidden"]');
-        $action = $crawler->filterXPath('//form//input[(@id="hiddenaction" or name="action") and @type="hidden"]');
-        $originalAction = $crawler->filterXPath('//form//input[(@id="originalaction" or name="originalaction") and @type="hidden"]');
+        $postType = $crawler->filterXPath('//form//input[(@id="post_type" or @name="post_type") and @type="hidden"]');
+        $action = $crawler->filterXPath('//form//input[(@id="hiddenaction" or @name="action") and @type="hidden"]');
+        $originalAction = $crawler->filterXPath('//form//input[(@id="originalaction" or @name="originalaction") and @type="hidden"]');
         $userID = self::getUserId($crawler);
-        $originalPostStatus = $crawler->filterXPath('//form//input[(@id="original_post_status" or name="original_post_status") and @type="hidden"]');
-        $referredBy = $crawler->filterXPath('//form//input[(@id="referredby" or name="referredby") and @type="hidden"]');
+        $originalPostStatus = $crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]');
+        $referredBy = $crawler->filterXPath('//form//input[(@id="referredby" or @name="referredby") and @type="hidden"]');
 
-        // XPath for a form element with all required fields: //form[input[(@id="_wpnonce" or @name="_wp_nonce") and @type="hidden"]]
+        // XPath for a form element with all required fields: //form[input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]]
 
         $post->setId((int) $postID->attr('value'));
         $post->setAuthorId((int) $userID->attr('value'));
@@ -85,7 +85,7 @@ final class BrowserActions
             $formData['parent_id'] = $post->getParentForumId();
         } elseif ($post instanceof Reply) {
             if ($form->has('bbp_forum_id')) {
-				// For bbPress 2.5. Newer versions 2.6 do not have this field.
+                // For bbPress 2.5. Newer versions 2.6 do not have this field.
                 $formData['bbp_forum_id'] = $post->getParentForumId();
             }
             $formData['parent_id'] = $post->getParentTopicId();
@@ -107,18 +107,18 @@ final class BrowserActions
     private static function getPostId(Crawler $crawler): Crawler
     {
         // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
-        return $crawler->filterXPath('//input[(@id="post_ID" or name="post_ID") and @type="hidden"]');
+        return $crawler->filterXPath('//input[(@id="post_ID" or @name="post_ID") and @type="hidden"]');
     }
 
     private static function getUserId(Crawler $crawler): Crawler
     {
-        return $crawler->filterXPath('//form//input[(@id="user-id" or name="user_ID") and @type="hidden"]');
+        return $crawler->filterXPath('//form//input[(@id="user-id" or @name="user_ID") and @type="hidden"]');
     }
 
     private static function getPostStatus(Crawler $crawler): Status
     {
         return Status::from(
-            $crawler->filterXPath('//form//input[(@id="original_post_status" or name="original_post_status") and @type="hidden"]')->attr('value')
+            $crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]')->attr('value')
         );
     }
 
