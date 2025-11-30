@@ -13,7 +13,9 @@ class Random
 
     public static function word(int $maxLetters = 10, int $minLetters = 1): string
     {
-        return bin2hex(random_bytes(random_int($minLetters, $maxLetters)));
+        $length = random_int($minLetters, $maxLetters);
+
+        return bin2hex(random_bytes((int) ceil($length / 2)));
     }
 
     public static function sentence(int $maxWords = 12, int $minWords = 1): string
