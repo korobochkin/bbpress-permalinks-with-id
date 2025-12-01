@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\ForumsPage;
 use Symfony\Component\BrowserKit\HttpBrowser;
 
 abstract class AbstractForumsPageTest extends AbstractHttpTestCase
 {
-    protected Post $forumsPage;
+    protected AbstractPost $forumsPage;
 
     protected function setUp(): void
     {
@@ -20,30 +20,30 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
 
     public function testForumsPageAsGuest(): void
     {
-        $this->browsers->guest->followRedirects(false);
+        $this->requestForumsPage($this->browsers->guest);
         $this->assertForumsPageAccessible($this->browsers->guest);
     }
 
     public function testForumsPageAsAdmin(): void
     {
-        $this->browsers->admin->followRedirects(false);
+        $this->requestForumsPage($this->browsers->admin);
         $this->assertForumsPageAccessible($this->browsers->admin);
+    }
+
+    protected function requestForumsPage(HttpBrowser $browser): void
+    {
+        $browser->followRedirects(false);
+        $browser->request('GET', '/forums/');
     }
 
     protected function assertForumsPageAccessible(HttpBrowser $browser): void
     {
-        $crawler = $browser->request('GET', '/forums/');
-
         $this->assertPageStatusIs200($browser->getResponse());
+        $this->assertPageTitleEquals($this->forumsPage->getTitle(), $browser->getCrawler());
+    }
 
-        $this->assertEquals(
-            $this->forumsPage->getTitle(),
-            $crawler->filterXPath('//html/body/div[@id="page"]//article/header/h1')->innerText()
-        );
-
-        $this->assertStringContainsStringIgnoringCase(
-            'No forums were found',
-            $crawler->filterXPath('//html/body/div[@id="page"]//article//div[@class="bbp-template-notice"]')->text()
-        );
+    protected function assertForumsPageHasNoForums(HttpBrowser $browser): void
+    {
+        $this->assertPageContainsNotice('No forums were found', $browser->getCrawler());
     }
 }

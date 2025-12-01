@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Post;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 
 class ForumsPage
 {
-    private static Post $forums;
+    private static Page $forums;
 
-    public static function generate(): Post
+    public static function generate(): Page
     {
-        $post = new Post();
+        $post = new Page();
         $post
-            ->setType(Type::Page)
             ->setTitle('Forums. '.Random::positiveInteger())
             ->setStatus(Status::Publish)
             ->setName('forums')
@@ -25,7 +23,7 @@ class ForumsPage
         return $post;
     }
 
-    public static function get(): Post
+    public static function get(): Page
     {
         if (!isset(static::$forums)) {
             static::$forums = self::generate();

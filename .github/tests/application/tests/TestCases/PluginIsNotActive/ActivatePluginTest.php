@@ -13,7 +13,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 class ActivatePluginTest extends AbstractHttpTestCase
 {
-    #[Attributes\DependsOnClass(ForumsPageTest::class)]
+    #[Attributes\DependsOnClass(RepliesTest::class)]
     public function testActivatePlugin(): void
     {
         $this->browsers->admin->followRedirects(true);
@@ -35,5 +35,14 @@ class ActivatePluginTest extends AbstractHttpTestCase
             'Plugin activated',
             $crawler->filterXPath('//html/body//div[contains(@class, "notice")]')->text(),
         );
+    }
+
+    #[Attributes\Depends('testActivatePlugin')]
+    public function testFlushRewriteRules(): void
+    {
+        $this->browsers->admin->followRedirects(false);
+        $this->browsers->admin->request('GET', '/wp-admin/options-permalink.php');
+
+        $this->assertPageStatusIs200($this->browsers->admin->getResponse());
     }
 }

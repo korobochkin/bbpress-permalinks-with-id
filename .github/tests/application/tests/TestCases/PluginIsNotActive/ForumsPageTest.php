@@ -28,11 +28,13 @@ class ForumsPageTest extends AbstractForumsPageTest
     public function testForumsPageAsGuest(): void
     {
         parent::testForumsPageAsGuest();
+        $this->assertForumsPageHasNoForums($this->browsers->guest);
     }
 
     #[Attributes\Depends('testForumsPageAsGuest')]
     public function testForumsPageAsAdmin(): void
     {
         parent::testForumsPageAsAdmin();
+        $this->assertForumsPageHasNoForums($this->browsers->admin);
     }
 }
