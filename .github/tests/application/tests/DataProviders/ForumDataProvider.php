@@ -15,7 +15,7 @@ class ForumDataProvider
 
     private int $numberOfForums = 2;
 
-    private int $numberOfTopics = 2;
+    private int $numberOfTopics = 20;
 
     private int $numberOfReplies = 2;
 
@@ -157,15 +157,22 @@ class ForumDataProvider
             if ($topicsCounter > $this->topicsPerPage) {
                 $numberOfPages = (int) ceil($topicsCounter / $this->topicsPerPage);
 
-                $topicsStartIndex = 0;
                 for ($page = 1; $page <= $numberOfPages; ++$page) {
-                    $sliceOfTopicsAndReplies = array_slice($topicsAndReplies, $topicsStartIndex, $this->topicsPerPage);
+                    // Calculate offset from the end
+                    $offset = $topicsCounter - ($page * $this->topicsPerPage);
+                    $length = $this->topicsPerPage;
+
+                    // If offset goes negative, adjust length and set offset to 0
+                    if ($offset < 0) {
+                        $length = $this->topicsPerPage + $offset; // reduces length by the overflow
+                        $offset = 0;
+                    }
+
+                    $slice = array_slice($topicsAndReplies, $offset, $length);
 
                     $topicsOnPage = array_map(function ($topicAndReplies) {
                         return $topicAndReplies[0];
-                    }, $sliceOfTopicsAndReplies);
-
-                    $topicsStartIndex += $this->topicsPerPage;
+                    }, $slice);
 
                     yield $i => [$forum, $page, $topicsOnPage];
                 }
