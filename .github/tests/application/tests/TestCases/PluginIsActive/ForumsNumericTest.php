@@ -23,7 +23,7 @@ class ForumsNumericTest extends AbstractForumsTest
         $this->forumsAreEmpty = false;
     }
 
-    #[Attributes\DependsOnClass(ForumsTest::class)]
+    #[Attributes\DependsOnClass(ForumsPagedTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsGuest(Forum $forum): void
     {
