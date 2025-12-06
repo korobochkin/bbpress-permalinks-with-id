@@ -21,6 +21,8 @@ class ForumDataProvider
 
     private int $topicsPerPage = 15;
 
+    private int $repliesPerPage = 15;
+
     /**
      * @var array<int, array{0: Forum, 1: Topic[]}>
      */
@@ -51,6 +53,13 @@ class ForumDataProvider
         self::prepareInstance();
 
         return self::$instance->topicsGenerator();
+    }
+
+    public static function getRepliesPaged(): \Generator
+    {
+        self::prepareInstance();
+
+        return self::$instance->repliesPagedGenerator();
     }
 
     public static function getReplies(): \Generator
@@ -209,6 +218,34 @@ class ForumDataProvider
             foreach ($topicsAndReplies as [$topic, $replies]) {
                 foreach ($replies as $reply) {
                     yield $i++ => [$forum, $topic, $reply];
+                }
+            }
+        }
+    }
+
+    /**
+     * @return \Generator<int, array{Forum, Topic, int, Reply}, mixed, void>
+     */
+    private function repliesPagedGenerator(): \Generator
+    {
+        $i = 0;
+        foreach ($this->data as [$forum, $topicsAndReplies]) {
+            foreach ($topicsAndReplies as [$topic, $replies]) {
+                $repliesCounter = count($replies) + 1; // + 1 is a topic itself
+
+                if ($repliesCounter > $this->repliesPerPage) {
+                    $numberOfPages = (int) ceil($repliesCounter / $this->repliesPerPage);
+                    $offset = 0;
+
+                    for ($page = 1; $page <= $numberOfPages; ++$page) {
+                        $length = 1 === $page ? $this->repliesPerPage - 1 : $this->repliesPerPage;
+
+                        $slice = array_slice($replies, $offset, $length);
+
+                        $offset += $length;
+
+                        yield $i++ => [$forum, $topic, $page, $slice];
+                    }
                 }
             }
         }
