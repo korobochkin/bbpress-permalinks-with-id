@@ -153,6 +153,19 @@ class ForumDataProvider
     }
 
     /**
+     * @return \Generator<int, array{Forum, Topic}, mixed, void>
+     */
+    private function topicsGenerator(): \Generator
+    {
+        $i = 0;
+        foreach ($this->data as [$forum, $topicsAndReplies]) {
+            foreach ($topicsAndReplies as [$topic, $replies]) {
+                yield $i++ => [$forum, $topic];
+            }
+        }
+    }
+
+    /**
      * @return \Generator<int, array{Forum, int, Topic[]}, mixed, void>
      */
     private function topicsPagedGenerator(): \Generator
@@ -182,19 +195,6 @@ class ForumDataProvider
 
                     yield $i => [$forum, $page, $topicsOnPage];
                 }
-            }
-        }
-    }
-
-    /**
-     * @return \Generator<int, array{Forum, Topic}, mixed, void>
-     */
-    private function topicsGenerator(): \Generator
-    {
-        $i = 0;
-        foreach ($this->data as [$forum, $topicsAndReplies]) {
-            foreach ($topicsAndReplies as [$topic, $replies]) {
-                yield $i++ => [$forum, $topic];
             }
         }
     }
