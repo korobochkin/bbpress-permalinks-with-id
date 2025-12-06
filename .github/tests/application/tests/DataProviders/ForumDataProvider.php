@@ -17,7 +17,7 @@ class ForumDataProvider
 
     private int $numberOfTopics = 20;
 
-    private int $numberOfReplies = 2;
+    private int $numberOfReplies = 20;
 
     private int $topicsPerPage = 15;
 
@@ -76,7 +76,13 @@ class ForumDataProvider
             for ($j = 0; $j < $this->numberOfTopics; ++$j) {
                 $replies = [];
 
-                for ($k = 0; $k < $this->numberOfReplies; ++$k) {
+                if ($j < 2) {
+                    $numberOfReplies = $this->numberOfReplies;
+                } else {
+                    $numberOfReplies = 3;
+                }
+
+                for ($k = 0; $k < $numberOfReplies; ++$k) {
                     $replies[] = $this->buildReply($i, $j, $k);
                 }
 
