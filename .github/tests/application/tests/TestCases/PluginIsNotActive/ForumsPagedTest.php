@@ -20,7 +20,7 @@ class ForumsPagedTest extends AbstractForumsPagedTest
      * @param Topic[] $topics
      */
     #[Attributes\DependsOnClass(TopicsTest::class)]
-    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForumsPaged')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopicsPaged')]
     public function testForumPagedAsGuest(Forum $forum, int $page, array $topics): void
     {
         $this->_testForumPaged($this->browsers->guest, $forum, $page, $topics);
@@ -30,7 +30,7 @@ class ForumsPagedTest extends AbstractForumsPagedTest
      * @param Topic[] $topics
      */
     #[Attributes\Depends('testForumPagedAsGuest')]
-    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForumsPaged')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopicsPaged')]
     public function testForumPagedAsAdmin(Forum $forum, int $page, array $topics): void
     {
         $this->_testForumPaged($this->browsers->admin, $forum, $page, $topics);

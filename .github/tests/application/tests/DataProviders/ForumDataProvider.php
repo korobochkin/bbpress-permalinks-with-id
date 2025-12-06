@@ -36,11 +36,11 @@ class ForumDataProvider
         return self::$instance->forumsGenerator();
     }
 
-    public static function getForumsPaged(): \Generator
+    public static function getTopicsPaged(): \Generator
     {
         self::prepareInstance();
 
-        return self::$instance->forumsPagedGenerator();
+        return self::$instance->topicsPagedGenerator();
     }
 
     /**
@@ -149,7 +149,7 @@ class ForumDataProvider
     /**
      * @return \Generator<int, array{Forum, int, Topic[]}, mixed, void>
      */
-    private function forumsPagedGenerator(): \Generator
+    private function topicsPagedGenerator(): \Generator
     {
         foreach ($this->data as $i => [$forum, $topicsAndReplies]) {
             $topicsCounter = count($topicsAndReplies);
