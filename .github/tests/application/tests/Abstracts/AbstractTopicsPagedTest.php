@@ -16,10 +16,7 @@ abstract class AbstractTopicsPagedTest extends AbstractHttpTestCase
     protected function _testTopicPaged(HttpBrowser $browser, Forum $forum, Topic $topic, int $page, array $replies): void
     {
         $browser->followRedirects(false);
-        $permalink = URL::paged(
-            $this->useNumericPermalinksRequests ? $topic->getNumericPermalink() : $topic->getSamplePermalink(),
-            $page
-        );
+        $permalink = URL::pagePermalink($topic, $page, $this->useNumericPermalinksRequests);
         $crawler = $browser->request('GET', $permalink);
 
         $this->assertPageStatusIs200($browser->getResponse());
