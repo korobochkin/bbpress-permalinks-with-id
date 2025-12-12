@@ -202,7 +202,7 @@ class ForumDataProvider
                         return $topicAndReplies[0];
                     }, $slice);
 
-                    yield $i => [$forum, $page, $topicsOnPage];
+                    yield implode('_', ['forum', $i, 'page', $page]) => [$forum, $page, $topicsOnPage];
                 }
             }
         }
