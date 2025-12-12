@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\PluginIsActive;
+namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\PluginIsNotActive;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractForumsPagedTest;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractForumPagedTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
@@ -14,19 +14,12 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumsNumericPagedTest extends AbstractForumsPagedTest
+class ForumPagedTest extends AbstractForumPagedTest
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->useNumericPermalinksRequests = true;
-        $this->useNumericPermalinksHTML = true;
-    }
-
     /**
      * @param Topic[] $topics
      */
-    #[Attributes\DependsOnClass(ForumsNumericTest::class)]
+    #[Attributes\DependsOnClass(TopicsTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopicsPaged')]
     public function testForumPagedAsGuest(Forum $forum, int $page, array $topics): void
     {

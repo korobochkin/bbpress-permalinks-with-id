@@ -11,7 +11,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
-abstract class AbstractTopicsPagedTest extends AbstractHttpTestCase
+abstract class AbstractTopicPagedTest extends AbstractHttpTestCase
 {
     protected function _testTopicPaged(HttpBrowser $browser, Forum $forum, Topic $topic, int $page, array $replies): void
     {

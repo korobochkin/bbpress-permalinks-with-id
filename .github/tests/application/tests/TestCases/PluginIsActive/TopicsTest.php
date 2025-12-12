@@ -22,7 +22,7 @@ class TopicsTest extends AbstractTopicsTest
         $this->useNumericPermalinksHTML = true;
     }
 
-    #[Attributes\DependsOnClass(ForumsNumericPagedTest::class)]
+    #[Attributes\DependsOnClass(ForumNumericPagedTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicAsGuest(Forum $forum, Topic $topic): void
     {

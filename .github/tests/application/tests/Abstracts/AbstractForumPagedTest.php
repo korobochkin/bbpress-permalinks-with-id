@@ -10,7 +10,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
-abstract class AbstractForumsPagedTest extends AbstractHttpTestCase
+abstract class AbstractForumPagedTest extends AbstractHttpTestCase
 {
     /**
      * @param Topic[] $topics
