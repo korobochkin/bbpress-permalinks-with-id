@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\PluginIsActive;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractRepliesTest;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractReplyTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class RepliesNumericTest extends AbstractRepliesTest
+class ReplyNumericTest extends AbstractReplyTest
 {
     protected function setUp(): void
     {
@@ -24,7 +24,7 @@ class RepliesNumericTest extends AbstractRepliesTest
         $this->useNumericPermalinksHTML = true;
     }
 
-    #[Attributes\DependsOnClass(RepliesTest::class)]
+    #[Attributes\DependsOnClass(ReplyTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyAsGuest(Forum $forum, Topic $topic, Reply $reply): void
     {

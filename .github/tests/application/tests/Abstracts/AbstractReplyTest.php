@@ -10,7 +10,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Top
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
-abstract class AbstractRepliesTest extends AbstractHttpTestCase
+abstract class AbstractReplyTest extends AbstractHttpTestCase
 {
     public function testReplyAsGuest(Forum $forum, Topic $topic, Reply $reply): void
     {
