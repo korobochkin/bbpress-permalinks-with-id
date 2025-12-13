@@ -9,7 +9,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Top
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
-abstract class AbstractTopicsTest extends AbstractHttpTestCase
+abstract class AbstractTopicTest extends AbstractHttpTestCase
 {
     public function testTopicAsGuest(Forum $forum, Topic $topic): void
     {

@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes;
 class RepliesTest extends AbstractRepliesTest
 {
     /**
-     * @see TopicsTest::assertPreConditions()
+     * @see TopicTest::assertPreConditions()
      */
     protected function assertPreConditions(): void
     {
