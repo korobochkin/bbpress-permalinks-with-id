@@ -39,7 +39,7 @@ class TopicsTest extends AbstractTopicsTest
         }
     }
 
-    #[Attributes\DependsOnClass(ForumsTest::class)]
+    #[Attributes\DependsOnClass(ForumTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testCreateTopic(Forum $forum, Topic $topic): void
     {

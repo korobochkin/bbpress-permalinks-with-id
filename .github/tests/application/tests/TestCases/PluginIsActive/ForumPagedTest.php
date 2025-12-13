@@ -25,7 +25,7 @@ class ForumPagedTest extends AbstractForumPagedTest
     /**
      * @param Topic[] $topics
      */
-    #[Attributes\DependsOnClass(ForumsTest::class)]
+    #[Attributes\DependsOnClass(ForumTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopicsPaged')]
     public function testForumPagedAsGuest(Forum $forum, int $page, array $topics): void
     {
