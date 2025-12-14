@@ -37,7 +37,7 @@ class ReplyTest extends AbstractReplyTest
         }
     }
 
-    #[Attributes\DependsOnClass(ForumPagedTest::class)]
+    #[Attributes\DependsOnClass(ForumEditTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testCreateReply(Forum $forum, Topic $topic, Reply $reply): void
     {
