@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\PluginIsNotActive;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractTopicsTest;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractTopicTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicsTest extends AbstractTopicsTest
+class TopicTest extends AbstractTopicTest
 {
     /**
      * Here I finalize building each Post instance with Type::Topic.
@@ -39,7 +39,7 @@ class TopicsTest extends AbstractTopicsTest
         }
     }
 
-    #[Attributes\DependsOnClass(ForumsTest::class)]
+    #[Attributes\DependsOnClass(ForumTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testCreateTopic(Forum $forum, Topic $topic): void
     {

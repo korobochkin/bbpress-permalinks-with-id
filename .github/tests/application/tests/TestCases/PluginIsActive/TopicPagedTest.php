@@ -22,7 +22,7 @@ class TopicPagedTest extends AbstractTopicPagedTest
         $this->useNumericPermalinksHTML = true;
     }
 
-    #[Attributes\DependsOnClass(TopicsTest::class)]
+    #[Attributes\DependsOnClass(TopicTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesPaged')]
     public function testTopicPagedAsGuest(Forum $forum, Topic $topic, int $page, array $replies): void
     {

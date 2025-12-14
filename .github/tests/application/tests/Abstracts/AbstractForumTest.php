@@ -8,7 +8,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\For
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
-abstract class AbstractForumsTest extends AbstractHttpTestCase
+abstract class AbstractForumTest extends AbstractHttpTestCase
 {
     protected bool $forumsAreEmpty = true;
 
