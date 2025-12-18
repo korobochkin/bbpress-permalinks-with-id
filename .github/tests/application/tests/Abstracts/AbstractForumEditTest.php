@@ -14,9 +14,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     protected function _testForumEditAsGuest(HttpBrowser $browser, Forum $forum): void
     {
         $this->requestEditPage($browser, $forum);
-
-        $this->assertIsRedirect($browser->getResponse());
-        $this->assertLocation($this->useNumericPermalinksHTML ? $forum->getNumericPermalink() : $forum->getSamplePermalink(), $browser->getResponse());
+        $this->assertEditPageRedirected($browser, $forum);
     }
 
     protected function _testForumEditAsAdmin(HttpBrowser $browser, Forum $forum): void
@@ -43,6 +41,12 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertForumEditFormHasTitle($forum, $crawler);
         $this->assertForumEditFormHasContent($forum, $crawler);
         $this->assertForumEditFormHasSubmit($crawler);
+    }
+
+    private function assertEditPageRedirected(HttpBrowser $browser, Forum $forum): void
+    {
+        $this->assertIsRedirect($browser->getResponse());
+        $this->assertLocation($this->useNumericPermalinksHTML ? $forum->getNumericPermalink() : $forum->getSamplePermalink(), $browser->getResponse());
     }
 
     private function assertForumEditFormHasId(Forum $forum, Crawler $crawler): void
