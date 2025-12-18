@@ -23,10 +23,17 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     {
         $crawler = $this->requestEditPage($browser, $forum);
 
-        $this->_testForumEditPage($browser, $forum, $crawler);
+        $this->testForumEditPage($browser, $forum, $crawler);
     }
 
-    protected function _testForumEditPage(HttpBrowser $browser, Forum $forum, Crawler $crawler): void
+    private function requestEditPage(HttpBrowser $browser, Forum $forum): Crawler
+    {
+        $browser->followRedirects(false);
+
+        return $browser->request('GET', URL::editPermalink($forum, $this->useNumericPermalinksRequests));
+    }
+
+    private function testForumEditPage(HttpBrowser $browser, Forum $forum, Crawler $crawler): void
     {
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($forum->getTitle(), $crawler);
@@ -38,7 +45,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertForumEditFormHasSubmit($crawler);
     }
 
-    protected function assertForumEditFormHasId(Forum $forum, Crawler $crawler): void
+    private function assertForumEditFormHasId(Forum $forum, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//input[@type="hidden" and @name="bbp_forum_id"]');
 
@@ -46,7 +53,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertEquals($forum->getId(), $input->attr('value'));
     }
 
-    protected function assertForumEditFormHasTitle(Forum $forum, Crawler $crawler): void
+    private function assertForumEditFormHasTitle(Forum $forum, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//input[@name="bbp_forum_title"]');
 
@@ -54,7 +61,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertEquals($forum->getTitle(), $input->attr('value'));
     }
 
-    protected function assertForumEditFormHasContent(Forum $forum, Crawler $crawler): void
+    private function assertForumEditFormHasContent(Forum $forum, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//textarea[@name="bbp_forum_content"]');
 
@@ -62,18 +69,11 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertEquals($forum->getContent(), $input->innerText());
     }
 
-    protected function assertForumEditFormHasSubmit(Crawler $crawler): void
+    private function assertForumEditFormHasSubmit(Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//button[@name="bbp_forum_submit"]');
 
         $this->assertCount(1, $input);
         $this->assertEquals('Submit', $input->text());
-    }
-
-    private function requestEditPage(HttpBrowser $browser, Forum $forum): Crawler
-    {
-        $browser->followRedirects(false);
-
-        return $browser->request('GET', URL::editPermalink($forum, $this->useNumericPermalinksRequests));
     }
 }
