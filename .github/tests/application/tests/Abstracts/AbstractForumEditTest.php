@@ -8,6 +8,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\For
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\DomCrawler\Form;
 
 abstract class AbstractForumEditTest extends AbstractHttpTestCase
 {
@@ -22,6 +23,30 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $crawler = $this->requestEditPage($browser, $forum);
 
         $this->testForumEditPage($browser, $forum, $crawler);
+
+        // Submit form
+        $newForum = $this->cloneAndEditForum($forum);
+        $browser->submit(
+            $this->findForumEditForm($crawler),
+            [
+                'bbp_forum_title' => $newForum->getTitle(),
+                'bbp_forum_content' => $newForum->getContent(),
+            ],
+        );
+        $this->assertEditPageRedirected($browser, $forum);
+
+        // Check that form was submitted
+        $crawler2 = $this->requestEditPage($browser, $forum);
+        $this->testForumEditPage($browser, $newForum, $crawler2);
+
+        // Rollback to the original content
+        $browser->submit(
+            $this->findForumEditForm($crawler2),
+            [
+                'bbp_forum_title' => $forum->getTitle(),
+                'bbp_forum_content' => $forum->getContent(),
+            ],
+        );
     }
 
     private function requestEditPage(HttpBrowser $browser, Forum $forum): Crawler
@@ -79,5 +104,19 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
 
         $this->assertCount(1, $input);
         $this->assertEquals('Submit', $input->text());
+    }
+
+    private function findForumEditForm(Crawler $crawler): Form
+    {
+        return $crawler->filterXPath('//body//div[@id="page"]//div[contains(@class, "entry-content")]//form[@id="new-post"]')->form();
+    }
+
+    private function cloneAndEditForum(Forum $forum): Forum
+    {
+        $editedForum = clone $forum;
+        $editedForum->setTitle(implode(' ', ['EDITED', $forum->getTitle(), 'EDITED']));
+        $editedForum->setContent(implode(' ', ['EDITED', $forum->getContent(), 'EDITED']));
+
+        return $editedForum;
     }
 }
