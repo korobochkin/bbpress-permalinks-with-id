@@ -7,6 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProvider
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\PostUtilities;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Random;
 
 class ForumDataProvider
@@ -36,6 +37,13 @@ class ForumDataProvider
         self::prepareInstance();
 
         return self::$instance->forumsGenerator();
+    }
+
+    public static function getForumsForEdit(): \Generator
+    {
+        self::prepareInstance();
+
+        return self::$instance->forumsGeneratorForEdit();
     }
 
     public static function getTopicsPaged(): \Generator
@@ -158,6 +166,16 @@ class ForumDataProvider
     {
         foreach ($this->data as $i => [$forum]) {
             yield $i => [$forum];
+        }
+    }
+
+    /**
+     * @return \Generator<int, array{Forum, Forum}, mixed, void>
+     */
+    private function forumsGeneratorForEdit(): \Generator
+    {
+        foreach ($this->data as $i => [$forum]) {
+            yield $i => [$forum, PostUtilities::copyAndEditTitleAndContent($forum)];
         }
     }
 

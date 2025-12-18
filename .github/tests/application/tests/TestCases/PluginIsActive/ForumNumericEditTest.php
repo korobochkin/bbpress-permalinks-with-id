@@ -30,9 +30,9 @@ class ForumNumericEditTest extends AbstractForumEditTest
     }
 
     #[Attributes\Depends('testForumEditAsGuest')]
-    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
-    public function testForumEditAsAdmin(Forum $forum): void
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForumsForEdit')]
+    public function testForumEditAsAdmin(Forum $forum, Forum $newForum): void
     {
-        $this->_testForumEditAsAdmin($this->browsers->admin, $forum);
+        $this->_testForumEditAsAdmin($this->browsers->admin, $forum, $newForum);
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\PostUtilities;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
@@ -19,14 +18,14 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertEditPageRedirected($browser, $forum);
     }
 
-    protected function _testForumEditAsAdmin(HttpBrowser $browser, Forum $forum): void
+    protected function _testForumEditAsAdmin(HttpBrowser $browser, Forum $forum, Forum $newForum): void
     {
+        // Original content
         $crawler = $this->requestEditPage($browser, $forum);
 
         $this->testForumEditPage($browser, $forum, $crawler);
 
-        // Submit form
-        $newForum = PostUtilities::copyAndEditTitleAndContent($forum);
+        // Edit content
         $browser->submit(
             $this->findForumEditForm($crawler),
             [
@@ -35,10 +34,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
             ],
         );
         $this->assertEditPageRedirected($browser, $forum);
-
-        // Check that form was submitted
-        $crawler2 = $this->requestEditPage($browser, $forum);
-        $this->testForumEditPage($browser, $newForum, $crawler2);
+        $this->testForumEditPage($browser, $newForum, $crawler2 = $this->requestEditPage($browser, $forum));
 
         // Rollback to the original content
         $browser->submit(
