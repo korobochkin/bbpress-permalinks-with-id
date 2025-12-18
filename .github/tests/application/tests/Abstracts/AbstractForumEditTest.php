@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\PostUtilities;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
@@ -25,7 +26,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->testForumEditPage($browser, $forum, $crawler);
 
         // Submit form
-        $newForum = $this->cloneAndEditForum($forum);
+        $newForum = PostUtilities::copyAndEditTitleAndContent($forum);
         $browser->submit(
             $this->findForumEditForm($crawler),
             [
@@ -109,14 +110,5 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     private function findForumEditForm(Crawler $crawler): Form
     {
         return $crawler->filterXPath('//body//div[@id="page"]//div[contains(@class, "entry-content")]//form[@id="new-post"]')->form();
-    }
-
-    private function cloneAndEditForum(Forum $forum): Forum
-    {
-        $editedForum = clone $forum;
-        $editedForum->setTitle(implode(' ', ['EDITED', $forum->getTitle(), 'EDITED']));
-        $editedForum->setContent(implode(' ', ['EDITED', $forum->getContent(), 'EDITED']));
-
-        return $editedForum;
     }
 }
