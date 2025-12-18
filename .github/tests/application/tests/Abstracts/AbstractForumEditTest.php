@@ -69,4 +69,11 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertCount(1, $input);
         $this->assertEquals('Submit', $input->text());
     }
+
+    private function requestEditPage(HttpBrowser $browser, Forum $forum): Crawler
+    {
+        $browser->followRedirects(false);
+
+        return $browser->request('GET', URL::editPermalink($forum, $this->useNumericPermalinksRequests));
+    }
 }
