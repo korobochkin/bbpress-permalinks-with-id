@@ -18,15 +18,23 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertEditPageRedirected($browser, $forum);
     }
 
-    protected function _testForumEditAsAdmin(HttpBrowser $browser, Forum $forum, Forum $newForum): void
+    protected function _testForumEditAsAdmin(HttpBrowser $browser, Forum $forum): void
     {
-        // Original content
-        $this->testForumEditPage($browser, $forum, $crawler = $this->requestEditPage($browser, $forum));
+        $crawler = $this->requestEditPage($browser, $forum);
+        $this->testForumEditPage($browser, $forum, $crawler);
+    }
 
-        // Edit content
+    protected function _testForumSubmitEditAsAdmin(HttpBrowser $browser, Forum $forum, Forum $newForum): void
+    {
+        $crawler = $this->requestEditPage($browser, $forum);
+
         $this->submitForumEditForm($browser, $crawler, $newForum);
+
         $this->assertEditPageRedirected($browser, $forum);
-        $this->testForumEditPage($browser, $newForum, $crawler2 = $this->requestEditPage($browser, $forum));
+
+        $crawler2 = $this->requestEditPage($browser, $forum);
+
+        $this->testForumEditPage($browser, $newForum, $crawler2);
 
         // Rollback to the original content
         $this->submitForumEditForm($browser, $crawler2, $forum);

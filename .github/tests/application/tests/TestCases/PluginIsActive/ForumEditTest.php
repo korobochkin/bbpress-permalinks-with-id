@@ -29,9 +29,16 @@ class ForumEditTest extends AbstractForumEditTest
     }
 
     #[Attributes\Depends('testForumEditAsGuest')]
-    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForumsForEdit')]
-    public function testForumEditAsAdmin(Forum $forum, Forum $newForum): void
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
+    public function testForumEditAsAdmin(Forum $forum): void
     {
-        $this->_testForumEditAsAdmin($this->browsers->admin, $forum, $newForum);
+        $this->_testForumEditAsAdmin($this->browsers->admin, $forum);
+    }
+
+    #[Attributes\Depends('testForumEditAsAdmin')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForumsForEdit')]
+    public function testForumSubmitEditAsAdmin(Forum $forum, Forum $newForum): void
+    {
+        $this->_testForumSubmitEditAsAdmin($this->browsers->admin, $forum, $newForum);
     }
 }
