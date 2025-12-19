@@ -21,29 +21,15 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     protected function _testForumEditAsAdmin(HttpBrowser $browser, Forum $forum, Forum $newForum): void
     {
         // Original content
-        $crawler = $this->requestEditPage($browser, $forum);
-
-        $this->testForumEditPage($browser, $forum, $crawler);
+        $this->testForumEditPage($browser, $forum, $crawler = $this->requestEditPage($browser, $forum));
 
         // Edit content
-        $browser->submit(
-            $this->findForumEditForm($crawler),
-            [
-                'bbp_forum_title' => $newForum->getTitle(),
-                'bbp_forum_content' => $newForum->getContent(),
-            ],
-        );
+        $this->submitForumEditForm($browser, $crawler, $newForum);
         $this->assertEditPageRedirected($browser, $forum);
         $this->testForumEditPage($browser, $newForum, $crawler2 = $this->requestEditPage($browser, $forum));
 
         // Rollback to the original content
-        $browser->submit(
-            $this->findForumEditForm($crawler2),
-            [
-                'bbp_forum_title' => $forum->getTitle(),
-                'bbp_forum_content' => $forum->getContent(),
-            ],
-        );
+        $this->submitForumEditForm($browser, $crawler2, $forum);
     }
 
     private function requestEditPage(HttpBrowser $browser, Forum $forum): Crawler
@@ -106,5 +92,16 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     private function findForumEditForm(Crawler $crawler): Form
     {
         return $crawler->filterXPath('//body//div[@id="page"]//div[contains(@class, "entry-content")]//form[@id="new-post"]')->form();
+    }
+
+    private function submitForumEditForm(HttpBrowser $browser, Crawler $crawler, Forum $forum): void
+    {
+        $browser->submit(
+            $this->findForumEditForm($crawler),
+            [
+                'bbp_forum_title' => $forum->getTitle(),
+                'bbp_forum_content' => $forum->getContent(),
+            ],
+        );
     }
 }
