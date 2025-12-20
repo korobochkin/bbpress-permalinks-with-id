@@ -67,7 +67,7 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
@@ -122,7 +122,7 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
@@ -137,7 +137,7 @@ jobs:
 
       - name: Cache PHP Stan Stubs
         id: 'cache-php-stan-stubs'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .github/php-stan/.cache
@@ -203,7 +203,7 @@ jobs:
     steps:
       - name: Hooks cache
         id: hooks-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .github/hooks-generator/.cache/wordpress-hooks
@@ -264,7 +264,7 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
@@ -278,7 +278,7 @@ jobs:
 
       - name: Hooks Cache
         id: hooks-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .github/hooks-generator/.cache/wordpress-hooks
@@ -289,7 +289,7 @@ jobs:
 
       - name: Dependencies cache
         id: dependencies-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .github/hooks-generator/.cache/wordpress
@@ -299,7 +299,7 @@ jobs:
           fail-on-cache-miss: true
 
       - name: Psalm Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .github/psalm/.cache/psalm
           key: psalm-cache-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
@@ -331,7 +331,7 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
@@ -344,7 +344,7 @@ jobs:
         run: 'composer install --no-progress --classmap-authoritative'
 
       - name: PHP Mess Detector Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .github/phpmd/.cache
           key: phpmd-cache-${{ github.ref_type == 'branch' && github.ref_name || 'main' }}
