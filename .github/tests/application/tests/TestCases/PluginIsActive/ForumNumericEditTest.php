@@ -7,6 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Pl
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractForumEditTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\PostUtilities;
 use PHPUnit\Framework\Attributes;
 
 /**
@@ -37,9 +38,9 @@ class ForumNumericEditTest extends AbstractForumEditTest
     }
 
     #[Attributes\Depends('testForumEditAsAdmin')]
-    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForumsForEdit')]
-    public function testForumSubmitEditAsAdmin(Forum $forum, Forum $newForum): void
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
+    public function testForumSubmitEditAsAdmin(Forum $forum): void
     {
-        $this->_testForumSubmitEditAsAdmin($this->browsers->admin, $forum, $newForum);
+        $this->_testForumSubmitEditAsAdmin($this->browsers->admin, $forum, PostUtilities::copyAndEditTitleAndContent($forum));
     }
 }
