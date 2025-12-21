@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Browser\FrontendUtilities;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\DomCrawler\Form;
 
 abstract class AbstractForumEditTest extends AbstractHttpTestCase
 {
@@ -28,7 +28,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     {
         $crawler = $this->requestEditPage($browser, $forum);
 
-        $this->submitForumEditForm($browser, $crawler, $newForum);
+        FrontendUtilities::submitEditForm($browser, $crawler, $newForum);
 
         $this->assertEditPageRedirected($browser, $forum);
 
@@ -37,7 +37,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->testForumEditPage($browser, $newForum, $crawler2);
 
         // Rollback to the original content
-        $this->submitForumEditForm($browser, $crawler2, $forum);
+        FrontendUtilities::submitEditForm($browser, $crawler2, $forum);
     }
 
     private function requestEditPage(HttpBrowser $browser, Forum $forum): Crawler
@@ -95,21 +95,5 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
 
         $this->assertCount(1, $input);
         $this->assertEquals('Submit', $input->text());
-    }
-
-    private function findForumEditForm(Crawler $crawler): Form
-    {
-        return $crawler->filterXPath('//body//div[@id="page"]//div[contains(@class, "entry-content")]//form[@id="new-post"]')->form();
-    }
-
-    private function submitForumEditForm(HttpBrowser $browser, Crawler $crawler, Forum $forum): void
-    {
-        $browser->submit(
-            $this->findForumEditForm($crawler),
-            [
-                'bbp_forum_title' => $forum->getTitle(),
-                'bbp_forum_content' => $forum->getContent(),
-            ],
-        );
     }
 }
