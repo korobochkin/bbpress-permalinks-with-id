@@ -54,6 +54,11 @@ abstract class AbstractHttpTestCase extends TestCase
         $this->assertThat($response->getStatusCode(), $this->logicalAnd($this->greaterThanOrEqual(300), $this->lessThan(400)));
     }
 
+    protected function assertLocation(string $expectedLocation, Response $response): void
+    {
+        $this->assertEquals($expectedLocation, $response->getHeader('location'));
+    }
+
     protected function assertSampleLinkIsOk(AbstractPost $post): void
     {
         $this->assertThat(
