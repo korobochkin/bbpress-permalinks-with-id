@@ -31,7 +31,7 @@ on:
         required: true
       WORDPRESS_ARG_THEME_ZIP_URL:
         type: string
-        description: 'https://downloads.wordpress.org/theme/twentytwelve.4.6.zip'
+        description: 'https://downloads.wordpress.org/theme/twentytwelve.4.7.zip'
         required: true
       WORDPRESS_DOMAIN:
         type: string
