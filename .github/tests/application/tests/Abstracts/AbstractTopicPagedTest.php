@@ -7,8 +7,8 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
-use Symfony\Component\BrowserKit\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractTopicPagedTest extends AbstractHttpTestCase
