@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Browser;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
-use Symfony\Component\BrowserKit\HttpBrowser;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
-use Symfony\Component\BrowserKit\HttpBrowser;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractForumTest extends AbstractHttpTestCase
