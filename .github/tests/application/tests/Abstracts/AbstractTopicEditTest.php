@@ -7,6 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Browser\FrontendUtilities;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -22,6 +23,22 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
     {
         $crawler = $this->requestEditPage($browser, $topic);
         $this->testTopicEditPage($browser, $forum, $topic, $crawler);
+    }
+
+    protected function _testTopicSubmitEditAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic, Topic $newTopic): void
+    {
+        $crawler = $this->requestEditPage($browser, $topic);
+
+        FrontendUtilities::submitEditForm($browser, $crawler, $newTopic);
+
+        $this->assertEditPageRedirected($browser, $topic);
+
+        $crawler2 = $this->requestEditPage($browser, $topic);
+
+        $this->testTopicEditPage($browser, $forum, $newTopic, $crawler2);
+
+        // Rollback to the original content
+        FrontendUtilities::submitEditForm($browser, $crawler2, $topic);
     }
 
     private function requestEditPage(HttpBrowser $browser, Topic $topic): Crawler

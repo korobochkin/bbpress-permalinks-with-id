@@ -23,7 +23,7 @@ class ReplyTest extends AbstractReplyTest
         $this->useNumericPermalinksHTML = true;
     }
 
-    #[Attributes\DependsOnClass(TopicNumericPagedTest::class)]
+    #[Attributes\DependsOnClass(TopicEditTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyAsGuest(Forum $forum, Topic $topic, Reply $reply): void
     {
