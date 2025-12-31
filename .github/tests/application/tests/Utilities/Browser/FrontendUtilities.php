@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Browser;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
 
 class FrontendUtilities
 {
-    public static function submitEditForm(HttpBrowser $browser, Crawler $crawler, AbstractPost $post): void
+    public static function submitEditForm(HttpBrowser $browser, Crawler $crawler, BbPressPostInterface $post): void
     {
+        $type = $post->getType()->value;
         $browser->submit(
             static::findEditForm($crawler),
             [
-                'bbp_forum_title' => $post->getTitle(),
-                'bbp_forum_content' => $post->getContent(),
+                'bbp_'.$type.'_title' => $post->getTitle(),
+                'bbp_'.$type.'_content' => $post->getContent(),
             ],
         );
     }
