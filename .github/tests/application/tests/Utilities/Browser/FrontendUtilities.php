@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Browser;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
@@ -13,9 +14,15 @@ class FrontendUtilities
 {
     public static function submitEditForm(HttpBrowser $browser, Crawler $crawler, BbPressPostInterface $post): void
     {
+        $form = static::findEditForm($crawler);
         $type = $post->getType()->value;
+
+        if ($type === Type::Topic->value) {
+            $form->remove('bbp_log_topic_edit');
+        }
+
         $browser->submit(
-            static::findEditForm($crawler),
+            $form,
             [
                 'bbp_'.$type.'_title' => $post->getTitle(),
                 'bbp_'.$type.'_content' => $post->getContent(),
