@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 
 class URL
@@ -18,7 +18,7 @@ class URL
         );
     }
 
-    public static function editPermalink(Forum|Reply|Topic $post, bool $useNumericPermalinks): string
+    public static function editPermalink(BbPressPostInterface $post, bool $useNumericPermalinks): string
     {
         $permalink = $useNumericPermalinks ? $post->getNumericPermalink() : $post->getSamplePermalink();
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\PostInterface;
 
 class PostUtilities
 {
@@ -15,7 +16,7 @@ class PostUtilities
      *
      * @return Type
      */
-    public static function copyAndEditTitleAndContent(AbstractPost $post): AbstractPost
+    public static function copyAndEditTitleAndContent(PostInterface $post): AbstractPost
     {
         $editedPost = clone $post;
 
