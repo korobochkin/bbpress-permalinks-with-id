@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\PostInterface;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
@@ -65,7 +66,7 @@ final class BrowserActions
         );
     }
 
-    private static function createBbPressPostTypes(HttpBrowser $browser, Forum|Reply|Topic $post): Crawler
+    private static function createBbPressPostTypes(HttpBrowser $browser, BbPressPostInterface $post): Crawler
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
@@ -98,7 +99,7 @@ final class BrowserActions
         return $savedPostCrawler;
     }
 
-    private static function requestPostNewPage(HttpBrowser $browser, AbstractPost $post): Crawler
+    private static function requestPostNewPage(HttpBrowser $browser, PostInterface $post): Crawler
     {
         return $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
     }

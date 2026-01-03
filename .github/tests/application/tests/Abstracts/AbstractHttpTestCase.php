@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\PostInterface;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowsersService;
@@ -59,7 +59,7 @@ abstract class AbstractHttpTestCase extends TestCase
         $this->assertEquals($expectedLocation, $response->getHeader('location'));
     }
 
-    protected function assertSampleLinkIsOk(AbstractPost $post): void
+    protected function assertSampleLinkIsOk(PostInterface $post): void
     {
         $this->assertThat(
             $post->getSamplePermalink(),

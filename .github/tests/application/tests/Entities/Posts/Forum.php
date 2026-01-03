@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts;
 
-class Forum extends AbstractPost
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
+
+class Forum extends AbstractPost implements BbPressPostInterface
 {
     public function getType(): Type
     {

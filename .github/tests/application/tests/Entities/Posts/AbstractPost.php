@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts;
 
-abstract class AbstractPost
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\PostInterface;
+
+abstract class AbstractPost implements PostInterface
 {
     private int $id;
 

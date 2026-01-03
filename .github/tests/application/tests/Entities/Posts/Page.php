@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts;
 
-class Page extends AbstractPost
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\WordPressPostInterface;
+
+class Page extends AbstractPost implements WordPressPostInterface
 {
     public function getType(): Type
     {
