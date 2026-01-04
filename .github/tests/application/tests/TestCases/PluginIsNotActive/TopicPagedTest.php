@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 class TopicPagedTest extends AbstractTopicPagedTest
 {
-    #[Attributes\DependsOnClass(ReplyTest::class)]
+    #[Attributes\DependsOnClass(ReplyEditTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesPaged')]
     public function testTopicPagedAsGuest(Forum $forum, Topic $topic, int $page, array $replies): void
     {

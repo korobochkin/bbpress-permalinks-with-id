@@ -6,6 +6,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 
 class URL
@@ -27,6 +28,22 @@ class URL
         }
 
         return $permalink.'edit/';
+    }
+
+    public static function replyAnchoredPermalink(Topic $topic, Reply $reply, bool $useNumericPermalinks): string
+    {
+        $permalink = $useNumericPermalinks ? $topic->getNumericPermalink() : $topic->getSamplePermalink();
+
+        if (!str_ends_with($permalink, '/')) {
+            throw new \LogicException('Invalid permalink format');
+        }
+
+        return $permalink.self::replyAnchor($reply);
+    }
+
+    public static function replyAnchor(Reply $reply): string
+    {
+        return '#post-'.$reply->getId();
     }
 
     private static function paged(string $permalink, int $page): string

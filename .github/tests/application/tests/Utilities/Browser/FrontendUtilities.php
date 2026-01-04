@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Browser;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
@@ -19,7 +20,12 @@ class FrontendUtilities
         $browser->submit(
             $form,
             [
-                'bbp_'.$type.'_title' => $post->getTitle(),
+                ...(
+                    Type::Forum === $post->getType()
+                    || Type::Topic === $post->getType()
+                        ? ['bbp_'.$type.'_title' => $post->getTitle()]
+                        : []
+                ),
                 'bbp_'.$type.'_content' => $post->getContent(),
             ],
         );
