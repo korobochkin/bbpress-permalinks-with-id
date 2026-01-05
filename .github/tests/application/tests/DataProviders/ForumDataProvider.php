@@ -145,7 +145,7 @@ class ForumDataProvider
         $reply
             ->setTitle(implode(' ', ['Reply #', $number, $random]))
             ->setContent($number.' '.Random::sentence())
-            ->setName(implode('-', ['topic-slug', $forumIteration, $topicIteration, $replyIteration, $random, 'end']))
+            ->setName(implode('-', ['reply-slug', $forumIteration, $topicIteration, $replyIteration, $random, 'end']))
         ;
 
         return $reply;
