@@ -32,11 +32,21 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
 
         FrontendUtilities::submitEditForm($browser, $crawler, $newReply);
 
+        /*
+         * bbPress doesn't have title field in frontend form for replies.
+         * But after submitting a form, it erases the actual title in the DB.
+         * After that bbPress starts using "Reply To: $TOPIC_TITLE" instead.
+         *
+         * @see FrontendUtilities::submitEditForm
+         */
+        $reply->setTitle('');
+        $newReply->setTitle('');
+
         $this->assertEditPageRedirected($browser, $topic, $reply);
 
         $crawler2 = $this->requestEditPage($browser, $reply);
 
-        $this->testReplyEditPageAfterEdit($browser, $forum, $topic, $newReply, $crawler2);
+        $this->testReplyEditPage($browser, $forum, $topic, $newReply, $crawler2);
 
         // Rollback to the original content
         FrontendUtilities::submitEditForm($browser, $crawler2, $reply);
@@ -51,31 +61,17 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
 
     private function testReplyEditPage(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply, Crawler $crawler): void
     {
+        $expectedReplyTitle = $reply->getTitle();
+
+        if ($expectedReplyTitle) {
+            $expectedReplyTitle = 'Reply To: '.$topic->getTitle();
+        }
+
         $this->assertPageStatusIs200($browser->getResponse());
-        $this->assertPageTitleEquals($reply->getTitle(), $crawler);
+        $this->assertPageTitleEquals($expectedReplyTitle, $crawler);
         $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
         $this->assertBbPressBreadCrumbsContains($topic->getTitle(), $crawler);
-        $this->assertBbPressBreadCrumbsContains($reply->getTitle(), $crawler);
-
-        $this->assertReplyEditFormHasId($reply, $crawler);
-        $this->assertReplyEditFormHasContent($reply, $crawler);
-        $this->assertReplyEditFormHasSubmit($crawler);
-    }
-
-    private function testReplyEditPageAfterEdit(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply, Crawler $crawler): void
-    {
-        /*
-         * bbPress doesn't have title field in frontend form for replies.
-         * But after submitting a form, it erases the actual title in the DB.
-         * After that bbPress starts using "Reply To: $TOPIC_TITLE" instead.
-         *
-         * @see FrontendUtilities::submitEditForm
-         */
-        $this->assertPageStatusIs200($browser->getResponse());
-        $this->assertPageTitleEquals($replyToTitle = 'Reply To: '.$topic->getTitle(), $crawler);
-        $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
-        $this->assertBbPressBreadCrumbsContains($topic->getTitle(), $crawler);
-        $this->assertBbPressBreadCrumbsContains($replyToTitle, $crawler);
+        $this->assertBbPressBreadCrumbsContains($expectedReplyTitle, $crawler);
 
         $this->assertReplyEditFormHasId($reply, $crawler);
         $this->assertReplyEditFormHasContent($reply, $crawler);
