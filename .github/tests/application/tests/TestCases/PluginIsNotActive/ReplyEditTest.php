@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes;
 class ReplyEditTest extends AbstractReplyEditTest
 {
     #[Attributes\DependsOnClass(ReplyTest::class)]
-    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
+    #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyEditAsGuest(Forum $forum, Topic $topic, Reply $reply): void
     {
         $this->_testReplyEditAsGuest($this->browsers->guest, $topic, $reply);

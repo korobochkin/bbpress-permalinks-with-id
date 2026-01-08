@@ -69,6 +69,13 @@ class ForumDataProvider
         return self::$instance->repliesGenerator();
     }
 
+    public static function getRepliesEdit(): \Generator
+    {
+        self::prepareInstance();
+
+        return self::$instance->repliesEditGenerator();
+    }
+
     private static function prepareInstance(): void
     {
         if (!isset(self::$instance)) {
@@ -246,6 +253,34 @@ class ForumDataProvider
 
                         yield $i++ => [$forum, $topic, $page, $slice];
                     }
+                }
+            }
+        }
+    }
+
+    /**
+     * @return \Generator<int, array{Forum, Topic, Reply}, mixed, void>
+     */
+    private function repliesEditGenerator(): \Generator
+    {
+        $i = 0;
+        foreach ($this->data as [$forum, $topicsAndReplies]) {
+            if (empty($topicsAndReplies)) {
+                continue;
+            }
+
+            $topicIndices = array_unique([array_key_first($topicsAndReplies), array_key_last($topicsAndReplies)]);
+
+            foreach ($topicIndices as $topicIndex) {
+                [$topic, $replies] = $topicsAndReplies[$topicIndex];
+                if (empty($replies)) {
+                    continue;
+                }
+
+                $replyIndices = array_unique([array_key_first($replies), array_key_last($replies)]);
+
+                foreach ($replyIndices as $replyIndex) {
+                    yield $i++ => [$forum, $topic, $replies[$replyIndex]];
                 }
             }
         }
