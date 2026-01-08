@@ -63,7 +63,7 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
     {
         $expectedReplyTitle = $reply->getTitle();
 
-        if ($expectedReplyTitle) {
+        if ('' === $expectedReplyTitle) {
             $expectedReplyTitle = 'Reply To: '.$topic->getTitle();
         }
 
