@@ -7,15 +7,18 @@ updates:
       - .github/phpcs
       - .github/phpmd
       - .github/psalm
+      - .github/tests/application
     versioning-strategy: increase
     cooldown:
       default-days: 10
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 10
     schedule:
       interval: weekly
 
   - package-ecosystem: github-actions
-    directory: /
+    directories:
+      - /
+      - .github/actions/hooks-generator
     schedule:
       interval: weekly
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 5
