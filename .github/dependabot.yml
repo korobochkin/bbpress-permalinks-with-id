@@ -16,7 +16,9 @@ updates:
       interval: weekly
 
   - package-ecosystem: github-actions
-    directory: /
+    directories:
+      - /
+      - .github/actions/hooks-generator
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
