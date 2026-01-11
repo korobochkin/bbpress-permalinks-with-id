@@ -15,4 +15,12 @@ enum Type: string
     case Topic = 'topic';
 
     case Reply = 'reply';
+
+    public function hasTitle(): bool
+    {
+        return match ($this) {
+            self::Forum, self::Topic => true,
+            default => false,
+        };
+    }
 }

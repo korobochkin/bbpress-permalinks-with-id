@@ -19,7 +19,11 @@ class FrontendUtilities
         $browser->submit(
             $form,
             [
-                'bbp_'.$type.'_title' => $post->getTitle(),
+                ...(
+                    $post->getType()->hasTitle()
+                    ? ['bbp_'.$type.'_title' => $post->getTitle()]
+                    : []
+                ),
                 'bbp_'.$type.'_content' => $post->getContent(),
             ],
         );
