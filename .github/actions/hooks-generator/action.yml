@@ -51,7 +51,7 @@ runs:
 
     - name: Checkout WordPress
       if: steps.dependencies-cache.outputs.cache-hit != 'true'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: WordPress/WordPress
         ref: ${{ inputs.wordpress }}
@@ -60,7 +60,7 @@ runs:
 
     - name: Checkout bbPress
       if: steps.dependencies-cache.outputs.cache-hit != 'true'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: bbpress/bbPress
         ref: ${{ inputs.bbpress }}
