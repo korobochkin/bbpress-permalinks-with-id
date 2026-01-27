@@ -18,7 +18,7 @@
         "phpunit/phpunit": "^12.5",
         "symfony/browser-kit": "^8.0",
         "symfony/http-client": "^8.0",
-        "symfony/mime": "^7.3",
+        "symfony/mime": "^8.0",
         "friendsofphp/php-cs-fixer": "^3.92"
     }
 }
