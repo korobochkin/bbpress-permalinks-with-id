@@ -31,6 +31,6 @@ class FrontendUtilities
 
     private static function findEditForm(Crawler $crawler): Form
     {
-        return $crawler->filterXPath('//body//div[@id="page"]//div[contains(@class, "entry-content")]//form[@id="new-post"]')->form();
+        return $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]')->form();
     }
 }
