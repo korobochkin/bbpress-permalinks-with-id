@@ -7,6 +7,9 @@ phpstan:
 psalm:
 	.github/psalm/vendor/bin/psalm --config=".github/psalm/psalm.xml"
 
+psalm-tests-application:
+	.github/psalm/vendor/bin/psalm --config=".github/psalm/psalm-tests-application.xml"
+
 phpmd:
 	@.github/phpmd/vendor/bin/phpmd \
 		plugin.php \

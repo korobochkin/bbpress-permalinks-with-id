@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<psalm
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    errorLevel="1"
+    resolveFromConfigFile="false"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+    checkForThrowsDocblock="true"
+    ensureArrayStringOffsetsExist="true"
+    cacheDirectory=".github/psalm/.cache/psalm-tests-application"
+>
+    <extraFiles>
+        <directory name=".github/tests/application/vendor"/>
+    </extraFiles>
+    <projectFiles>
+        <directory name=".github/tests/application/tests"/>
+    </projectFiles>
+</psalm>
