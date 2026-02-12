@@ -6,7 +6,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
 use Symfony\Component\HttpClient\HttpClient;
 
-class BrowsersService
+final class BrowsersService
 {
     public HttpBrowser $admin;
 

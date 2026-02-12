@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicPagedTest extends AbstractTopicPagedTest
+final class TopicPagedTest extends AbstractTopicPagedTest
 {
     protected function setUp(): void
     {

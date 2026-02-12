@@ -8,7 +8,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Int
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Traits\ParentForumIdTrait;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Traits\ParentTopicIdTrait;
 
-class Reply extends AbstractPost implements BbPressPostInterface
+final class Reply extends AbstractPost implements BbPressPostInterface
 {
     use ParentForumIdTrait;
     use ParentTopicIdTrait;

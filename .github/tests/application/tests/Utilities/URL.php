@@ -9,7 +9,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Int
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 
-class URL
+final class URL
 {
     public static function pagePermalink(Forum|Topic $post, int $page, bool $useNumericPermalinks): string
     {

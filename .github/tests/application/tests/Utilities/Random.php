@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 
-class Random
+final class Random
 {
     public static function positiveInteger(): int
     {

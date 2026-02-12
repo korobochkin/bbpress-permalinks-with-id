@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumPagedTest extends AbstractForumPagedTest
+final class ForumPagedTest extends AbstractForumPagedTest
 {
     /**
      * @param Topic[] $topics

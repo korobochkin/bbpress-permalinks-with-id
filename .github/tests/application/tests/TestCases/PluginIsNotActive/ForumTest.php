@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumTest extends AbstractForumTest
+final class ForumTest extends AbstractForumTest
 {
     #[Attributes\DependsOnClass(ForumsPageTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]

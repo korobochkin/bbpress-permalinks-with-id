@@ -9,7 +9,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrows
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
 
-class FrontendUtilities
+final class FrontendUtilities
 {
     public static function submitEditForm(HttpBrowser $browser, Crawler $crawler, BbPressPostInterface $post): void
     {

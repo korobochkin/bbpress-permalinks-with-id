@@ -6,7 +6,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
 use Symfony\Component\BrowserKit\Request;
 
-class HttpBrowser extends \Symfony\Component\BrowserKit\HttpBrowser
+final class HttpBrowser extends \Symfony\Component\BrowserKit\HttpBrowser
 {
     protected function getHeaders(Request $request): array
     {

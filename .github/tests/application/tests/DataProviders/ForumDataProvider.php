@@ -9,7 +9,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Rep
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Random;
 
-class ForumDataProvider
+final class ForumDataProvider
 {
     public static self $instance;
 

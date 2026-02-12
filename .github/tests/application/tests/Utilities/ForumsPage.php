@@ -7,7 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
 
-class ForumsPage
+final class ForumsPage
 {
     private static Page $forums;
 

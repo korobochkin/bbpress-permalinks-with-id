@@ -7,7 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\PostInterface;
 
-class PostUtilities
+final class PostUtilities
 {
     /**
      * @template Type of AbstractPost

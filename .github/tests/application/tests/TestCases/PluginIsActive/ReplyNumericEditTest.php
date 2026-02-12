@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ReplyNumericEditTest extends AbstractReplyEditTest
+final class ReplyNumericEditTest extends AbstractReplyEditTest
 {
     protected function setUp(): void
     {

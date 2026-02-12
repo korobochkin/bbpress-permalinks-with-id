@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumEditTest extends AbstractForumEditTest
+final class ForumEditTest extends AbstractForumEditTest
 {
     protected function setUp(): void
     {

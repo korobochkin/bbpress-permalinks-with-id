@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicEditTest extends AbstractTopicEditTest
+final class TopicEditTest extends AbstractTopicEditTest
 {
     protected function setUp(): void
     {

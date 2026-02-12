@@ -13,7 +13,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumNumericTest extends AbstractForumTest
+final class ForumNumericTest extends AbstractForumTest
 {
     protected function setUp(): void
     {

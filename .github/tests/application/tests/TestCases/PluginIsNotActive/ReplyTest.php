@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ReplyTest extends AbstractReplyTest
+final class ReplyTest extends AbstractReplyTest
 {
     /**
      * @see TopicTest::assertPreConditions()

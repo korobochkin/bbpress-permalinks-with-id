@@ -14,7 +14,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicEditTest extends AbstractTopicEditTest
+final class TopicEditTest extends AbstractTopicEditTest
 {
     #[Attributes\DependsOnClass(TopicPagedTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]

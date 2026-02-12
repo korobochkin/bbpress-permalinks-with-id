@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ReplyEditTest extends AbstractReplyEditTest
+final class ReplyEditTest extends AbstractReplyEditTest
 {
     #[Attributes\DependsOnClass(ReplyTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]

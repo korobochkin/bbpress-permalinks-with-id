@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ActivatePluginTest extends AbstractHttpTestCase
+final class ActivatePluginTest extends AbstractHttpTestCase
 {
     #[Attributes\DependsOnClass(TopicEditTest::class)]
     public function testActivatePlugin(): void

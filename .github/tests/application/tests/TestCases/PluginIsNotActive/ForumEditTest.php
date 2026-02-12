@@ -13,7 +13,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumEditTest extends AbstractForumEditTest
+final class ForumEditTest extends AbstractForumEditTest
 {
     #[Attributes\DependsOnClass(ForumPagedTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]

@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicTest extends AbstractTopicTest
+final class TopicTest extends AbstractTopicTest
 {
     /**
      * Here I finalize building each Post instance with Type::Topic.
