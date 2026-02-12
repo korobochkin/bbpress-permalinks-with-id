@@ -1,0 +1,10 @@
+---
+services:
+  php:
+    build:
+      dockerfile: ./containers/php/Dockerfile
+      context: ./
+    init: true
+    tty: true
+    volumes:
+      - ./../:/root/project
