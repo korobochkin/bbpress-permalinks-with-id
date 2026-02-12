@@ -340,6 +340,13 @@ jobs:
           key: ${{ runner.os }}-psalm-composer-${{ hashFiles('.github/psalm/composer.lock') }}
           restore-keys: ${{ runner.os }}-psalm-composer-
 
+      - name: Composer Cache. Tests Application
+        uses: actions/cache@v5
+        with:
+          path: .github/tests/application
+          key: ${{ runner.os }}-tests-application-composer-${{ hashFiles('.github/tests/application/composer.lock') }}
+          restore-keys: ${{ runner.os }}-tests-application-composer-
+
       - name: Composer Install
         working-directory: .github/psalm
         run: 'composer install --no-progress --classmap-authoritative'
