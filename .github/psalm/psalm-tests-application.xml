@@ -15,7 +15,12 @@
         <directory name=".github/tests/application/vendor"/>
     </extraFiles>
     <projectFiles>
-        <directory name=".github/tests/application/tests"/>
+        <directory name=".github/tests/application"/>
+        <ignoreFiles>
+            <directory name=".github/tests/application/.cache"/>
+            <directory name=".github/tests/application/containers"/>
+            <directory name=".github/tests/application/vendor"/>
+        </ignoreFiles>
     </projectFiles>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
