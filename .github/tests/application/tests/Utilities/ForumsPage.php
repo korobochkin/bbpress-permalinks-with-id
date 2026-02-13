@@ -25,10 +25,10 @@ final class ForumsPage
 
     public static function get(): Page
     {
-        if (!isset(static::$forums)) {
-            static::$forums = self::generate();
+        if (!isset(self::$forums)) {
+            self::$forums = self::generate();
         }
 
-        return static::$forums;
+        return self::$forums;
     }
 }

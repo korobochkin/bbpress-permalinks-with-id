@@ -13,7 +13,7 @@ final class FrontendUtilities
 {
     public static function submitEditForm(HttpBrowser $browser, Crawler $crawler, BbPressPostInterface $post): void
     {
-        $form = static::findEditForm($crawler);
+        $form = self::findEditForm($crawler);
         $type = $post->getType()->value;
 
         $browser->submit(
