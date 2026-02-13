@@ -17,4 +17,7 @@
     <projectFiles>
         <directory name=".github/tests/application/tests"/>
     </projectFiles>
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
 </psalm>
