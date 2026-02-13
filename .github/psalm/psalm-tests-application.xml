@@ -25,4 +25,7 @@
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
     </plugins>
+    <ignoreExceptions>
+        <classAndDescendants name="PHPUnit\Framework\Exception"/>
+    </ignoreExceptions>
 </psalm>
