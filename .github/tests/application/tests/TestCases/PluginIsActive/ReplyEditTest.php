@@ -18,6 +18,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 final class ReplyEditTest extends AbstractReplyEditTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

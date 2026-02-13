@@ -22,6 +22,7 @@ final class ReplyTest extends AbstractReplyTest
     /**
      * @see TopicTest::assertPreConditions()
      */
+    #[\Override]
     protected function assertPreConditions(): void
     {
         parent::assertPreConditions();
@@ -50,6 +51,7 @@ final class ReplyTest extends AbstractReplyTest
         $this->assertSampleLinkIsOk($reply);
     }
 
+    #[\Override]
     #[Attributes\Depends('testCreateReply')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyAsGuest(Forum $forum, Topic $topic, Reply $reply): void
@@ -57,6 +59,7 @@ final class ReplyTest extends AbstractReplyTest
         parent::testReplyAsGuest($forum, $topic, $reply);
     }
 
+    #[\Override]
     #[Attributes\Depends('testReplyAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyAsAdmin(Forum $forum, Topic $topic, Reply $reply): void

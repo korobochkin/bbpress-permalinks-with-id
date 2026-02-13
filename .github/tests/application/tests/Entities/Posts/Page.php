@@ -8,6 +8,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Int
 
 final class Page extends AbstractPost implements WordPressPostInterface
 {
+    #[\Override]
     public function getType(): Type
     {
         return Type::Page;

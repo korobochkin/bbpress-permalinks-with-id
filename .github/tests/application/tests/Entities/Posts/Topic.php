@@ -11,6 +11,7 @@ final class Topic extends AbstractPost implements BbPressPostInterface
 {
     use ParentForumIdTrait;
 
+    #[\Override]
     public function getType(): Type
     {
         return Type::Topic;

@@ -16,6 +16,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 final class ForumPagedTest extends AbstractForumPagedTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

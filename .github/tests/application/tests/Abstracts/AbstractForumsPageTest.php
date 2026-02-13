@@ -12,6 +12,7 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
 {
     protected AbstractPost $forumsPage;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

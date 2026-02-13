@@ -24,6 +24,7 @@ final class ForumsPageTest extends AbstractForumsPageTest
         $this->assertPageStatusIs200($this->browsers->admin->getResponse());
     }
 
+    #[\Override]
     #[Attributes\Depends('testForumsPageCreation')]
     public function testForumsPageAsGuest(): void
     {
@@ -31,6 +32,7 @@ final class ForumsPageTest extends AbstractForumsPageTest
         $this->assertForumsPageHasNoForums($this->browsers->guest);
     }
 
+    #[\Override]
     #[Attributes\Depends('testForumsPageAsGuest')]
     public function testForumsPageAsAdmin(): void
     {

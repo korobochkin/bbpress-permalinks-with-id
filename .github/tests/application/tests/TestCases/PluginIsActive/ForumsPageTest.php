@@ -14,12 +14,14 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 final class ForumsPageTest extends AbstractForumsPageTest
 {
+    #[\Override]
     #[Attributes\DependsOnClass(ActivatePluginTest::class)]
     public function testForumsPageAsGuest(): void
     {
         parent::testForumsPageAsGuest();
     }
 
+    #[\Override]
     #[Attributes\DependsOnClass(ActivatePluginTest::class)]
     public function testForumsPageAsAdmin(): void
     {

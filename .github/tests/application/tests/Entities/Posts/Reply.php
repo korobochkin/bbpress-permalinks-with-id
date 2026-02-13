@@ -13,6 +13,7 @@ final class Reply extends AbstractPost implements BbPressPostInterface
     use ParentForumIdTrait;
     use ParentTopicIdTrait;
 
+    #[\Override]
     public function getType(): Type
     {
         return Type::Reply;

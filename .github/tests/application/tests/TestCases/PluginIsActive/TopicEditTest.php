@@ -17,6 +17,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 final class TopicEditTest extends AbstractTopicEditTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

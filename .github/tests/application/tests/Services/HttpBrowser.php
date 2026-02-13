@@ -8,6 +8,7 @@ use Symfony\Component\BrowserKit\Request;
 
 final class HttpBrowser extends \Symfony\Component\BrowserKit\HttpBrowser
 {
+    #[\Override]
     protected function getHeaders(Request $request): array
     {
         $headers = parent::getHeaders($request);

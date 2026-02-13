@@ -14,6 +14,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 final class AdminPagesTest extends AbstractAdminPagesTest
 {
+    #[\Override]
     #[Attributes\DependsOnClass(ActivatePluginTest::class)]
     public function testIndexPage(): void
     {

@@ -15,6 +15,7 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 final class ForumTest extends AbstractForumTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,6 +23,7 @@ final class ForumTest extends AbstractForumTest
         $this->forumsAreEmpty = false;
     }
 
+    #[\Override]
     #[Attributes\DependsOnClass(ForumsPageTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsGuest(Forum $forum): void
@@ -29,6 +31,7 @@ final class ForumTest extends AbstractForumTest
         parent::testForumAsGuest($forum);
     }
 
+    #[\Override]
     #[Attributes\Depends('testForumAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsAdmin(Forum $forum): void

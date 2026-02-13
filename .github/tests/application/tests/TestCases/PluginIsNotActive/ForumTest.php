@@ -30,6 +30,7 @@ final class ForumTest extends AbstractForumTest
         $this->assertSampleLinkIsOk($forum);
     }
 
+    #[\Override]
     #[Attributes\Depends('testCreateForum')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsGuest(Forum $forum): void
@@ -37,6 +38,7 @@ final class ForumTest extends AbstractForumTest
         parent::testForumAsGuest($forum);
     }
 
+    #[\Override]
     #[Attributes\Depends('testForumAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsAdmin(Forum $forum): void

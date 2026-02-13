@@ -8,6 +8,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Int
 
 final class Forum extends AbstractPost implements BbPressPostInterface
 {
+    #[\Override]
     public function getType(): Type
     {
         return Type::Forum;
