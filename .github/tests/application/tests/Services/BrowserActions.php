@@ -15,6 +15,9 @@ use Symfony\Component\DomCrawler\Crawler;
 
 final class BrowserActions
 {
+    /**
+     * @throws \InvalidArgumentException
+     */
     public static function createPostViaWPAdmin(HttpBrowser $browser, Forum|Page|Reply|Topic $post): Crawler
     {
         if ($post instanceof Page) {
@@ -24,6 +27,9 @@ final class BrowserActions
         return self::createBbPressPostTypes($browser, $post);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private static function createNativePostTypes(HttpBrowser $browser, Page $post): Crawler
     {
         $crawler = self::requestPostNewPage($browser, $post);
@@ -66,6 +72,9 @@ final class BrowserActions
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private static function createBbPressPostTypes(HttpBrowser $browser, BbPressPostInterface $post): Crawler
     {
         $crawler = self::requestPostNewPage($browser, $post);
@@ -115,6 +124,9 @@ final class BrowserActions
         return $crawler->filterXPath('//form//input[(@id="user-id" or @name="user_ID") and @type="hidden"]');
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private static function getPostStatus(Crawler $crawler): Status
     {
         return Status::from(
@@ -122,6 +134,9 @@ final class BrowserActions
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private static function getSamplePermalink(Crawler $crawler): string
     {
         return $crawler->filterXPath('//body//*[contains(@id, "sample-permalink")]//a')->attr('href');

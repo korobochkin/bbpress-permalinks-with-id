@@ -38,6 +38,9 @@ final class ReplyTest extends AbstractReplyTest
         }
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(ForumEditTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testCreateReply(Forum $forum, Topic $topic, Reply $reply): void

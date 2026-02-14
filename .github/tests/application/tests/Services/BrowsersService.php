@@ -12,11 +12,19 @@ final class BrowsersService
 
     public HttpBrowser $guest;
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     public function __construct()
     {
         $this->setUp();
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     private function setUp(): void
     {
         $this->admin = new HttpBrowser(HttpClient::create([
@@ -55,6 +63,10 @@ final class BrowsersService
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     private function logIn(HttpBrowser $browser, string $login, string $password): void
     {
         $crawler = $browser->request('GET', '/wp-login.php');

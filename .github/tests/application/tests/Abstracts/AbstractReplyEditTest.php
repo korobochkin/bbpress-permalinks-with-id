@@ -14,18 +14,28 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractReplyEditTest extends AbstractHttpTestCase
 {
+    /**
+     * @throws \LogicException
+     */
     protected function _testReplyEditAsGuest(HttpBrowser $browser, Topic $topic, Reply $reply): void
     {
         $this->requestEditPage($browser, $reply);
         $this->assertEditPageRedirected($browser, $topic, $reply);
     }
 
+    /**
+     * @throws \LogicException
+     */
     protected function _testReplyEditAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply): void
     {
         $crawler = $this->requestEditPage($browser, $reply);
         $this->testReplyEditPage($browser, $forum, $topic, $reply, $crawler);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     */
     protected function _testReplySubmitEditAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply, Reply $newReply): void
     {
         $crawler = $this->requestEditPage($browser, $reply);
@@ -52,6 +62,9 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
         FrontendUtilities::submitEditForm($browser, $crawler2, $reply);
     }
 
+    /**
+     * @throws \LogicException
+     */
     private function requestEditPage(HttpBrowser $browser, Reply $reply): Crawler
     {
         $browser->followRedirects(false);
@@ -59,6 +72,9 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
         return $browser->request('GET', URL::editPermalink($reply, $this->useNumericPermalinksRequests));
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function testReplyEditPage(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply, Crawler $crawler): void
     {
         $expectedReplyTitle = $reply->getTitle();
@@ -78,6 +94,9 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
         $this->assertReplyEditFormHasSubmit($crawler);
     }
 
+    /**
+     * @throws \LogicException
+     */
     private function assertEditPageRedirected(HttpBrowser $browser, Topic $topic, Reply $reply): void
     {
         $this->assertIsRedirect($browser->getResponse());
@@ -94,6 +113,9 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function assertReplyEditFormHasId(Reply $reply, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//input[@type="hidden" and @name="bbp_reply_id"]');
@@ -110,6 +132,9 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
         $this->assertEquals($reply->getContent(), $input->innerText());
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function assertReplyEditFormHasSubmit(Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//button[@name="bbp_reply_submit"]');

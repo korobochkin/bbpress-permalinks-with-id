@@ -12,16 +12,25 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractReplyTest extends AbstractHttpTestCase
 {
+    /**
+     * @throws \InvalidArgumentException
+     */
     public function testReplyAsGuest(Forum $forum, Topic $topic, Reply $reply): void
     {
         $this->testReply($this->browsers->guest, $forum, $topic, $reply);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     public function testReplyAsAdmin(Forum $forum, Topic $topic, Reply $reply): void
     {
         $this->testReply($this->browsers->admin, $forum, $topic, $reply);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     protected function testReply(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply): Crawler
     {
         $browser->followRedirects(false);

@@ -40,6 +40,9 @@ final class TopicTest extends AbstractTopicTest
         }
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(ForumTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testCreateTopic(Forum $forum, Topic $topic): void

@@ -14,6 +14,9 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 final class ForumsPageTest extends AbstractForumsPageTest
 {
+    /**
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(AdminPagesTest::class)]
     public function testForumsPageCreation(): void
     {

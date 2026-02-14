@@ -11,6 +11,9 @@ use Symfony\Component\DomCrawler\Form;
 
 final class FrontendUtilities
 {
+    /**
+     * @throws \InvalidArgumentException
+     */
     public static function submitEditForm(HttpBrowser $browser, Crawler $crawler, BbPressPostInterface $post): void
     {
         $form = self::findEditForm($crawler);
@@ -29,6 +32,9 @@ final class FrontendUtilities
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private static function findEditForm(Crawler $crawler): Form
     {
         return $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]')->form();

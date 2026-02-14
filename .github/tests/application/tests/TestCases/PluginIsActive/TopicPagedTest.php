@@ -23,6 +23,10 @@ final class TopicPagedTest extends AbstractTopicPagedTest
         $this->useNumericPermalinksHTML = true;
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(TopicTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesPaged')]
     public function testTopicPagedAsGuest(Forum $forum, Topic $topic, int $page, array $replies): void
@@ -30,6 +34,10 @@ final class TopicPagedTest extends AbstractTopicPagedTest
         $this->_testTopicPaged($this->browsers->guest, $forum, $topic, $page, $replies);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\Depends('testTopicPagedAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesPaged')]
     public function testTopicPagedAsAdmin(Forum $forum, Topic $topic, int $page, array $replies): void

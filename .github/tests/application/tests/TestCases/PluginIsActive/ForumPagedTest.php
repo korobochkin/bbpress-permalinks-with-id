@@ -25,6 +25,9 @@ final class ForumPagedTest extends AbstractForumPagedTest
 
     /**
      * @param Topic[] $topics
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     #[Attributes\DependsOnClass(ForumTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopicsPaged')]
@@ -35,6 +38,9 @@ final class ForumPagedTest extends AbstractForumPagedTest
 
     /**
      * @param Topic[] $topics
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     #[Attributes\Depends('testForumPagedAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopicsPaged')]

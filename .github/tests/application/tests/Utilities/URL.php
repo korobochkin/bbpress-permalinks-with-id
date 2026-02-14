@@ -11,6 +11,9 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Top
 
 final class URL
 {
+    /**
+     * @throws \LogicException
+     */
     public static function pagePermalink(Forum|Topic $post, int $page, bool $useNumericPermalinks): string
     {
         return self::paged(
@@ -19,6 +22,9 @@ final class URL
         );
     }
 
+    /**
+     * @throws \LogicException
+     */
     public static function editPermalink(BbPressPostInterface $post, bool $useNumericPermalinks): string
     {
         $permalink = $useNumericPermalinks ? $post->getNumericPermalink() : $post->getSamplePermalink();
@@ -30,6 +36,9 @@ final class URL
         return $permalink.'edit/';
     }
 
+    /**
+     * @throws \LogicException
+     */
     public static function replyAnchoredPermalink(Topic $topic, Reply $reply, bool $useNumericPermalinks): string
     {
         $permalink = $useNumericPermalinks ? $topic->getNumericPermalink() : $topic->getSamplePermalink();
@@ -46,6 +55,9 @@ final class URL
         return '#post-'.$reply->getId();
     }
 
+    /**
+     * @throws \LogicException
+     */
     private static function paged(string $permalink, int $page): string
     {
         if (!str_ends_with($permalink, '/')) {

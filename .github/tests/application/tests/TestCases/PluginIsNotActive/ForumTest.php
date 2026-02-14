@@ -17,6 +17,9 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 final class ForumTest extends AbstractForumTest
 {
+    /**
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(ForumsPageTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testCreateForum(Forum $forum): void

@@ -25,6 +25,10 @@ final class ReplyEditTest extends AbstractReplyEditTest
         $this->useNumericPermalinksHTML = true;
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(ReplyNumericTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
     public function testReplyEditAsGuest(Forum $forum, Topic $topic, Reply $reply): void
@@ -32,6 +36,10 @@ final class ReplyEditTest extends AbstractReplyEditTest
         $this->_testReplyEditAsGuest($this->browsers->guest, $topic, $reply);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\Depends('testReplyEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
     public function testReplyEditAsAdmin(Forum $forum, Topic $topic, Reply $reply): void
@@ -39,6 +47,10 @@ final class ReplyEditTest extends AbstractReplyEditTest
         $this->_testReplyEditAsAdmin($this->browsers->admin, $forum, $topic, $reply);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\Depends('testReplyEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
     public function testReplySubmitEditAsAdmin(Forum $forum, Topic $topic, Reply $reply): void

@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes;
 #[Attributes\CoversNothing]
 final class ActivatePluginTest extends AbstractHttpTestCase
 {
+    /**
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(TopicEditTest::class)]
     public function testActivatePlugin(): void
     {

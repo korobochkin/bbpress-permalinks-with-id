@@ -24,6 +24,9 @@ final class TopicEditTest extends AbstractTopicEditTest
         $this->useNumericPermalinksHTML = true;
     }
 
+    /**
+     * @throws \LogicException
+     */
     #[Attributes\DependsOnClass(TopicNumericPagedTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicEditAsGuest(Forum $forum, Topic $topic): void
@@ -31,6 +34,9 @@ final class TopicEditTest extends AbstractTopicEditTest
         $this->_testTopicEditAsGuest($this->browsers->guest, $forum, $topic);
     }
 
+    /**
+     * @throws \LogicException
+     */
     #[Attributes\Depends('testTopicEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicEditAsAdmin(Forum $forum, Topic $topic): void
@@ -38,6 +44,9 @@ final class TopicEditTest extends AbstractTopicEditTest
         $this->_testTopicEditAsAdmin($this->browsers->admin, $forum, $topic);
     }
 
+    /**
+     * @throws \LogicException
+     */
     #[Attributes\Depends('testTopicEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicSubmitEditAsAdmin(Forum $forum, Topic $topic): void
