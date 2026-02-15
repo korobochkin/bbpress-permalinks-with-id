@@ -13,7 +13,7 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class AbstractForumPagedTest extends AbstractHttpTestCase
 {
     /**
-     * @param Topic[] $topics
+     * @param list<Topic> $topics
      *
      * @throws \LogicException
      * @throws \InvalidArgumentException
@@ -49,6 +49,11 @@ abstract class AbstractForumPagedTest extends AbstractHttpTestCase
         return $titlesOnPage;
     }
 
+    /**
+     * @param list<Topic> $topics
+     *
+     * @return list<\PHPUnit\Framework\Constraint\TraversableContainsEqual>
+     */
     protected function buildConstraintsForTopicTitles(array $topics): array
     {
         $constraints = [];
