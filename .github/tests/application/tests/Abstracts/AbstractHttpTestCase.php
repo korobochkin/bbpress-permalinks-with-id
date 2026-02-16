@@ -124,7 +124,7 @@ abstract class AbstractHttpTestCase extends TestCase
         $link = $this->getReplyPermalink($crawler);
         $this->assertStringStartsWith(
             $this->useNumericPermalinksHTML ? $topic->getNumericPermalink() : $topic->getSamplePermalink(),
-            $link->attr('href'),
+            $link->attr('href') ?? throw new \RuntimeException(),
         );
         $this->assertSame(
             '#'.$topic->getId(),
@@ -140,11 +140,11 @@ abstract class AbstractHttpTestCase extends TestCase
         $link = $this->getReplyPermalink($crawler);
         $this->assertStringStartsWith(
             $this->useNumericPermalinksHTML ? $topic->getNumericPermalink() : $topic->getSamplePermalink(),
-            $link->attr('href'),
+            $link->attr('href') ?? throw new \RuntimeException(),
         );
         $this->assertStringEndsWith(
             (string) $reply->getId(),
-            $link->attr('href'),
+            $link->attr('href') ?? throw new \RuntimeException(),
         );
         $this->assertSame(
             '#'.$reply->getId(),

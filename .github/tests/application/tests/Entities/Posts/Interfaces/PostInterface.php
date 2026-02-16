@@ -35,9 +35,20 @@ interface PostInterface
 
     public function setAuthorId(int $authorId): self;
 
+    /**
+     * @return non-empty-string
+     */
     public function getSamplePermalink(): string;
 
+    /**
+     * @throws \RuntimeException
+     */
     public function setSamplePermalink(string $samplePermalink): self;
 
+    /**
+     * @return non-empty-string
+     *
+     * @throws \RuntimeException
+     */
     public function getNumericPermalink(): string;
 }

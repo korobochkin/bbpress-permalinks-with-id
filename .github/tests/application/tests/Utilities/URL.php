@@ -50,6 +50,9 @@ final class URL
         return $permalink.self::replyAnchor($reply);
     }
 
+    /**
+     * @return non-empty-string
+     */
     public static function replyAnchor(Reply $reply): string
     {
         return '#post-'.$reply->getId();

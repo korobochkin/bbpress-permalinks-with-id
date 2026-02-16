@@ -20,6 +20,9 @@ abstract class AbstractPost implements PostInterface
 
     private int $authorId;
 
+    /**
+     * @var non-empty-string
+     */
     private string $samplePermalink;
 
     #[\Override]
@@ -118,6 +121,10 @@ abstract class AbstractPost implements PostInterface
     #[\Override]
     public function setSamplePermalink(string $samplePermalink): self
     {
+        if ('' === $samplePermalink) {
+            throw new \RuntimeException();
+        }
+
         $this->samplePermalink = $samplePermalink;
 
         return $this;
@@ -126,6 +133,12 @@ abstract class AbstractPost implements PostInterface
     #[\Override]
     public function getNumericPermalink(): string
     {
-        return str_replace($this->name, (string) $this->id, $this->samplePermalink);
+        $result = str_replace($this->name, (string) $this->id, $this->samplePermalink);
+
+        if ('' === $result) {
+            throw new \RuntimeException();
+        }
+
+        return $result;
     }
 }
