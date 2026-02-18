@@ -40,6 +40,7 @@ final class ReplyTest extends AbstractReplyTest
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     #[Attributes\DependsOnClass(ForumEditTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]

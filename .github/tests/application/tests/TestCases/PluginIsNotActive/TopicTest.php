@@ -42,6 +42,7 @@ final class TopicTest extends AbstractTopicTest
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     #[Attributes\DependsOnClass(ForumTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]

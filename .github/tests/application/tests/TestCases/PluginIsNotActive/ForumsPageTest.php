@@ -16,6 +16,7 @@ final class ForumsPageTest extends AbstractForumsPageTest
 {
     /**
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     #[Attributes\DependsOnClass(AdminPagesTest::class)]
     public function testForumsPageCreation(): void

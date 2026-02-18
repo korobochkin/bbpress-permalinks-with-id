@@ -19,6 +19,7 @@ final class ForumTest extends AbstractForumTest
 {
     /**
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     #[Attributes\DependsOnClass(ForumsPageTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
