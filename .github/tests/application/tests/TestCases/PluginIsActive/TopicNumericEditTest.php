@@ -47,6 +47,7 @@ final class TopicNumericEditTest extends AbstractTopicEditTest
 
     /**
      * @throws \LogicException
+     * @throws \Random\RandomException
      */
     #[Attributes\Depends('testTopicEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]

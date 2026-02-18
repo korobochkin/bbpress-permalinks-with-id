@@ -48,6 +48,7 @@ final class ForumEditTest extends AbstractForumEditTest
     /**
      * @throws \LogicException
      * @throws \InvalidArgumentException
+     * @throws \Random\RandomException
      */
     #[Attributes\Depends('testForumEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]

@@ -11,6 +11,9 @@ final class ForumsPage
 {
     private static Page $forums;
 
+    /**
+     * @throws \Random\RandomException
+     */
     public static function generate(): Page
     {
         $post = new Page();
@@ -23,6 +26,9 @@ final class ForumsPage
         return $post;
     }
 
+    /**
+     * @throws \Random\RandomException
+     */
     public static function get(): Page
     {
         if (!isset(self::$forums)) {

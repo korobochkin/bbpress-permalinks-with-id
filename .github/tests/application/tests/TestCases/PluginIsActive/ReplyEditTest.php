@@ -50,6 +50,7 @@ final class ReplyEditTest extends AbstractReplyEditTest
     /**
      * @throws \LogicException
      * @throws \InvalidArgumentException
+     * @throws \Random\RandomException
      */
     #[Attributes\Depends('testReplyEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]

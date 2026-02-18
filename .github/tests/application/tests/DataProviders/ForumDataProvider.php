@@ -130,6 +130,11 @@ final class ForumDataProvider
         self::$instance = new self();
     }
 
+    /**
+     * @param int<0, max> $forumIteration
+     *
+     * @throws \Random\RandomException
+     */
     private function buildForum(int $forumIteration): Forum
     {
         $post = new Forum();
@@ -143,6 +148,12 @@ final class ForumDataProvider
         return $post;
     }
 
+    /**
+     * @param int<0, max> $forumIteration
+     * @param int<0, max> $topicIteration
+     *
+     * @throws \Random\RandomException
+     */
     private function buildTopic(int $forumIteration, int $topicIteration): Topic
     {
         $topic = new Topic();
@@ -158,6 +169,13 @@ final class ForumDataProvider
         return $topic;
     }
 
+    /**
+     * @param int<0, max> $forumIteration
+     * @param int<0, max> $topicIteration
+     * @param int<0, max> $replyIteration
+     *
+     * @throws \Random\RandomException
+     */
     private function buildReply(int $forumIteration, int $topicIteration, int $replyIteration): Reply
     {
         $reply = new Reply();

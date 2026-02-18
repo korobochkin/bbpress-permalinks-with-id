@@ -15,6 +15,8 @@ final class PostUtilities
      * @param Type $post
      *
      * @return Type
+     *
+     * @throws \Random\RandomException
      */
     public static function copyAndEditTitleAndContent(PostInterface $post): AbstractPost
     {

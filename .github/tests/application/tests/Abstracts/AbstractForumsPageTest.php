@@ -12,6 +12,9 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
 {
     protected AbstractPost $forumsPage;
 
+    /**
+     * @throws \Random\RandomException
+     */
     #[\Override]
     protected function setUp(): void
     {
