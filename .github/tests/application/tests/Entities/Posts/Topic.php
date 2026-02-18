@@ -7,6 +7,9 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Pos
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Traits\ParentForumIdTrait;
 
+/**
+ * @psalm-suppress MissingConstructor
+ */
 final class Topic extends AbstractPost implements BbPressPostInterface
 {
     use ParentForumIdTrait;

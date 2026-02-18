@@ -8,6 +8,9 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Int
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Traits\ParentForumIdTrait;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Traits\ParentTopicIdTrait;
 
+/**
+ * @psalm-suppress MissingConstructor
+ */
 final class Reply extends AbstractPost implements BbPressPostInterface
 {
     use ParentForumIdTrait;
