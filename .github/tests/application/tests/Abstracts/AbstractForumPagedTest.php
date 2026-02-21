@@ -13,6 +13,7 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class AbstractForumPagedTest extends AbstractHttpTestCase
 {
     /**
+     * @param int<1, max> $page
      * @param list<Topic> $topics
      *
      * @throws \LogicException

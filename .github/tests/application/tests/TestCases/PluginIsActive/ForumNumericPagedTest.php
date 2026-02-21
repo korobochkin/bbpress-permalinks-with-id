@@ -25,7 +25,8 @@ final class ForumNumericPagedTest extends AbstractForumPagedTest
     }
 
     /**
-     * @param Topic[] $topics
+     * @param int<1, max> $page
+     * @param list<Topic> $topics
      *
      * @throws \LogicException
      * @throws \InvalidArgumentException
@@ -38,7 +39,8 @@ final class ForumNumericPagedTest extends AbstractForumPagedTest
     }
 
     /**
-     * @param Topic[] $topics
+     * @param int<1, max> $page
+     * @param list<Topic> $topics
      *
      * @throws \LogicException
      * @throws \InvalidArgumentException

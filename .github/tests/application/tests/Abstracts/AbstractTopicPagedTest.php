@@ -14,6 +14,9 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class AbstractTopicPagedTest extends AbstractHttpTestCase
 {
     /**
+     * @param int<1, max> $page
+     * @param list<Reply> $replies
+     *
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */
