@@ -26,15 +26,16 @@ final class ForumsPage
         return $post;
     }
 
+    public static function get(): Page
+    {
+        return self::$forums;
+    }
+
     /**
      * @throws \Random\RandomException
      */
-    public static function get(): Page
+    public static function prepareInstance(): void
     {
-        if (!isset(self::$forums)) {
-            self::$forums = self::generate();
-        }
-
-        return self::$forums;
+        self::$forums = self::generate();
     }
 }
