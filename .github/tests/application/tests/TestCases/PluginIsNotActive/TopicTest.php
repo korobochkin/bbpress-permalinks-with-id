@@ -41,6 +41,8 @@ final class TopicTest extends AbstractTopicTest
     }
 
     /**
+     * @psalm-suppress UnusedParam
+     *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */

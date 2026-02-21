@@ -39,6 +39,8 @@ final class ReplyTest extends AbstractReplyTest
     }
 
     /**
+     * @psalm-suppress UnusedParam
+     *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */

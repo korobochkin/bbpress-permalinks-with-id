@@ -18,6 +18,8 @@ use PHPUnit\Framework\Attributes;
 final class ReplyEditTest extends AbstractReplyEditTest
 {
     /**
+     * @psalm-suppress UnusedParam
+     *
      * @throws \LogicException
      */
     #[Attributes\DependsOnClass(ReplyTest::class)]

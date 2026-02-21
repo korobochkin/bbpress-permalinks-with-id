@@ -27,6 +27,8 @@ final class ReplyNumericEditTest extends AbstractReplyEditTest
     }
 
     /**
+     * @psalm-suppress UnusedParam
+     *
      * @throws \LogicException
      */
     #[Attributes\DependsOnClass(ReplyEditTest::class)]

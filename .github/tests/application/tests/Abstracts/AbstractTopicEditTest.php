@@ -14,6 +14,8 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class AbstractTopicEditTest extends AbstractHttpTestCase
 {
     /**
+     * @psalm-suppress PossiblyUnusedParam
+     *
      * @throws \LogicException
      */
     protected function _testTopicEditAsGuest(HttpBrowser $browser, Forum $forum, Topic $topic): void

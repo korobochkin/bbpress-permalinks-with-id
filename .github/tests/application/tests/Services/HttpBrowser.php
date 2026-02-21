@@ -6,6 +6,9 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
 use Symfony\Component\BrowserKit\Request;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 final class HttpBrowser extends \Symfony\Component\BrowserKit\HttpBrowser
 {
     #[\Override]

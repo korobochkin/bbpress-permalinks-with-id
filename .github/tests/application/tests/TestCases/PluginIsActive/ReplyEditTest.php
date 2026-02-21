@@ -26,6 +26,8 @@ final class ReplyEditTest extends AbstractReplyEditTest
     }
 
     /**
+     * @psalm-suppress UnusedParam
+     *
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */
