@@ -359,8 +359,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: .github/psalm/.cache/psalm-tests-application
-          key: psalm-tests-application-cache
-          restore-keys: psalm-tests-application-cache
+          key: psalm-tests-application
+          restore-keys: psalm-tests-application
 
       - name: Psalm
         run: 'make psalm-tests-application'
