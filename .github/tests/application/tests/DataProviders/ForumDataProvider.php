@@ -28,41 +28,13 @@ final class ForumDataProvider
      */
     private array $data;
 
+    /**
+     * @throws \Random\RandomException
+     * @throws \RuntimeException
+     */
     public function __construct()
     {
-        $data = [];
-
-        for ($i = 0; $i < $this->numberOfForums; ++$i) {
-            $topicsAndReplies = [];
-
-            for ($j = 0; $j < $this->numberOfTopics; ++$j) {
-                $replies = [];
-
-                if ($j < 2) {
-                    $numberOfReplies = $this->numberOfReplies;
-                } else {
-                    $numberOfReplies = 3;
-                }
-
-                for ($k = 0; $k < $numberOfReplies; ++$k) {
-                    $replies[] = $this->buildReply($i, $j, $k);
-                }
-
-                $topicsAndReplies[] = [
-                    0 => $this->buildTopic($i, $j),
-                    1 => $replies,
-                ];
-            }
-
-            $data[$i] = [
-                0 => $this->buildForum($i),
-                1 => $topicsAndReplies,
-            ];
-        }
-
-        assert([] !== $data);
-
-        $this->data = $data;
+        $this->prepare();
     }
 
     /**
@@ -125,9 +97,56 @@ final class ForumDataProvider
         return self::$instance->repliesEditGenerator();
     }
 
+    /**
+     * @throws \Random\RandomException
+     * @throws \RuntimeException
+     */
     public static function prepareInstance(): void
     {
         self::$instance = new self();
+    }
+
+    /**
+     * @throws \Random\RandomException
+     * @throws \RuntimeException
+     */
+    private function prepare(): void
+    {
+        $data = [];
+
+        for ($i = 0; $i < $this->numberOfForums; ++$i) {
+            $topicsAndReplies = [];
+
+            for ($j = 0; $j < $this->numberOfTopics; ++$j) {
+                $replies = [];
+
+                if ($j < 2) {
+                    $numberOfReplies = $this->numberOfReplies;
+                } else {
+                    $numberOfReplies = 3;
+                }
+
+                for ($k = 0; $k < $numberOfReplies; ++$k) {
+                    $replies[] = $this->buildReply($i, $j, $k);
+                }
+
+                $topicsAndReplies[] = [
+                    0 => $this->buildTopic($i, $j),
+                    1 => $replies,
+                ];
+            }
+
+            $data[$i] = [
+                0 => $this->buildForum($i),
+                1 => $topicsAndReplies,
+            ];
+        }
+
+        if (empty($data)) {
+            throw new \RuntimeException();
+        }
+
+        $this->data = $data;
     }
 
     /**
