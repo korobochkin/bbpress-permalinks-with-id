@@ -143,7 +143,7 @@ final class ForumDataProvider
         }
 
         if (empty($data)) {
-            throw new \RuntimeException();
+            throw new \RuntimeException('The data in the ForumDataProvider is empty');
         }
 
         $this->data = $data;
