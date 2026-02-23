@@ -343,7 +343,7 @@ jobs:
       - name: Composer Cache. Tests Application
         uses: actions/cache@v5
         with:
-          path: .github/tests/application
+          path: .github/tests/application/vendor
           key: ${{ runner.os }}-tests-application-composer-${{ hashFiles('.github/tests/application/composer.lock') }}
           restore-keys: ${{ runner.os }}-tests-application-composer-
 
