@@ -15,6 +15,7 @@ use Symfony\Component\DomCrawler\Crawler;
 abstract class AbstractReplyEditTest extends AbstractHttpTestCase
 {
     /**
+     * @throws \InvalidArgumentException
      * @throws \LogicException
      */
     protected function _testReplyEditAsGuest(HttpBrowser $browser, Topic $topic, Reply $reply): void
@@ -24,6 +25,7 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
     }
 
     /**
+     * @throws \InvalidArgumentException
      * @throws \LogicException
      */
     protected function _testReplyEditAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply): void
