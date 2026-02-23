@@ -126,6 +126,7 @@ final class BrowserActions
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     private static function getPostStatus(Crawler $crawler): Status
     {
@@ -136,6 +137,7 @@ final class BrowserActions
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     private static function getSamplePermalink(Crawler $crawler): string
     {

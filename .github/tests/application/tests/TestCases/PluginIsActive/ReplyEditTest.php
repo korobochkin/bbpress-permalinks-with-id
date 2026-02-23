@@ -29,7 +29,6 @@ final class ReplyEditTest extends AbstractReplyEditTest
      * @psalm-suppress UnusedParam
      *
      * @throws \LogicException
-     * @throws \InvalidArgumentException
      */
     #[Attributes\DependsOnClass(ReplyNumericTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
@@ -40,7 +39,6 @@ final class ReplyEditTest extends AbstractReplyEditTest
 
     /**
      * @throws \LogicException
-     * @throws \InvalidArgumentException
      */
     #[Attributes\Depends('testReplyEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
@@ -51,7 +49,6 @@ final class ReplyEditTest extends AbstractReplyEditTest
 
     /**
      * @throws \LogicException
-     * @throws \InvalidArgumentException
      * @throws \Random\RandomException
      */
     #[Attributes\Depends('testReplyEditAsAdmin')]

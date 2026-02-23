@@ -26,6 +26,7 @@ final class TopicEditTest extends AbstractTopicEditTest
 
     /**
      * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     #[Attributes\DependsOnClass(TopicNumericPagedTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
@@ -36,6 +37,7 @@ final class TopicEditTest extends AbstractTopicEditTest
 
     /**
      * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     #[Attributes\Depends('testTopicEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
@@ -47,6 +49,7 @@ final class TopicEditTest extends AbstractTopicEditTest
     /**
      * @throws \LogicException
      * @throws \Random\RandomException
+     * @throws \InvalidArgumentException
      */
     #[Attributes\Depends('testTopicEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
