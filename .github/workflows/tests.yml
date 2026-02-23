@@ -359,8 +359,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: .github/psalm/.cache/psalm-tests-application
-          key: psalm-tests-application
-          restore-keys: psalm-tests-application
+          key: psalm-tests-application-${{ github.ref_type == 'branch' && github.ref_name || 'main' }}
+          restore-keys: psalm-tests-application-
 
       - name: Psalm
         run: 'make psalm-tests-application'
