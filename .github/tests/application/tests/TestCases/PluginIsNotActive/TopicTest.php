@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicTest extends AbstractTopicTest
+final class TopicTest extends AbstractTopicTest
 {
     /**
      * Here I finalize building each Post instance with Type::Topic.
@@ -26,6 +26,7 @@ class TopicTest extends AbstractTopicTest
      * As an alternative it can be done in test*-methods,
      * but I would like to keep test*-methods small, clean and simple.
      */
+    #[\Override]
     protected function assertPreConditions(): void
     {
         parent::assertPreConditions();
@@ -39,6 +40,12 @@ class TopicTest extends AbstractTopicTest
         }
     }
 
+    /**
+     * @psalm-suppress UnusedParam
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     #[Attributes\DependsOnClass(ForumTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testCreateTopic(Forum $forum, Topic $topic): void
@@ -52,6 +59,7 @@ class TopicTest extends AbstractTopicTest
         $this->assertSampleLinkIsOk($topic);
     }
 
+    #[\Override]
     #[Attributes\Depends('testCreateTopic')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicAsGuest(Forum $forum, Topic $topic): void
@@ -59,6 +67,7 @@ class TopicTest extends AbstractTopicTest
         parent::testTopicAsGuest($forum, $topic);
     }
 
+    #[\Override]
     #[Attributes\Depends('testTopicAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicAsAdmin(Forum $forum, Topic $topic): void

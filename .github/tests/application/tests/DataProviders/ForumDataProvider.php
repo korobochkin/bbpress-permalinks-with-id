@@ -9,9 +9,9 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Rep
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\Random;
 
-class ForumDataProvider
+final class ForumDataProvider
 {
-    public static self $instance;
+    private static self $instance;
 
     private int $numberOfForums = 2;
 
@@ -24,68 +24,96 @@ class ForumDataProvider
     private int $repliesPerPage = 15;
 
     /**
-     * @var array<int, array{0: Forum, 1: Topic[]}>
+     * @var non-empty-array<int<0, max>, array{0: Forum, 1: list<array{0: Topic, 1: list<Reply>}>}>
      */
-    private array $data = [];
+    private array $data;
 
     /**
-     * @return \Generator<int, array{Forum}, mixed, void>
+     * @throws \Random\RandomException
+     * @throws \RuntimeException
+     */
+    public function __construct()
+    {
+        $this->prepare();
+    }
+
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     *
+     * @return \Generator<int<0, max>, array{Forum}, mixed, void>
      */
     public static function getForums(): \Generator
     {
-        self::prepareInstance();
-
         return self::$instance->forumsGenerator();
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     *
+     * @return \Generator<non-empty-string, array{Forum, int<1, max>, list<Topic>}, mixed, void>
+     */
     public static function getTopicsPaged(): \Generator
     {
-        self::prepareInstance();
-
         return self::$instance->topicsPagedGenerator();
     }
 
     /**
-     * @return \Generator<int, array{Forum, Topic}, mixed, void>
+     * @psalm-suppress PossiblyUnusedMethod
+     *
+     * @return \Generator<int<0, max>, array{Forum, Topic}, mixed, void>
      */
     public static function getTopics(): \Generator
     {
-        self::prepareInstance();
-
         return self::$instance->topicsGenerator();
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     *
+     * @return \Generator<int<0, max>, array{Forum, Topic, int<1, max>, list<Reply>}, mixed, void>
+     */
     public static function getRepliesPaged(): \Generator
     {
-        self::prepareInstance();
-
         return self::$instance->repliesPagedGenerator();
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     *
+     * @return \Generator<int<0, max>, array{Forum, Topic, Reply}, mixed, void>
+     */
     public static function getReplies(): \Generator
     {
-        self::prepareInstance();
-
         return self::$instance->repliesGenerator();
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     *
+     * @return \Generator<int<0, max>, array{Forum, Topic, Reply}, mixed, void>
+     */
     public static function getRepliesEdit(): \Generator
     {
-        self::prepareInstance();
-
         return self::$instance->repliesEditGenerator();
     }
 
-    private static function prepareInstance(): void
+    /**
+     * @throws \Random\RandomException
+     * @throws \RuntimeException
+     */
+    public static function prepareInstance(): void
     {
-        if (!isset(self::$instance)) {
-            self::$instance = new self();
-            self::$instance->build();
-        }
+        self::$instance = new self();
     }
 
-    private function build(): void
+    /**
+     * @throws \Random\RandomException
+     * @throws \RuntimeException
+     */
+    private function prepare(): void
     {
+        $data = [];
+
         for ($i = 0; $i < $this->numberOfForums; ++$i) {
             $topicsAndReplies = [];
 
@@ -103,18 +131,29 @@ class ForumDataProvider
                 }
 
                 $topicsAndReplies[] = [
-                    $this->buildTopic($i, $j),
-                    $replies,
+                    0 => $this->buildTopic($i, $j),
+                    1 => $replies,
                 ];
             }
 
-            $this->data[$i] = [
-                $this->buildForum($i),
-                $topicsAndReplies,
+            $data[$i] = [
+                0 => $this->buildForum($i),
+                1 => $topicsAndReplies,
             ];
         }
+
+        if (empty($data)) {
+            throw new \RuntimeException('The data in the ForumDataProvider is empty');
+        }
+
+        $this->data = $data;
     }
 
+    /**
+     * @param int<0, max> $forumIteration
+     *
+     * @throws \Random\RandomException
+     */
     private function buildForum(int $forumIteration): Forum
     {
         $post = new Forum();
@@ -128,6 +167,12 @@ class ForumDataProvider
         return $post;
     }
 
+    /**
+     * @param int<0, max> $forumIteration
+     * @param int<0, max> $topicIteration
+     *
+     * @throws \Random\RandomException
+     */
     private function buildTopic(int $forumIteration, int $topicIteration): Topic
     {
         $topic = new Topic();
@@ -143,6 +188,13 @@ class ForumDataProvider
         return $topic;
     }
 
+    /**
+     * @param int<0, max> $forumIteration
+     * @param int<0, max> $topicIteration
+     * @param int<0, max> $replyIteration
+     *
+     * @throws \Random\RandomException
+     */
     private function buildReply(int $forumIteration, int $topicIteration, int $replyIteration): Reply
     {
         $reply = new Reply();
@@ -159,7 +211,7 @@ class ForumDataProvider
     }
 
     /**
-     * @return \Generator<int, array{Forum}, mixed, void>
+     * @return \Generator<int<0, max>, array{Forum}, mixed, void>
      */
     private function forumsGenerator(): \Generator
     {
@@ -169,20 +221,20 @@ class ForumDataProvider
     }
 
     /**
-     * @return \Generator<int, array{Forum, Topic}, mixed, void>
+     * @return \Generator<int<0, max>, array{Forum, Topic}, mixed, void>
      */
     private function topicsGenerator(): \Generator
     {
         $i = 0;
         foreach ($this->data as [$forum, $topicsAndReplies]) {
-            foreach ($topicsAndReplies as [$topic, $replies]) {
+            foreach ($topicsAndReplies as [$topic]) {
                 yield $i++ => [$forum, $topic];
             }
         }
     }
 
     /**
-     * @return \Generator<int, array{Forum, int, Topic[]}, mixed, void>
+     * @return \Generator<non-empty-string, array{Forum, int<1, max>, list<Topic>}, mixed, void>
      */
     private function topicsPagedGenerator(): \Generator
     {
@@ -216,7 +268,7 @@ class ForumDataProvider
     }
 
     /**
-     * @return \Generator<int, array{Forum, Topic, Reply}, mixed, void>
+     * @return \Generator<int<0, max>, array{Forum, Topic, Reply}, mixed, void>
      */
     private function repliesGenerator(): \Generator
     {
@@ -231,7 +283,7 @@ class ForumDataProvider
     }
 
     /**
-     * @return \Generator<int, array{Forum, Topic, int, Reply}, mixed, void>
+     * @return \Generator<int<0, max>, array{Forum, Topic, int<1, max>, list<Reply>}, mixed, void>
      */
     private function repliesPagedGenerator(): \Generator
     {
@@ -259,7 +311,7 @@ class ForumDataProvider
     }
 
     /**
-     * @return \Generator<int, array{Forum, Topic, Reply}, mixed, void>
+     * @return \Generator<int<0, max>, array{Forum, Topic, Reply}, mixed, void>
      */
     private function repliesEditGenerator(): \Generator
     {

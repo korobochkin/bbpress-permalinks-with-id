@@ -6,8 +6,9 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Pos
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\WordPressPostInterface;
 
-class Page extends AbstractPost implements WordPressPostInterface
+final class Page extends AbstractPost implements WordPressPostInterface
 {
+    #[\Override]
     public function getType(): Type
     {
         return Type::Page;

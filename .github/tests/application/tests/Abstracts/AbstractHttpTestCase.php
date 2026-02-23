@@ -82,6 +82,9 @@ abstract class AbstractHttpTestCase extends TestCase
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     protected function assertBbPressBreadCrumbsContains(string $needle, Crawler $crawler): void
     {
         $this->assertStringContainsString(
@@ -102,6 +105,9 @@ abstract class AbstractHttpTestCase extends TestCase
         $this->assertStringContainsStringIgnoringCase($needle, implode(PHP_EOL, $noticesOnPage));
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     protected function assertBbPressReplyContentContains(Reply|Topic $post, Crawler $crawler): void
     {
         $this->assertStringContainsString(
@@ -110,12 +116,15 @@ abstract class AbstractHttpTestCase extends TestCase
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     protected function assertBbPressTopicHasLink(Topic $topic, Crawler $crawler): void
     {
         $link = $this->getReplyPermalink($crawler);
         $this->assertStringStartsWith(
             $this->useNumericPermalinksHTML ? $topic->getNumericPermalink() : $topic->getSamplePermalink(),
-            $link->attr('href'),
+            $link->attr('href') ?? throw new \RuntimeException(),
         );
         $this->assertSame(
             '#'.$topic->getId(),
@@ -123,16 +132,19 @@ abstract class AbstractHttpTestCase extends TestCase
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     protected function assertBbPressReplyHasLink(Topic $topic, Reply $reply, Crawler $crawler): void
     {
         $link = $this->getReplyPermalink($crawler);
         $this->assertStringStartsWith(
             $this->useNumericPermalinksHTML ? $topic->getNumericPermalink() : $topic->getSamplePermalink(),
-            $link->attr('href'),
+            $link->attr('href') ?? throw new \RuntimeException(),
         );
         $this->assertStringEndsWith(
             (string) $reply->getId(),
-            $link->attr('href'),
+            $link->attr('href') ?? throw new \RuntimeException(),
         );
         $this->assertSame(
             '#'.$reply->getId(),

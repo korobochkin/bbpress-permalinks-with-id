@@ -14,14 +14,19 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumEditTest extends AbstractForumEditTest
+final class ForumEditTest extends AbstractForumEditTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->useNumericPermalinksHTML = true;
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(ForumNumericPagedTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumEditAsGuest(Forum $forum): void
@@ -29,6 +34,10 @@ class ForumEditTest extends AbstractForumEditTest
         $this->_testForumEditAsGuest($this->browsers->guest, $forum);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\Depends('testForumEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumEditAsAdmin(Forum $forum): void
@@ -36,6 +45,11 @@ class ForumEditTest extends AbstractForumEditTest
         $this->_testForumEditAsAdmin($this->browsers->admin, $forum);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     * @throws \Random\RandomException
+     */
     #[Attributes\Depends('testForumEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumSubmitEditAsAdmin(Forum $forum): void

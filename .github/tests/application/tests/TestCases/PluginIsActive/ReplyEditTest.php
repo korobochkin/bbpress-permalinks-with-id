@@ -16,14 +16,20 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ReplyEditTest extends AbstractReplyEditTest
+final class ReplyEditTest extends AbstractReplyEditTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->useNumericPermalinksHTML = true;
     }
 
+    /**
+     * @psalm-suppress UnusedParam
+     *
+     * @throws \LogicException
+     */
     #[Attributes\DependsOnClass(ReplyNumericTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
     public function testReplyEditAsGuest(Forum $forum, Topic $topic, Reply $reply): void
@@ -31,6 +37,9 @@ class ReplyEditTest extends AbstractReplyEditTest
         $this->_testReplyEditAsGuest($this->browsers->guest, $topic, $reply);
     }
 
+    /**
+     * @throws \LogicException
+     */
     #[Attributes\Depends('testReplyEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
     public function testReplyEditAsAdmin(Forum $forum, Topic $topic, Reply $reply): void
@@ -38,6 +47,10 @@ class ReplyEditTest extends AbstractReplyEditTest
         $this->_testReplyEditAsAdmin($this->browsers->admin, $forum, $topic, $reply);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \Random\RandomException
+     */
     #[Attributes\Depends('testReplyEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
     public function testReplySubmitEditAsAdmin(Forum $forum, Topic $topic, Reply $reply): void

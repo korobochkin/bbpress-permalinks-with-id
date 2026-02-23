@@ -7,10 +7,13 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
 
-class ForumsPage
+final class ForumsPage
 {
     private static Page $forums;
 
+    /**
+     * @throws \Random\RandomException
+     */
     public static function generate(): Page
     {
         $post = new Page();
@@ -25,10 +28,14 @@ class ForumsPage
 
     public static function get(): Page
     {
-        if (!isset(static::$forums)) {
-            static::$forums = self::generate();
-        }
+        return self::$forums;
+    }
 
-        return static::$forums;
+    /**
+     * @throws \Random\RandomException
+     */
+    public static function prepareInstance(): void
+    {
+        self::$forums = self::generate();
     }
 }

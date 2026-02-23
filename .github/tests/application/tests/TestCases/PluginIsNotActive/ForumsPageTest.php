@@ -12,8 +12,12 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumsPageTest extends AbstractForumsPageTest
+final class ForumsPageTest extends AbstractForumsPageTest
 {
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     #[Attributes\DependsOnClass(AdminPagesTest::class)]
     public function testForumsPageCreation(): void
     {
@@ -24,6 +28,7 @@ class ForumsPageTest extends AbstractForumsPageTest
         $this->assertPageStatusIs200($this->browsers->admin->getResponse());
     }
 
+    #[\Override]
     #[Attributes\Depends('testForumsPageCreation')]
     public function testForumsPageAsGuest(): void
     {
@@ -31,6 +36,7 @@ class ForumsPageTest extends AbstractForumsPageTest
         $this->assertForumsPageHasNoForums($this->browsers->guest);
     }
 
+    #[\Override]
     #[Attributes\Depends('testForumsPageAsGuest')]
     public function testForumsPageAsAdmin(): void
     {

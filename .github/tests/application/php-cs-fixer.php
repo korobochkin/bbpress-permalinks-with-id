@@ -12,6 +12,10 @@ $finder = new Finder()
 return new Config()
     ->setRules([
         '@PhpCsFixer' => true,
+        'fully_qualified_strict_types' => [
+            'import_symbols' => true,
+            'phpdoc_tags' => [],
+        ],
     ])
     ->setFinder($finder)
 ;

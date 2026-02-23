@@ -17,11 +17,12 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ReplyTest extends AbstractReplyTest
+final class ReplyTest extends AbstractReplyTest
 {
     /**
      * @see TopicTest::assertPreConditions()
      */
+    #[\Override]
     protected function assertPreConditions(): void
     {
         parent::assertPreConditions();
@@ -37,6 +38,12 @@ class ReplyTest extends AbstractReplyTest
         }
     }
 
+    /**
+     * @psalm-suppress UnusedParam
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     #[Attributes\DependsOnClass(ForumEditTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testCreateReply(Forum $forum, Topic $topic, Reply $reply): void
@@ -50,6 +57,7 @@ class ReplyTest extends AbstractReplyTest
         $this->assertSampleLinkIsOk($reply);
     }
 
+    #[\Override]
     #[Attributes\Depends('testCreateReply')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyAsGuest(Forum $forum, Topic $topic, Reply $reply): void
@@ -57,6 +65,7 @@ class ReplyTest extends AbstractReplyTest
         parent::testReplyAsGuest($forum, $topic, $reply);
     }
 
+    #[\Override]
     #[Attributes\Depends('testReplyAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyAsAdmin(Forum $forum, Topic $topic, Reply $reply): void

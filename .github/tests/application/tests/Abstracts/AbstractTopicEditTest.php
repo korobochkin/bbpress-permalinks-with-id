@@ -13,18 +13,31 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractTopicEditTest extends AbstractHttpTestCase
 {
+    /**
+     * @psalm-suppress PossiblyUnusedParam
+     *
+     * @throws \LogicException
+     */
     protected function _testTopicEditAsGuest(HttpBrowser $browser, Forum $forum, Topic $topic): void
     {
         $this->requestEditPage($browser, $topic);
         $this->assertEditPageRedirected($browser, $topic);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     protected function _testTopicEditAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic): void
     {
         $crawler = $this->requestEditPage($browser, $topic);
         $this->testTopicEditPage($browser, $forum, $topic, $crawler);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     protected function _testTopicSubmitEditAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic, Topic $newTopic): void
     {
         $crawler = $this->requestEditPage($browser, $topic);
@@ -41,6 +54,10 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
         FrontendUtilities::submitEditForm($browser, $crawler2, $topic);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     private function requestEditPage(HttpBrowser $browser, Topic $topic): Crawler
     {
         $browser->followRedirects(false);
@@ -48,6 +65,9 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
         return $browser->request('GET', URL::editPermalink($topic, $this->useNumericPermalinksRequests));
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function testTopicEditPage(HttpBrowser $browser, Forum $forum, Topic $topic, Crawler $crawler): void
     {
         $this->assertPageStatusIs200($browser->getResponse());
@@ -69,6 +89,9 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
         $this->assertLocation($this->useNumericPermalinksHTML ? $topic->getNumericPermalink() : $topic->getSamplePermalink(), $browser->getResponse());
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function assertTopicEditFormHasForumId(Forum $forum, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//select[@name="bbp_forum_id"]/option[@selected="selected"]');
@@ -77,6 +100,9 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
         $this->assertEquals($forum->getId(), $input->attr('value'));
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function assertTopicEditFormHasId(Topic $topic, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//input[@type="hidden" and @name="bbp_topic_id"]');
@@ -85,6 +111,9 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
         $this->assertEquals($topic->getId(), $input->attr('value'));
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function assertTopicEditFormHasStick(Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//select[@name="bbp_stick_topic"]/option[@selected="selected"]');
@@ -92,6 +121,9 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
         $this->assertEquals('unstick', $input->attr('value'));
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function assertTopicEditFormHasTitle(Topic $topic, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//input[@name="bbp_topic_title"]');
@@ -108,6 +140,9 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
         $this->assertEquals($topic->getContent(), $input->innerText());
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function assertTopicEditFormHasSubmit(Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//button[@name="bbp_topic_submit"]');

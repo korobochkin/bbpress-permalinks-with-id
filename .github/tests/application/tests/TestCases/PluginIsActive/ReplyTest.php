@@ -15,14 +15,16 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ReplyTest extends AbstractReplyTest
+final class ReplyTest extends AbstractReplyTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->useNumericPermalinksHTML = true;
     }
 
+    #[\Override]
     #[Attributes\DependsOnClass(TopicNumericEditTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyAsGuest(Forum $forum, Topic $topic, Reply $reply): void
@@ -30,6 +32,7 @@ class ReplyTest extends AbstractReplyTest
         parent::testReplyAsGuest($forum, $topic, $reply);
     }
 
+    #[\Override]
     #[Attributes\Depends('testReplyAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyAsAdmin(Forum $forum, Topic $topic, Reply $reply): void

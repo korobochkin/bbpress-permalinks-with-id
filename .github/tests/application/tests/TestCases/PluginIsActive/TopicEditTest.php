@@ -15,14 +15,19 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicEditTest extends AbstractTopicEditTest
+final class TopicEditTest extends AbstractTopicEditTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->useNumericPermalinksHTML = true;
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(TopicNumericPagedTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicEditAsGuest(Forum $forum, Topic $topic): void
@@ -30,6 +35,10 @@ class TopicEditTest extends AbstractTopicEditTest
         $this->_testTopicEditAsGuest($this->browsers->guest, $forum, $topic);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\Depends('testTopicEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicEditAsAdmin(Forum $forum, Topic $topic): void
@@ -37,6 +46,11 @@ class TopicEditTest extends AbstractTopicEditTest
         $this->_testTopicEditAsAdmin($this->browsers->admin, $forum, $topic);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \Random\RandomException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\Depends('testTopicEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicSubmitEditAsAdmin(Forum $forum, Topic $topic): void

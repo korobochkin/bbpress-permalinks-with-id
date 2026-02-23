@@ -6,17 +6,25 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
 use Symfony\Component\HttpClient\HttpClient;
 
-class BrowsersService
+final class BrowsersService
 {
     public HttpBrowser $admin;
 
     public HttpBrowser $guest;
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     public function __construct()
     {
         $this->setUp();
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     private function setUp(): void
     {
         $this->admin = new HttpBrowser(HttpClient::create([
@@ -42,19 +50,34 @@ class BrowsersService
         $this->guest->request('GET', $home);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function getHomePageURL(): string
     {
         return $this->getEnvOrThrowError(TestSiteCredentials::HOME);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private function getEnvOrThrowError(TestSiteCredentials $name): string
     {
-        return $_ENV[$name->value]
-        ?? throw new \InvalidArgumentException(
-            "Required ENV variable is not defined: {$name->value}"
-        );
+        if (
+            isset($_ENV[$name->value])
+            && is_string($_ENV[$name->value])
+            && '' !== $_ENV[$name->value]
+        ) {
+            return $_ENV[$name->value];
+        }
+
+        throw new \InvalidArgumentException("Required ENV variable is not defined: {$name->value}");
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     private function logIn(HttpBrowser $browser, string $login, string $password): void
     {
         $crawler = $browser->request('GET', '/wp-login.php');

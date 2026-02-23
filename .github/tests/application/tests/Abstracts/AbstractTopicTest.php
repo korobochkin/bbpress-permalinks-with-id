@@ -11,16 +11,25 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractTopicTest extends AbstractHttpTestCase
 {
+    /**
+     * @throws \InvalidArgumentException
+     */
     public function testTopicAsGuest(Forum $forum, Topic $topic): void
     {
         $this->testTopic($this->browsers->guest, $forum, $topic);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     public function testTopicAsAdmin(Forum $forum, Topic $topic): void
     {
         $this->testTopic($this->browsers->admin, $forum, $topic);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     protected function testTopic(HttpBrowser $browser, Forum $forum, Topic $topic): Crawler
     {
         $browser->followRedirects(false);

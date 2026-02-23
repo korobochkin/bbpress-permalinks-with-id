@@ -6,8 +6,12 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
 
 use Symfony\Component\BrowserKit\Request;
 
-class HttpBrowser extends \Symfony\Component\BrowserKit\HttpBrowser
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
+final class HttpBrowser extends \Symfony\Component\BrowserKit\HttpBrowser
 {
+    #[\Override]
     protected function getHeaders(Request $request): array
     {
         $headers = parent::getHeaders($request);

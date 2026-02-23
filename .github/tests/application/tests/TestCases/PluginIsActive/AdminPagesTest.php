@@ -12,8 +12,9 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class AdminPagesTest extends AbstractAdminPagesTest
+final class AdminPagesTest extends AbstractAdminPagesTest
 {
+    #[\Override]
     #[Attributes\DependsOnClass(ActivatePluginTest::class)]
     public function testIndexPage(): void
     {

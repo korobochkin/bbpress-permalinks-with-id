@@ -7,6 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\TestCases\Pl
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts\AbstractTopicPagedTest;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\DataProviders\ForumDataProvider;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use PHPUnit\Framework\Attributes;
 
@@ -14,14 +15,22 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicPagedTest extends AbstractTopicPagedTest
+final class TopicPagedTest extends AbstractTopicPagedTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->useNumericPermalinksHTML = true;
     }
 
+    /**
+     * @param int<1, max> $page
+     * @param list<Reply> $replies
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\DependsOnClass(TopicTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesPaged')]
     public function testTopicPagedAsGuest(Forum $forum, Topic $topic, int $page, array $replies): void
@@ -29,6 +38,13 @@ class TopicPagedTest extends AbstractTopicPagedTest
         $this->_testTopicPaged($this->browsers->guest, $forum, $topic, $page, $replies);
     }
 
+    /**
+     * @param int<1, max> $page
+     * @param list<Reply> $replies
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     #[Attributes\Depends('testTopicPagedAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesPaged')]
     public function testTopicPagedAsAdmin(Forum $forum, Topic $topic, int $page, array $replies): void

@@ -13,8 +13,12 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumEditTest extends AbstractForumEditTest
+final class ForumEditTest extends AbstractForumEditTest
 {
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     */
     #[Attributes\DependsOnClass(ForumPagedTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumEditAsGuest(Forum $forum): void
@@ -22,6 +26,10 @@ class ForumEditTest extends AbstractForumEditTest
         $this->_testForumEditAsGuest($this->browsers->guest, $forum);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     */
     #[Attributes\Depends('testForumEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumEditAsAdmin(Forum $forum): void

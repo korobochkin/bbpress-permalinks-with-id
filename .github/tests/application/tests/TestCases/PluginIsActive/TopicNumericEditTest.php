@@ -15,8 +15,9 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicNumericEditTest extends AbstractTopicEditTest
+final class TopicNumericEditTest extends AbstractTopicEditTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,6 +25,9 @@ class TopicNumericEditTest extends AbstractTopicEditTest
         $this->useNumericPermalinksHTML = true;
     }
 
+    /**
+     * @throws \LogicException
+     */
     #[Attributes\DependsOnClass(TopicEditTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicEditAsGuest(Forum $forum, Topic $topic): void
@@ -31,6 +35,9 @@ class TopicNumericEditTest extends AbstractTopicEditTest
         $this->_testTopicEditAsGuest($this->browsers->guest, $forum, $topic);
     }
 
+    /**
+     * @throws \LogicException
+     */
     #[Attributes\Depends('testTopicEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicEditAsAdmin(Forum $forum, Topic $topic): void
@@ -38,6 +45,10 @@ class TopicNumericEditTest extends AbstractTopicEditTest
         $this->_testTopicEditAsAdmin($this->browsers->admin, $forum, $topic);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \Random\RandomException
+     */
     #[Attributes\Depends('testTopicEditAsAdmin')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicSubmitEditAsAdmin(Forum $forum, Topic $topic): void

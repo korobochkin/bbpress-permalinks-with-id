@@ -6,8 +6,9 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Pos
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
 
-class Forum extends AbstractPost implements BbPressPostInterface
+final class Forum extends AbstractPost implements BbPressPostInterface
 {
+    #[\Override]
     public function getType(): Type
     {
         return Type::Forum;

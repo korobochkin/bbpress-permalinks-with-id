@@ -11,6 +11,9 @@ interface PostInterface
 {
     public function getId(): int;
 
+    /**
+     * @psalm-suppress PossiblyUnusedReturnValue
+     */
     public function setId(int $id): self;
 
     public function getType(): Type;
@@ -31,13 +34,32 @@ interface PostInterface
 
     public function setName(string $name): self;
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     */
     public function getAuthorId(): int;
 
+    /**
+     * @psalm-suppress PossiblyUnusedReturnValue
+     */
     public function setAuthorId(int $authorId): self;
 
+    /**
+     * @return non-empty-string
+     */
     public function getSamplePermalink(): string;
 
+    /**
+     * @psalm-suppress PossiblyUnusedReturnValue
+     *
+     * @throws \RuntimeException
+     */
     public function setSamplePermalink(string $samplePermalink): self;
 
+    /**
+     * @return non-empty-string
+     *
+     * @throws \RuntimeException
+     */
     public function getNumericPermalink(): string;
 }

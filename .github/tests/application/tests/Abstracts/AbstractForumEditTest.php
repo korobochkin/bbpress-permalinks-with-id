@@ -12,18 +12,30 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractForumEditTest extends AbstractHttpTestCase
 {
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     protected function _testForumEditAsGuest(HttpBrowser $browser, Forum $forum): void
     {
         $this->requestEditPage($browser, $forum);
         $this->assertEditPageRedirected($browser, $forum);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     protected function _testForumEditAsAdmin(HttpBrowser $browser, Forum $forum): void
     {
         $crawler = $this->requestEditPage($browser, $forum);
         $this->testForumEditPage($browser, $forum, $crawler);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     protected function _testForumSubmitEditAsAdmin(HttpBrowser $browser, Forum $forum, Forum $newForum): void
     {
         $crawler = $this->requestEditPage($browser, $forum);
@@ -40,6 +52,10 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         FrontendUtilities::submitEditForm($browser, $crawler2, $forum);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     private function requestEditPage(HttpBrowser $browser, Forum $forum): Crawler
     {
         $browser->followRedirects(false);
@@ -47,6 +63,10 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         return $browser->request('GET', URL::editPermalink($forum, $this->useNumericPermalinksRequests));
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     private function testForumEditPage(HttpBrowser $browser, Forum $forum, Crawler $crawler): void
     {
         $this->assertPageStatusIs200($browser->getResponse());
@@ -59,12 +79,20 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertForumEditFormHasSubmit($crawler);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     private function assertEditPageRedirected(HttpBrowser $browser, Forum $forum): void
     {
         $this->assertIsRedirect($browser->getResponse());
         $this->assertLocation($this->useNumericPermalinksHTML ? $forum->getNumericPermalink() : $forum->getSamplePermalink(), $browser->getResponse());
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     private function assertForumEditFormHasId(Forum $forum, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//input[@type="hidden" and @name="bbp_forum_id"]');
@@ -73,6 +101,10 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertEquals($forum->getId(), $input->attr('value'));
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     private function assertForumEditFormHasTitle(Forum $forum, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//input[@name="bbp_forum_title"]');
@@ -81,6 +113,10 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertEquals($forum->getTitle(), $input->attr('value'));
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     private function assertForumEditFormHasContent(Forum $forum, Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//textarea[@name="bbp_forum_content"]');
@@ -89,6 +125,10 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertEquals($forum->getContent(), $input->innerText());
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     private function assertForumEditFormHasSubmit(Crawler $crawler): void
     {
         $input = $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]//button[@name="bbp_forum_submit"]');

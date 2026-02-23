@@ -15,8 +15,13 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ReplyEditTest extends AbstractReplyEditTest
+final class ReplyEditTest extends AbstractReplyEditTest
 {
+    /**
+     * @psalm-suppress UnusedParam
+     *
+     * @throws \LogicException
+     */
     #[Attributes\DependsOnClass(ReplyTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getReplies')]
     public function testReplyEditAsGuest(Forum $forum, Topic $topic, Reply $reply): void
@@ -24,6 +29,9 @@ class ReplyEditTest extends AbstractReplyEditTest
         $this->_testReplyEditAsGuest($this->browsers->guest, $topic, $reply);
     }
 
+    /**
+     * @throws \LogicException
+     */
     #[Attributes\Depends('testReplyEditAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getRepliesEdit')]
     public function testReplyEditAsAdmin(Forum $forum, Topic $topic, Reply $reply): void

@@ -8,6 +8,9 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\HttpUtil
 
 abstract class AbstractAdminPagesTest extends AbstractHttpTestCase
 {
+    /**
+     * @throws \Symfony\Component\BrowserKit\Exception\LogicException
+     */
     public function testIndexPage(): void
     {
         $requestedUri = '/wp-admin/index.php';

@@ -12,17 +12,26 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 {
     protected bool $forumsAreEmpty = true;
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     public function testForumAsGuest(Forum $forum): void
     {
         $crawler = $this->testForum($this->browsers->guest, $forum);
         $this->testNotLoggedIn($crawler);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     public function testForumAsAdmin(Forum $forum): void
     {
         $this->testForum($this->browsers->admin, $forum);
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     protected function testForum(HttpBrowser $browser, Forum $forum): Crawler
     {
         $browser->followRedirects(false);

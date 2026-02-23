@@ -13,6 +13,13 @@ use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractTopicPagedTest extends AbstractHttpTestCase
 {
+    /**
+     * @param int<1, max> $page
+     * @param list<Reply> $replies
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     protected function _testTopicPaged(HttpBrowser $browser, Forum $forum, Topic $topic, int $page, array $replies): void
     {
         $browser->followRedirects(false);

@@ -14,14 +14,16 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class TopicTest extends AbstractTopicTest
+final class TopicTest extends AbstractTopicTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->useNumericPermalinksHTML = true;
     }
 
+    #[\Override]
     #[Attributes\DependsOnClass(ForumNumericEditTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicAsGuest(Forum $forum, Topic $topic): void
@@ -29,6 +31,7 @@ class TopicTest extends AbstractTopicTest
         parent::testTopicAsGuest($forum, $topic);
     }
 
+    #[\Override]
     #[Attributes\Depends('testTopicAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopics')]
     public function testTopicAsAdmin(Forum $forum, Topic $topic): void

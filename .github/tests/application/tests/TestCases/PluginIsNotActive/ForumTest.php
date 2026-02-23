@@ -15,8 +15,12 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumTest extends AbstractForumTest
+final class ForumTest extends AbstractForumTest
 {
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     #[Attributes\DependsOnClass(ForumsPageTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testCreateForum(Forum $forum): void
@@ -30,6 +34,7 @@ class ForumTest extends AbstractForumTest
         $this->assertSampleLinkIsOk($forum);
     }
 
+    #[\Override]
     #[Attributes\Depends('testCreateForum')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsGuest(Forum $forum): void
@@ -37,6 +42,7 @@ class ForumTest extends AbstractForumTest
         parent::testForumAsGuest($forum);
     }
 
+    #[\Override]
     #[Attributes\Depends('testForumAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getForums')]
     public function testForumAsAdmin(Forum $forum): void

@@ -7,7 +7,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 use Symfony\Component\BrowserKit\AbstractBrowser;
 use Symfony\Component\BrowserKit\Response;
 
-class HttpUtilities
+final class HttpUtilities
 {
     /**
      * @see AbstractBrowser::request

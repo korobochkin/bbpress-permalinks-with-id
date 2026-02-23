@@ -9,11 +9,14 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrows
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Form;
 
-class FrontendUtilities
+final class FrontendUtilities
 {
+    /**
+     * @throws \InvalidArgumentException
+     */
     public static function submitEditForm(HttpBrowser $browser, Crawler $crawler, BbPressPostInterface $post): void
     {
-        $form = static::findEditForm($crawler);
+        $form = self::findEditForm($crawler);
         $type = $post->getType()->value;
 
         $browser->submit(
@@ -29,6 +32,9 @@ class FrontendUtilities
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     private static function findEditForm(Crawler $crawler): Form
     {
         return $crawler->filterXPath('//body//div[contains(@class, "entry-content")]//form[@name="new-post"]')->form();

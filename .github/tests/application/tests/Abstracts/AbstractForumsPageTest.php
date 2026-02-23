@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\AbstractPost;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\ForumsPage;
 
 abstract class AbstractForumsPageTest extends AbstractHttpTestCase
 {
-    protected AbstractPost $forumsPage;
+    protected Page $forumsPage;
 
+    /**
+     * @throws \Random\RandomException
+     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -15,16 +15,23 @@ use Symfony\Component\DomCrawler\Crawler;
 
 final class BrowserActions
 {
-    public static function createPostViaWPAdmin(HttpBrowser $browser, Forum|Page|Reply|Topic $post): Crawler
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    public static function createPostViaWPAdmin(HttpBrowser $browser, Forum|Page|Reply|Topic $post): void
     {
         if ($post instanceof Page) {
-            return self::createNativePostTypes($browser, $post);
+            self::createNativePostTypes($browser, $post);
+        } else {
+            self::createBbPressPostTypes($browser, $post);
         }
-
-        return self::createBbPressPostTypes($browser, $post);
     }
 
-    private static function createNativePostTypes(HttpBrowser $browser, Page $post): Crawler
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private static function createNativePostTypes(HttpBrowser $browser, Page $post): void
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
@@ -45,7 +52,7 @@ final class BrowserActions
         $post->setId((int) $postID->attr('value'));
         $post->setAuthorId((int) $userID->attr('value'));
 
-        return $browser->request(
+        $browser->request(
             'POST',
             '/wp-admin/post.php',
             [
@@ -66,7 +73,11 @@ final class BrowserActions
         );
     }
 
-    private static function createBbPressPostTypes(HttpBrowser $browser, BbPressPostInterface $post): Crawler
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function createBbPressPostTypes(HttpBrowser $browser, BbPressPostInterface $post): void
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
@@ -95,8 +106,6 @@ final class BrowserActions
 
         $post->setStatus(self::getPostStatus($savedPostCrawler));
         $post->setSamplePermalink(self::getSamplePermalink($savedPostCrawler));
-
-        return $savedPostCrawler;
     }
 
     private static function requestPostNewPage(HttpBrowser $browser, PostInterface $post): Crawler
@@ -115,15 +124,23 @@ final class BrowserActions
         return $crawler->filterXPath('//form//input[(@id="user-id" or @name="user_ID") and @type="hidden"]');
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     private static function getPostStatus(Crawler $crawler): Status
     {
         return Status::from(
-            $crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]')->attr('value')
+            $crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]')->attr('value') ?? throw new \RuntimeException()
         );
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
     private static function getSamplePermalink(Crawler $crawler): string
     {
-        return $crawler->filterXPath('//body//*[contains(@id, "sample-permalink")]//a')->attr('href');
+        return $crawler->filterXPath('//body//*[contains(@id, "sample-permalink")]//a')->attr('href') ?? throw new \RuntimeException();
     }
 }

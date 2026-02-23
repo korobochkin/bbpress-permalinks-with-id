@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<psalm
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    errorLevel="1"
+    resolveFromConfigFile="false"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+    checkForThrowsDocblock="true"
+    ensureArrayStringOffsetsExist="true"
+    cacheDirectory=".github/psalm/.cache/psalm-tests-application"
+    autoloader=".github/tests/application/vendor/autoload.php"
+>
+    <projectFiles>
+        <directory name=".github/tests/application"/>
+        <ignoreFiles>
+            <directory name=".github/tests/application/.cache"/>
+            <directory name=".github/tests/application/containers"/>
+            <directory name=".github/tests/application/vendor"/>
+        </ignoreFiles>
+    </projectFiles>
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+    </plugins>
+    <ignoreExceptions>
+        <classAndDescendants name="PHPUnit\Framework\Exception"/>
+    </ignoreExceptions>
+</psalm>

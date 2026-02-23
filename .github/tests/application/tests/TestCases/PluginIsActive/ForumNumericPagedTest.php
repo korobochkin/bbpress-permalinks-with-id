@@ -14,8 +14,9 @@ use PHPUnit\Framework\Attributes;
  * @internal
  */
 #[Attributes\CoversNothing]
-class ForumNumericPagedTest extends AbstractForumPagedTest
+final class ForumNumericPagedTest extends AbstractForumPagedTest
 {
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,7 +25,11 @@ class ForumNumericPagedTest extends AbstractForumPagedTest
     }
 
     /**
-     * @param Topic[] $topics
+     * @param int<1, max> $page
+     * @param list<Topic> $topics
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     #[Attributes\DependsOnClass(ForumNumericTest::class)]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopicsPaged')]
@@ -34,7 +39,11 @@ class ForumNumericPagedTest extends AbstractForumPagedTest
     }
 
     /**
-     * @param Topic[] $topics
+     * @param int<1, max> $page
+     * @param list<Topic> $topics
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      */
     #[Attributes\Depends('testForumPagedAsGuest')]
     #[Attributes\DataProviderExternal(ForumDataProvider::class, 'getTopicsPaged')]
