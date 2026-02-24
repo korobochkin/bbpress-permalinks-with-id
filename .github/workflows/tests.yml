@@ -166,12 +166,12 @@ jobs:
       - name: Generate PHP Stan Stubs. WordPress ${{ matrix.config.wordpress }}
         if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
         working-directory: .github/php-stan
-        run: 'vendor/bin/generate-stubs --no-interaction .cache/wordpress --out=.cache/stubs/wordpress.stub'
+        run: 'rm .cache/stubs/wordpress.stub && vendor/bin/generate-stubs --no-interaction .cache/wordpress --out=.cache/stubs/wordpress.stub'
 
       - name: Generate PHP Stan Stubs. bbPress ${{ matrix.config.bbpress }}
         if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
         working-directory: .github/php-stan
-        run: 'vendor/bin/generate-stubs --no-interaction .cache/bbpress --out=.cache/stubs/bbpress.stub'
+        run: 'rm .cache/stubs/bbpress.stub && vendor/bin/generate-stubs --no-interaction .cache/bbpress --out=.cache/stubs/bbpress.stub'
 
       - name: Run PHP Stan
         working-directory: .github/php-stan
