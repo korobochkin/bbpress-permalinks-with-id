@@ -166,15 +166,16 @@ jobs:
       - name: Generate PHP Stan Stubs. WordPress ${{ matrix.config.wordpress }}
         if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
         working-directory: .github/php-stan
-        run: 'vendor/bin/generate-stubs --no-interaction ./.cache/wordpress --out=./.cache/stubs/wordpress.stub'
+        run: 'vendor/bin/generate-stubs --no-interaction .cache/wordpress --out=.cache/stubs/wordpress.stub'
 
       - name: Generate PHP Stan Stubs. bbPress ${{ matrix.config.bbpress }}
         if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
         working-directory: .github/php-stan
-        run: 'vendor/bin/generate-stubs --no-interaction ./.cache/bbpress --out=./.cache/stubs/bbpress.stub'
+        run: 'vendor/bin/generate-stubs --no-interaction .cache/bbpress --out=.cache/stubs/bbpress.stub'
 
       - name: Run PHP Stan
-        run: '.github/php-stan/vendor/bin/phpstan analyse --no-interaction --no-progress --configuration=.github/php-stan/php-stan.neon'
+        working-directory: .github/php-stan
+        run: 'vendor/bin/phpstan analyse --no-interaction --no-progress --configuration=php-stan.neon'
         continue-on-error: true # TODO: remove this parameter after fixing the code
 
   psalm-pre:
