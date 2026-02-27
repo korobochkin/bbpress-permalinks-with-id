@@ -6,32 +6,19 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
-use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\ForumsPage;
 
 abstract class AbstractForumsPageTest extends AbstractHttpTestCase
 {
-    protected Page $forumsPage;
-
-    /**
-     * @throws \Random\RandomException
-     */
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->forumsPage = ForumsPage::get();
-    }
-
-    public function testForumsPageAsGuest(): void
+    public function testForumsPageAsGuest(Page $forumsPage): void
     {
         $this->requestForumsPage($this->browsers->guest);
-        $this->assertForumsPageAccessible($this->browsers->guest);
+        $this->assertForumsPageAccessible($this->browsers->guest, $forumsPage);
     }
 
-    public function testForumsPageAsAdmin(): void
+    public function testForumsPageAsAdmin(Page $forumsPage): void
     {
         $this->requestForumsPage($this->browsers->admin);
-        $this->assertForumsPageAccessible($this->browsers->admin);
+        $this->assertForumsPageAccessible($this->browsers->admin, $forumsPage);
     }
 
     protected function requestForumsPage(HttpBrowser $browser): void
@@ -40,10 +27,10 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
         $browser->request('GET', '/forums/');
     }
 
-    protected function assertForumsPageAccessible(HttpBrowser $browser): void
+    protected function assertForumsPageAccessible(HttpBrowser $browser, Page $forumsPage): void
     {
         $this->assertPageStatusIs200($browser->getResponse());
-        $this->assertPageTitleEquals($this->forumsPage->getTitle(), $browser->getCrawler());
+        $this->assertPageTitleEquals($forumsPage->getTitle(), $browser->getCrawler());
     }
 
     protected function assertForumsPageHasNoForums(HttpBrowser $browser): void
