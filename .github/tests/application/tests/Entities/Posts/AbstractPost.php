@@ -25,6 +25,8 @@ abstract class AbstractPost implements PostInterface
      */
     private string $samplePermalink;
 
+    private \DateTime $postDate;
+
     #[\Override]
     public function getId(): int
     {
@@ -140,5 +142,19 @@ abstract class AbstractPost implements PostInterface
         }
 
         return $result;
+    }
+
+    #[\Override]
+    public function getPostDate(): \DateTime
+    {
+        return $this->postDate;
+    }
+
+    #[\Override]
+    public function setPostDate(\DateTime $postDate): self
+    {
+        $this->postDate = $postDate;
+
+        return $this;
     }
 }
