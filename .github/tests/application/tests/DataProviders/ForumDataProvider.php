@@ -25,6 +25,8 @@ final class ForumDataProvider
 
     private \DateTime $postDateTimeCounter;
 
+    private \DateInterval $postDateInterval;
+
     /**
      * @var non-empty-array<int<0, max>, array{0: Forum, 1: list<array{0: Topic, 1: list<Reply>}>}>
      */
@@ -34,9 +36,10 @@ final class ForumDataProvider
      * @throws \Random\RandomException
      * @throws \RuntimeException
      */
-    public function __construct(\DateTime $initialDateTime)
+    public function __construct(\DateTime $initialDateTime, \DateInterval $interval)
     {
         $this->postDateTimeCounter = $initialDateTime;
+        $this->postDateInterval = $interval;
         $this->prepare();
     }
 
@@ -103,11 +106,13 @@ final class ForumDataProvider
     /**
      * @throws \Random\RandomException
      * @throws \RuntimeException
+     * @throws \Exception
      */
     public static function prepareInstance(): void
     {
         self::$instance = new self(
             new \DateTime('-3 months', new \DateTimeZone('UTC'))->setTime(0, 0, 0, 0),
+            new \DateInterval('PT3H'),
         );
     }
 
@@ -351,7 +356,7 @@ final class ForumDataProvider
     private function buildPostDate(): \DateTime
     {
         $date = clone $this->postDateTimeCounter;
-        $this->postDateTimeCounter->modify('+3 hours');
+        $this->postDateTimeCounter->add($this->postDateInterval);
 
         return $date;
     }
