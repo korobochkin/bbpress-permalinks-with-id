@@ -57,3 +57,13 @@ function configurator_disable_auto_updates()
     remove_all_filters('plugins_api');
 }
 add_action('admin_init', 'configurator_disable_auto_updates');
+
+function configurator_bbp_after_has_topics_parse_args(array $params): array
+{
+    if (isset($params['orderby'])) {
+        $params['orderby'] = 'date';
+    }
+
+    return $params;
+}
+add_filter('bbp_after_has_topics_parse_args', 'configurator_bbp_after_has_topics_parse_args');
