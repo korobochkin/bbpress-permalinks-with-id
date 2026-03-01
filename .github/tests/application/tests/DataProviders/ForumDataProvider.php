@@ -23,6 +23,10 @@ final class ForumDataProvider
 
     private int $repliesPerPage = 15;
 
+    private \DateTime $postDateTimeCounter;
+
+    private \DateInterval $postDateInterval;
+
     /**
      * @var non-empty-array<int<0, max>, array{0: Forum, 1: list<array{0: Topic, 1: list<Reply>}>}>
      */
@@ -32,8 +36,10 @@ final class ForumDataProvider
      * @throws \Random\RandomException
      * @throws \RuntimeException
      */
-    public function __construct()
+    public function __construct(\DateTime $initialDateTime, \DateInterval $interval)
     {
+        $this->postDateTimeCounter = $initialDateTime;
+        $this->postDateInterval = $interval;
         $this->prepare();
     }
 
@@ -100,10 +106,14 @@ final class ForumDataProvider
     /**
      * @throws \Random\RandomException
      * @throws \RuntimeException
+     * @throws \Exception
      */
     public static function prepareInstance(): void
     {
-        self::$instance = new self();
+        self::$instance = new self(
+            new \DateTime('-3 months', new \DateTimeZone('UTC'))->setTime(0, 0, 0, 0),
+            new \DateInterval('PT3H'),
+        );
     }
 
     /**
@@ -115,9 +125,11 @@ final class ForumDataProvider
         $data = [];
 
         for ($i = 0; $i < $this->numberOfForums; ++$i) {
+            $forum = $this->buildForum($i);
             $topicsAndReplies = [];
 
             for ($j = 0; $j < $this->numberOfTopics; ++$j) {
+                $topic = $this->buildTopic($i, $j);
                 $replies = [];
 
                 if ($j < 2) {
@@ -131,13 +143,13 @@ final class ForumDataProvider
                 }
 
                 $topicsAndReplies[] = [
-                    0 => $this->buildTopic($i, $j),
+                    0 => $topic,
                     1 => $replies,
                 ];
             }
 
             $data[$i] = [
-                0 => $this->buildForum($i),
+                0 => $forum,
                 1 => $topicsAndReplies,
             ];
         }
@@ -162,6 +174,7 @@ final class ForumDataProvider
             ->setTitle(implode(' ', ['Forum #', $forumIteration, $random]))
             ->setContent(Random::sentence())
             ->setName(implode('-', ['forum-slug', $forumIteration, $random, 'end']))
+            ->setPostDate($this->buildPostDate())
         ;
 
         return $post;
@@ -183,6 +196,7 @@ final class ForumDataProvider
             ->setTitle(implode(' ', ['Topic #', $number, $random]))
             ->setContent($number.' '.Random::sentence())
             ->setName(implode('-', ['topic-slug', $forumIteration, $topicIteration, $random, 'end']))
+            ->setPostDate($this->buildPostDate())
         ;
 
         return $topic;
@@ -205,6 +219,7 @@ final class ForumDataProvider
             ->setTitle(implode(' ', ['Reply #', $number, $random]))
             ->setContent($number.' '.Random::sentence())
             ->setName(implode('-', ['reply-slug', $forumIteration, $topicIteration, $replyIteration, $random, 'end']))
+            ->setPostDate($this->buildPostDate())
         ;
 
         return $reply;
@@ -336,5 +351,13 @@ final class ForumDataProvider
                 }
             }
         }
+    }
+
+    private function buildPostDate(): \DateTime
+    {
+        $date = clone $this->postDateTimeCounter;
+        $this->postDateTimeCounter->add($this->postDateInterval);
+
+        return $date;
     }
 }

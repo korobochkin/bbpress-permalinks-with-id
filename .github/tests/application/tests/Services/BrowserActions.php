@@ -90,6 +90,15 @@ final class BrowserActions
             'post_title' => $post->getTitle(),
             'content' => $post->getContent(),
             'post_name' => $post->getName(),
+
+            // Publish date
+            'aa' => $post->getPostDate()->format('Y'), // year
+            'mm' => $post->getPostDate()->format('m'), // month
+            'jj' => $post->getPostDate()->format('d'), // date
+            // Publish time
+            'hh' => $post->getPostDate()->format('H'), // hour
+            'mn' => $post->getPostDate()->format('i'), // minute
+            'ss' => $post->getPostDate()->format('s'), // second
         ];
 
         if ($post instanceof Topic) {

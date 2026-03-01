@@ -62,4 +62,11 @@ interface PostInterface
      * @throws \RuntimeException
      */
     public function getNumericPermalink(): string;
+
+    public function getPostDate(): \DateTime;
+
+    /**
+     * @psalm-suppress PossiblyUnusedReturnValue
+     */
+    public function setPostDate(\DateTime $postDate): self;
 }
