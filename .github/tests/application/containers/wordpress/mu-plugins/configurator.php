@@ -60,9 +60,7 @@ add_action('admin_init', 'configurator_disable_auto_updates');
 
 function configurator_bbp_after_has_topics_parse_args(array $params): array
 {
-    if (isset($params['orderby'])) {
-        $params['orderby'] = 'date';
-    }
+    $params['orderby'] = 'date';
 
     return $params;
 }
