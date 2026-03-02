@@ -8,7 +8,7 @@ download_wordpress:
 		git clone --depth 1 --single-branch --branch $(WORDPRESS_BRANCH) git@github.com:WordPress/WordPress.git .cache/wordpress; \
 	else \
 		echo "WordPress repository exists, fetching updates..."; \
-		cd .cache/wordpress && git fetch --depth 1 origin $(WORDPRESS_BRANCH) && git reset --hard origin/$(WORDPRESS_BRANCH); \
+		cd .cache/wordpress && git fetch --depth 1 origin $(WORDPRESS_BRANCH) && git reset --hard FETCH_HEAD; \
 	fi
 
 download_bbpress:
@@ -17,7 +17,7 @@ download_bbpress:
 		git clone --depth 1 --single-branch --branch $(BBPRESS_BRANCH) git@github.com:bbpress/bbPress.git .cache/bbpress; \
 	else \
 		echo "bbPress repository exists, fetching updates..."; \
-		cd .cache/bbpress && git fetch --depth 1 origin $(BBPRESS_BRANCH) && git reset --hard origin/$(BBPRESS_BRANCH); \
+		cd .cache/bbpress && git fetch --depth 1 origin $(BBPRESS_BRANCH) && git reset --hard FETCH_HEAD; \
 	fi
 
 .cache/wordpress: download_wordpress
