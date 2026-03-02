@@ -26,3 +26,11 @@ plugin-check:
 		--exclude-files='.distignore,.gitattributes,.gitignore' \
 		--ignore-codes=trademarked_term \
 		--checks=code_obfuscation,file_type,plugin_header_fields,plugin_updater,plugin_uninstall,plugin_readme,localhost,no_unfiltered_uploads,trademarks,offloading_files
+
+.PHONY: \
+	phpcs \
+	phpstan \
+	psalm \
+	psalm-tests-application \
+	phpmd \
+	plugin-check
