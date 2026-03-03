@@ -20,18 +20,27 @@ download_bbpress:
 		cd .cache/bbpress && git fetch --depth 1 origin $(BBPRESS_BRANCH) && git reset --hard FETCH_HEAD; \
 	fi
 
-.cache/wordpress: download_wordpress
+vendor: composer.json composer.lock
+	composer install --no-interaction --no-progress --classmap-authoritative
 
-.cache/bbpress: download_bbpress
-
-vendor:
-	composer install --no-interaction --no-progress
-
-generate: vendor .cache/wordpress .cache/bbpress
+generate_wordpress_hooks:
 	vendor/bin/wp-hooks-generator --input=.cache/wordpress --output=.cache/wordpress-hooks
+
+generate_bbpress_hooks:
 	vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/bbpress-hooks
+
+.cache/wordpress-hooks: \
+	vendor \
+	download_wordpress \
+	generate_wordpress_hooks
+
+.cache/bbpress-hooks: \
+	vendor \
+	download_bbpress \
+	generate_bbpress_hooks
 
 .PHONY: \
 	download_wordpress \
-	download_bbpress
-	generate \
+	download_bbpress \
+	generate_wordpress_hooks \
+	generate_bbpress_hooks

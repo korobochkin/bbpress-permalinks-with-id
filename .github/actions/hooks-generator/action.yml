@@ -37,7 +37,7 @@ runs:
     - name: Composer Install
       shell: bash
       working-directory: .github/hooks-generator
-      run: 'composer install --no-progress --classmap-authoritative'
+      run: make vendor --always-make
 
     - name: Dependencies cache
       id: dependencies-cache
@@ -70,12 +70,12 @@ runs:
     - name: Generate WordPress hooks
       working-directory: .github/hooks-generator
       shell: bash
-      run: vendor/bin/wp-hooks-generator --input=.cache/wordpress --output=.cache/wordpress-hooks
+      run: make generate_wordpress_hooks
 
     - name: Generate bbPress hooks
       working-directory: .github/hooks-generator
       shell: bash
-      run: vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/bbpress-hooks
+      run: make generate_bbpress_hooks
 
     - name: Upload artifact
       uses: actions/upload-artifact@v6
