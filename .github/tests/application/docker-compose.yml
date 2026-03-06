@@ -10,7 +10,7 @@ services:
     ports:
       - '127.0.0.1:1514:1514/udp'
     healthcheck:
-      test: ["CMD", "sh", "-c", "netstat -uln | grep -q 1514"]
+      test: ["CMD-SHELL", "netstat -uln | grep -q 1514"]
       start_period: 3s
       start_interval: 1s
       timeout: 2s
