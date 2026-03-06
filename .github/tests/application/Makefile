@@ -10,6 +10,9 @@ down:
 config:
 	@docker compose config --quiet
 
+reset_logs:
+	docker exec syslog sh -c "truncate -s 0 /var/log/remote/*.log"
+
 vendor: composer.json composer.lock
 	composer install --no-interaction --no-progress --classmap-authoritative
 
@@ -30,6 +33,7 @@ php_cs_fixer:
 	up \
 	down \
 	config \
+	reset_logs \
 	composer_install_from_host \
 	run_tests \
 	run_tests_from_host \
