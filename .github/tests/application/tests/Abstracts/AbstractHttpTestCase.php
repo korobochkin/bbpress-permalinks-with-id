@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Logs\LogEntry;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\PostInterface;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
@@ -42,6 +43,9 @@ abstract class AbstractHttpTestCase extends TestCase
 
     protected bool $useNumericPermalinksHTML = false;
 
+    /**
+     * @throws \UnexpectedValueException
+     */
     #[\Override]
     protected function setUp(): void
     {
@@ -49,6 +53,9 @@ abstract class AbstractHttpTestCase extends TestCase
         $this->logs->checkpoint();
     }
 
+    /**
+     * @throws \UnexpectedValueException
+     */
     #[\Override]
     protected function assertPostConditions(): void
     {
@@ -58,7 +65,7 @@ abstract class AbstractHttpTestCase extends TestCase
 
         if ([] !== $newErrors) {
             $messages = array_map(
-                static fn (\stdClass $entry): string => $entry->message ?? '(empty message)',
+                static fn (LogEntry $entry): string => $entry->message,
                 $newErrors,
             );
 
