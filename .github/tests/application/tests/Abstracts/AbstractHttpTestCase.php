@@ -8,6 +8,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Int
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowsersService;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\WordPressServerLogs;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DomCrawler\Crawler;
@@ -23,6 +24,17 @@ abstract class AbstractHttpTestCase extends TestCase
             }
 
             throw new \RuntimeException('BROWSERS_SERVICE not found in $GLOBALS. Ensure phpunit-bootstrap.php is loaded.');
+        }
+    }
+
+    protected WordPressServerLogs $logs {
+        get {
+            if (isset($GLOBALS['WORDPRESS_LOGS_SERVICE'])
+                && is_a($GLOBALS['WORDPRESS_LOGS_SERVICE'], WordPressServerLogs::class)) {
+                return $GLOBALS['WORDPRESS_LOGS_SERVICE'];
+            }
+
+            throw new \RuntimeException('WORDPRESS_LOGS_SERVICE not found in $GLOBALS. Ensure phpunit-bootstrap.php is loaded.');
         }
     }
 
