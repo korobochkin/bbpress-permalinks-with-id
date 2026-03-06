@@ -42,6 +42,33 @@ abstract class AbstractHttpTestCase extends TestCase
 
     protected bool $useNumericPermalinksHTML = false;
 
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->logs->checkpoint();
+    }
+
+    #[\Override]
+    protected function assertPostConditions(): void
+    {
+        parent::assertPostConditions();
+
+        $newErrors = $this->logs->getErrorsSinceCheckpoint();
+
+        if ([] !== $newErrors) {
+            $messages = array_map(
+                static fn (\stdClass $entry): string => $entry->message ?? '(empty message)',
+                $newErrors,
+            );
+
+            $this->fail(
+                'WordPress server produced '.count($newErrors)." error(s) during this test:\n"
+                .implode("\n", $messages),
+            );
+        }
+    }
+
     protected function assertPageStatusIs200(Response $response): void
     {
         $this->assertSame(200, $response->getStatusCode());

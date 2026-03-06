@@ -12,6 +12,8 @@ final class WordPressServerLogs
 
     private const string ERRORS_LOG = self::LOG_DIR.'/wordpress-errors.log';
 
+    private int $errorCheckpoint = 0;
+
     /**
      * @return list<\stdClass>
      */
@@ -28,9 +30,17 @@ final class WordPressServerLogs
         return $this->readLog(self::ERRORS_LOG);
     }
 
-    public function hasErrors(): bool
+    public function checkpoint(): void
     {
-        return [] !== $this->getErrors();
+        $this->errorCheckpoint = count($this->getErrors());
+    }
+
+    /**
+     * @return list<\stdClass>
+     */
+    public function getErrorsSinceCheckpoint(): array
+    {
+        return array_slice($this->getErrors(), $this->errorCheckpoint);
     }
 
     /**
