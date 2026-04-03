@@ -70,7 +70,7 @@ final class WordPressServerLogs
         $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
         if (false === $lines) {
-            return [];
+            throw new \UnexpectedValueException(sprintf('Failed to read log file "%s".', $path));
         }
 
         $entries = [];
