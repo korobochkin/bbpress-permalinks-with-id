@@ -11,7 +11,7 @@ config:
 	@docker compose config --quiet
 
 reset_logs:
-	docker exec syslog sh -c "truncate -s 0 /var/log/remote/*.log"
+	docker exec syslog sh -c "find /var/log/remote -maxdepth 1 -type f -name '*.log' -exec truncate -s 0 {} \;"
 
 vendor: composer.json composer.lock
 	composer install --no-interaction --no-progress --classmap-authoritative
