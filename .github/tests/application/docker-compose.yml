@@ -1,5 +1,21 @@
 ---
 services:
+  syslog:
+    container_name: syslog
+    build:
+      context: ./containers/syslog
+      dockerfile: ./syslog.Dockerfile
+    volumes:
+      - syslog_data:/var/log/remote
+    ports:
+      - '127.0.0.1:1514:1514/udp'
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -uln | grep -q 1514"]
+      start_period: 3s
+      start_interval: 1s
+      timeout: 2s
+      retries: 3
+
   wordpress:
     container_name: wordpress
     build:
@@ -31,8 +47,15 @@ services:
     volumes:
       - wordpress_data:/var/www/html
       - ../../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://127.0.0.1:1514"
+        tag: "wordpress"
     depends_on:
       db:
+        condition: service_healthy
+      syslog:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "test", "-f", "/var/www/html/wp-config.php"]
@@ -94,6 +117,7 @@ services:
     volumes:
       - ./:/root/tests-application
       - ./php-configs/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - syslog_data:/var/log/remote:ro
     ports:
       - '127.0.0.1:9009:9009'
     environment:
@@ -105,5 +129,11 @@ services:
         condition: service_healthy
 
 volumes:
+  syslog_data:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=10m
   wordpress_data:
   db_data:

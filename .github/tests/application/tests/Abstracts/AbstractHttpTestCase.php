@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Logs\LogEntry;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\PostInterface;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\BrowsersService;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\WordPressServerLogs;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DomCrawler\Crawler;
@@ -26,9 +28,53 @@ abstract class AbstractHttpTestCase extends TestCase
         }
     }
 
+    protected WordPressServerLogs $logs {
+        get {
+            if (isset($GLOBALS['WORDPRESS_LOGS_SERVICE'])
+                && is_a($GLOBALS['WORDPRESS_LOGS_SERVICE'], WordPressServerLogs::class)) {
+                return $GLOBALS['WORDPRESS_LOGS_SERVICE'];
+            }
+
+            throw new \RuntimeException('WORDPRESS_LOGS_SERVICE not found in $GLOBALS. Ensure phpunit-bootstrap.php is loaded.');
+        }
+    }
+
     protected bool $useNumericPermalinksRequests = false;
 
     protected bool $useNumericPermalinksHTML = false;
+
+    /**
+     * @throws \UnexpectedValueException
+     */
+    #[\Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->logs->checkpoint();
+    }
+
+    /**
+     * @throws \UnexpectedValueException
+     */
+    #[\Override]
+    protected function assertPostConditions(): void
+    {
+        parent::assertPostConditions();
+
+        $newErrors = $this->logs->getErrorsSinceCheckpoint();
+
+        if ([] !== $newErrors) {
+            $messages = array_map(
+                static fn (LogEntry $entry): string => $entry->message,
+                $newErrors,
+            );
+
+            $this->fail(
+                'WordPress server produced '.count($newErrors)." error(s) during this test:\n"
+                .implode("\n", $messages),
+            );
+        }
+    }
 
     protected function assertPageStatusIs200(Response $response): void
     {
