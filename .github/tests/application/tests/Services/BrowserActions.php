@@ -150,6 +150,6 @@ final class BrowserActions
      */
     private static function getSamplePermalink(Crawler $crawler): string
     {
-        return $crawler->filterXPath('//body//*[contains(@id, "sample-permalink")]//a')->attr('href') ?? throw new \RuntimeException();
+        return $crawler->filterXPath('//body//*[contains(@id, "edit-slug-box")]//a')->attr('href') ?? throw new \RuntimeException();
     }
 }
