@@ -10,6 +10,14 @@ down:
 config:
 	@docker compose config --quiet
 
+.env:
+	@if [ -f .env ]; then \
+		echo "File .env exists. Update manually or delete it and rerun the command."; \
+	else \
+		cp .env.example .env; \
+		echo "File created. Do not forget to fill it with values manually."; \
+	fi
+
 reset_logs:
 	docker exec syslog sh -c "find /var/log/remote -maxdepth 1 -type f -name '*.log' -exec truncate -s 0 {} \;"
 
