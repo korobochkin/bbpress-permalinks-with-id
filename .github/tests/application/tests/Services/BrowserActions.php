@@ -11,6 +11,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Pag
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\TypesUtilities;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class BrowserActions
@@ -145,11 +146,13 @@ final class BrowserActions
     }
 
     /**
+     * @return non-falsy-string
+     *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
     private static function getSamplePermalink(Crawler $crawler): string
     {
-        return $crawler->filterXPath('//body//*[contains(@id, "edit-slug-box")]//a')->attr('href') ?? throw new \RuntimeException();
+        return TypesUtilities::getNonFalsyString($crawler->filterXPath('//body//*[contains(@id, "edit-slug-box")]//a')->attr('href'));
     }
 }
