@@ -9,10 +9,15 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Typ
 
 interface PostInterface
 {
+    /**
+     * @return positive-int
+     */
     public function getId(): int;
 
     /**
      * @psalm-suppress PossiblyUnusedReturnValue
+     *
+     * @param positive-int $id
      */
     public function setId(int $id): self;
 

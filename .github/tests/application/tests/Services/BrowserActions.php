@@ -51,7 +51,7 @@ final class BrowserActions
 
         // XPath for a form element with all required fields: //form[input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]]
 
-        $post->setId((int) $postID->attr('value'));
+        $post->setId($postID);
         $post->setAuthorId($userID);
 
         $browser->request(
@@ -66,7 +66,7 @@ final class BrowserActions
                 'post_type' => $postType->attr('value'),
                 'original_post_status' => $originalPostStatus->attr('value'),
                 'referredby' => $referredBy->attr('value'),
-                'post_ID' => $postID->attr('value'),
+                'post_ID' => $postID,
                 'post_title' => $post->getTitle(),
                 'content' => $post->getContent(),
                 'post_status' => $post->getStatus()->value, // 'draft'
@@ -85,7 +85,7 @@ final class BrowserActions
 
         $form = $crawler->filterXPath('//body//div[@id="wpbody"]//input[@id="publish"]')->form();
 
-        $post->setId((int) self::getPostId($crawler)->attr('value'));
+        $post->setId(self::getPostId($crawler));
         $post->setAuthorId(self::getUserId($crawler));
 
         $formData = [
@@ -124,10 +124,16 @@ final class BrowserActions
         return $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
     }
 
-    private static function getPostId(Crawler $crawler): Crawler
+    /**
+     * @return positive-int
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function getPostId(Crawler $crawler): int
     {
         // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
-        return $crawler->filterXPath('//input[(@id="post_ID" or @name="post_ID") and @type="hidden"]');
+        return TypesUtilities::getPositiveInt($crawler->filterXPath('//input[(@id="post_ID" or @name="post_ID") and @type="hidden"]')->attr('value'));
     }
 
     /**
