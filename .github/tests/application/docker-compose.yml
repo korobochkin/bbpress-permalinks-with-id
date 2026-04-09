@@ -25,10 +25,14 @@ services:
         WORDPRESS_ARG_BASE_IMAGE: "${WORDPRESS_ARG_BASE_IMAGE}"
         WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: "${WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL}"
         WORDPRESS_ARG_THEME_ZIP_URL: "${WORDPRESS_ARG_THEME_ZIP_URL}"
+        NEW_RELIC_AGENT_VERSION: "${NEW_RELIC_AGENT_VERSION}"
+        NEW_RELIC_LICENSE_KEY: "${NEW_RELIC_LICENSE_KEY}"
+        NEW_RELIC_APPNAME: "${NEW_RELIC_APPNAME}"
     networks:
       default:
         aliases:
           - "${WORDPRESS_DOMAIN}"
+      newrelic-php:
     ports:
       - '127.0.0.1:8080:8080'
     environment:
@@ -128,6 +132,12 @@ services:
       wordpress:
         condition: service_healthy
 
+  newrelic-php-daemon:
+    container_name: newrelic-php-daemon
+    image: newrelic/php-daemon
+    networks:
+      - newrelic-php
+
 volumes:
   syslog_data:
     driver: local
@@ -137,3 +147,6 @@ volumes:
       o: size=10m
   wordpress_data:
   db_data:
+
+networks:
+  newrelic-php:
