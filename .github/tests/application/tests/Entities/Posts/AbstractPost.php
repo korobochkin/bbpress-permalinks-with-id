@@ -18,6 +18,9 @@ abstract class AbstractPost implements PostInterface
 
     private string $name;
 
+    /**
+     * @var positive-int
+     */
     private int $authorId;
 
     /**

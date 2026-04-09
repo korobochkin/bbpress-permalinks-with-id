@@ -36,11 +36,15 @@ interface PostInterface
 
     /**
      * @psalm-suppress PossiblyUnusedMethod
+     *
+     * @return positive-int
      */
     public function getAuthorId(): int;
 
     /**
      * @psalm-suppress PossiblyUnusedReturnValue
+     *
+     * @param positive-int $authorId
      */
     public function setAuthorId(int $authorId): self;
 

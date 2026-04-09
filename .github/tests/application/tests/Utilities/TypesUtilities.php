@@ -21,4 +21,20 @@ final class TypesUtilities
 
         throw new \RuntimeException();
     }
+
+    /**
+     * @return positive-int
+     *
+     * @throws \RuntimeException
+     */
+    public static function getPositiveInt(?string $value): int
+    {
+        $value = (int) trim($value ?? throw new \RuntimeException());
+
+        if ($value > 0) {
+            return $value;
+        }
+
+        throw new \RuntimeException();
+    }
 }
