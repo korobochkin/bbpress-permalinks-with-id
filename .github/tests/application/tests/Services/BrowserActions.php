@@ -37,17 +37,17 @@ final class BrowserActions
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
-        $nonce = $crawler->filterXPath('//form//input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]');
+        $nonce = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]')->attr('value'));
 
         // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
         $postID = self::getPostId($crawler);
 
-        $postType = $crawler->filterXPath('//form//input[(@id="post_type" or @name="post_type") and @type="hidden"]');
-        $action = $crawler->filterXPath('//form//input[(@id="hiddenaction" or @name="action") and @type="hidden"]');
-        $originalAction = $crawler->filterXPath('//form//input[(@id="originalaction" or @name="originalaction") and @type="hidden"]');
+        $postType = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="post_type" or @name="post_type") and @type="hidden"]')->attr('value'));
+        $action = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="hiddenaction" or @name="action") and @type="hidden"]')->attr('value'));
+        $originalAction = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="originalaction" or @name="originalaction") and @type="hidden"]')->attr('value'));
         $userID = self::getUserId($crawler);
-        $originalPostStatus = $crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]');
-        $referredBy = $crawler->filterXPath('//form//input[(@id="referredby" or @name="referredby") and @type="hidden"]');
+        $originalPostStatus = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]')->attr('value'));
+        $referredBy = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="referredby" or @name="referredby") and @type="hidden"]')->attr('value'));
 
         // XPath for a form element with all required fields: //form[input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]]
 
@@ -58,14 +58,14 @@ final class BrowserActions
             'POST',
             '/wp-admin/post.php',
             [
-                '_wpnonce' => $nonce->attr('value'),
+                '_wpnonce' => $nonce,
                 '_wp_http_referer' => '/wp-admin/post-new.php?post_type='.$post->getType()->value,
-                'action' => $action->attr('value'),
-                'originalaction' => $originalAction->attr('value'),
+                'action' => $action,
+                'originalaction' => $originalAction,
                 'post_author' => $userID,
-                'post_type' => $postType->attr('value'),
-                'original_post_status' => $originalPostStatus->attr('value'),
-                'referredby' => $referredBy->attr('value'),
+                'post_type' => $postType,
+                'original_post_status' => $originalPostStatus,
+                'referredby' => $referredBy,
                 'post_ID' => $postID,
                 'post_title' => $post->getTitle(),
                 'content' => $post->getContent(),
