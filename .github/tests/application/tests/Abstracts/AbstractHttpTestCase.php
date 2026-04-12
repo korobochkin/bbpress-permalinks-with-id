@@ -156,6 +156,7 @@ abstract class AbstractHttpTestCase extends TestCase
      */
     protected function assertBbPressReplyContentContains(Reply|Topic $post, Crawler $crawler): void
     {
+        $this->assertNotEmpty($post->getContent());
         $this->assertStringContainsString(
             $post->getContent(),
             $crawler->filterXPath('//html/body/div[@id="page"]//article//div[contains(@class, "entry-content")]//div[contains(@class, "bbp-reply-content")]/p')->text(),

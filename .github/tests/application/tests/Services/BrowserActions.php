@@ -11,6 +11,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Pag
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\TypesUtilities;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class BrowserActions
@@ -30,41 +31,42 @@ final class BrowserActions
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     private static function createNativePostTypes(HttpBrowser $browser, Page $post): void
     {
         $crawler = self::requestPostNewPage($browser, $post);
 
-        $nonce = $crawler->filterXPath('//form//input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]');
+        $nonce = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]')->attr('value'));
 
         // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
         $postID = self::getPostId($crawler);
 
-        $postType = $crawler->filterXPath('//form//input[(@id="post_type" or @name="post_type") and @type="hidden"]');
-        $action = $crawler->filterXPath('//form//input[(@id="hiddenaction" or @name="action") and @type="hidden"]');
-        $originalAction = $crawler->filterXPath('//form//input[(@id="originalaction" or @name="originalaction") and @type="hidden"]');
+        $postType = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="post_type" or @name="post_type") and @type="hidden"]')->attr('value'));
+        $action = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="hiddenaction" or @name="action") and @type="hidden"]')->attr('value'));
+        $originalAction = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="originalaction" or @name="originalaction") and @type="hidden"]')->attr('value'));
         $userID = self::getUserId($crawler);
-        $originalPostStatus = $crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]');
-        $referredBy = $crawler->filterXPath('//form//input[(@id="referredby" or @name="referredby") and @type="hidden"]');
+        $originalPostStatus = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]')->attr('value'));
+        $referredBy = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="referredby" or @name="referredby") and @type="hidden"]')->attr('value'));
 
         // XPath for a form element with all required fields: //form[input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]]
 
-        $post->setId((int) $postID->attr('value'));
-        $post->setAuthorId((int) $userID->attr('value'));
+        $post->setId($postID);
+        $post->setAuthorId($userID);
 
         $browser->request(
             'POST',
             '/wp-admin/post.php',
             [
-                '_wpnonce' => $nonce->attr('value'),
+                '_wpnonce' => $nonce,
                 '_wp_http_referer' => '/wp-admin/post-new.php?post_type='.$post->getType()->value,
-                'action' => $action->attr('value'),
-                'originalaction' => $originalAction->attr('value'),
-                'post_author' => $userID->attr('value'),
-                'post_type' => $postType->attr('value'),
-                'original_post_status' => $originalPostStatus->attr('value'),
-                'referredby' => $referredBy->attr('value'),
-                'post_ID' => $postID->attr('value'),
+                'action' => $action,
+                'originalaction' => $originalAction,
+                'post_author' => $userID,
+                'post_type' => $postType,
+                'original_post_status' => $originalPostStatus,
+                'referredby' => $referredBy,
+                'post_ID' => $postID,
                 'post_title' => $post->getTitle(),
                 'content' => $post->getContent(),
                 'post_status' => $post->getStatus()->value, // 'draft'
@@ -83,8 +85,8 @@ final class BrowserActions
 
         $form = $crawler->filterXPath('//body//div[@id="wpbody"]//input[@id="publish"]')->form();
 
-        $post->setId((int) self::getPostId($crawler)->attr('value'));
-        $post->setAuthorId((int) self::getUserId($crawler)->attr('value'));
+        $post->setId(self::getPostId($crawler));
+        $post->setAuthorId(self::getUserId($crawler));
 
         $formData = [
             'post_title' => $post->getTitle(),
@@ -122,15 +124,27 @@ final class BrowserActions
         return $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
     }
 
-    private static function getPostId(Crawler $crawler): Crawler
+    /**
+     * @return positive-int
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function getPostId(Crawler $crawler): int
     {
         // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
-        return $crawler->filterXPath('//input[(@id="post_ID" or @name="post_ID") and @type="hidden"]');
+        return TypesUtilities::getPositiveInt($crawler->filterXPath('//input[(@id="post_ID" or @name="post_ID") and @type="hidden"]')->attr('value'));
     }
 
-    private static function getUserId(Crawler $crawler): Crawler
+    /**
+     * @return positive-int
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function getUserId(Crawler $crawler): int
     {
-        return $crawler->filterXPath('//form//input[(@id="user-id" or @name="user_ID") and @type="hidden"]');
+        return TypesUtilities::getPositiveInt($crawler->filterXPath('//form//input[(@id="user-id" or @name="user_ID") and @type="hidden"]')->attr('value'));
     }
 
     /**
@@ -145,11 +159,13 @@ final class BrowserActions
     }
 
     /**
+     * @return non-falsy-string
+     *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
     private static function getSamplePermalink(Crawler $crawler): string
     {
-        return $crawler->filterXPath('//body//*[contains(@id, "sample-permalink")]//a')->attr('href') ?? throw new \RuntimeException();
+        return TypesUtilities::getNonFalsyString($crawler->filterXPath('//body//*[contains(@id, "edit-slug-box")]//a')->attr('href'));
     }
 }

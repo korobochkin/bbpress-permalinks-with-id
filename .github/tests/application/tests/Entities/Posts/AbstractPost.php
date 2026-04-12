@@ -8,6 +8,9 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Int
 
 abstract class AbstractPost implements PostInterface
 {
+    /**
+     * @var positive-int
+     */
     private int $id;
 
     private Status $status;
@@ -18,6 +21,9 @@ abstract class AbstractPost implements PostInterface
 
     private string $name;
 
+    /**
+     * @var positive-int
+     */
     private int $authorId;
 
     /**
