@@ -29,10 +29,15 @@ final class TypesUtilities
      */
     public static function getPositiveInt(?string $value): int
     {
-        $value = (int) trim($value ?? throw new \RuntimeException());
+        $value = trim($value ?? throw new \RuntimeException());
+        $validated = filter_var(
+            $value,
+            FILTER_VALIDATE_INT,
+            ['options' => ['min_range' => 1]]
+        );
 
-        if ($value > 0) {
-            return $value;
+        if (false !== $validated) {
+            return $validated;
         }
 
         throw new \RuntimeException();
