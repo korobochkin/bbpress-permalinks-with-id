@@ -11,6 +11,8 @@ $finder = new Finder()
 
 return new Config()
     ->setRules([
+        '@Symfony' => true,
+        '@Symfony:risky' => true,
         '@PhpCsFixer' => true,
         'fully_qualified_strict_types' => [
             'import_symbols' => true,

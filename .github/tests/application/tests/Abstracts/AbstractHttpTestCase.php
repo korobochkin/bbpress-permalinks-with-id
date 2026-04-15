@@ -70,7 +70,7 @@ abstract class AbstractHttpTestCase extends TestCase
             );
 
             $this->fail(
-                'WordPress server produced '.count($newErrors)." error(s) during this test:\n"
+                'WordPress server produced '.\count($newErrors)." error(s) during this test:\n"
                 .implode("\n", $messages),
             );
         }
@@ -148,7 +148,7 @@ abstract class AbstractHttpTestCase extends TestCase
             $noticesOnPage[] = trim($node->textContent);
         }
 
-        $this->assertStringContainsStringIgnoringCase($needle, implode(PHP_EOL, $noticesOnPage));
+        $this->assertStringContainsStringIgnoringCase($needle, implode(\PHP_EOL, $noticesOnPage));
     }
 
     /**

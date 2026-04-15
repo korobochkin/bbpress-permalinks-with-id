@@ -254,7 +254,7 @@ final class ForumDataProvider
     private function topicsPagedGenerator(): \Generator
     {
         foreach ($this->data as $i => [$forum, $topicsAndReplies]) {
-            $topicsCounter = count($topicsAndReplies);
+            $topicsCounter = \count($topicsAndReplies);
 
             if ($topicsCounter > $this->topicsPerPage) {
                 $numberOfPages = (int) ceil($topicsCounter / $this->topicsPerPage);
@@ -270,9 +270,9 @@ final class ForumDataProvider
                         $offset = 0;
                     }
 
-                    $slice = array_slice($topicsAndReplies, $offset, $length);
+                    $slice = \array_slice($topicsAndReplies, $offset, $length);
 
-                    $topicsOnPage = array_map(function ($topicAndReplies) {
+                    $topicsOnPage = array_map(static function ($topicAndReplies) {
                         return $topicAndReplies[0];
                     }, $slice);
 
@@ -305,7 +305,7 @@ final class ForumDataProvider
         $i = 0;
         foreach ($this->data as [$forum, $topicsAndReplies]) {
             foreach ($topicsAndReplies as [$topic, $replies]) {
-                $repliesCounter = count($replies) + 1; // + 1 is a topic itself
+                $repliesCounter = \count($replies) + 1; // + 1 is a topic itself
 
                 if ($repliesCounter > $this->repliesPerPage) {
                     $numberOfPages = (int) ceil($repliesCounter / $this->repliesPerPage);
@@ -314,7 +314,7 @@ final class ForumDataProvider
                     for ($page = 1; $page <= $numberOfPages; ++$page) {
                         $length = 1 === $page ? $this->repliesPerPage - 1 : $this->repliesPerPage;
 
-                        $slice = array_slice($replies, $offset, $length);
+                        $slice = \array_slice($replies, $offset, $length);
 
                         $offset += $length;
 

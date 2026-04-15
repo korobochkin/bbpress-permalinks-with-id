@@ -13,7 +13,7 @@ final class Random
      */
     public static function positiveInteger(): int
     {
-        return random_int(1, PHP_INT_MAX);
+        return random_int(1, \PHP_INT_MAX);
     }
 
     /**

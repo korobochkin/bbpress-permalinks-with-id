@@ -65,7 +65,7 @@ final class BrowsersService
     {
         if (
             isset($_ENV[$name->value])
-            && is_string($_ENV[$name->value])
+            && \is_string($_ENV[$name->value])
             && '' !== $_ENV[$name->value]
         ) {
             return $_ENV[$name->value];
@@ -91,7 +91,7 @@ final class BrowsersService
 
         $response = $browser->getResponse();
 
-        if (200 !== $response->getStatusCode() || false !== strpos($response->getContent(), 'login_error')) {
+        if (200 !== $response->getStatusCode() || str_contains($response->getContent(), 'login_error')) {
             throw new \RuntimeException('Failed to login');
         }
     }

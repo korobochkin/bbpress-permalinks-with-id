@@ -32,7 +32,7 @@ final class TypesUtilities
         $value = trim($value ?? throw new \RuntimeException());
         $validated = filter_var(
             $value,
-            FILTER_VALIDATE_INT,
+            \FILTER_VALIDATE_INT,
             ['options' => ['min_range' => 1]]
         );
 

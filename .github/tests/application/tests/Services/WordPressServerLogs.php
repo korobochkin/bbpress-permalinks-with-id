@@ -43,7 +43,7 @@ final class WordPressServerLogs
      */
     public function checkpoint(): void
     {
-        $this->errorCheckpoint = count($this->getErrors());
+        $this->errorCheckpoint = \count($this->getErrors());
     }
 
     /**
@@ -53,7 +53,7 @@ final class WordPressServerLogs
      */
     public function getErrorsSinceCheckpoint(): array
     {
-        return array_slice($this->getErrors(), $this->errorCheckpoint);
+        return \array_slice($this->getErrors(), $this->errorCheckpoint);
     }
 
     /**
@@ -67,10 +67,10 @@ final class WordPressServerLogs
             return [];
         }
 
-        $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $lines = file($path, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES);
 
         if (false === $lines) {
-            throw new \UnexpectedValueException(sprintf('Failed to read log file "%s".', $path));
+            throw new \UnexpectedValueException(\sprintf('Failed to read log file "%s".', $path));
         }
 
         $entries = [];
@@ -89,7 +89,7 @@ final class WordPressServerLogs
     {
         $data = json_decode($line, true);
 
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             throw new \UnexpectedValueException('Invalid $data object');
         }
 
