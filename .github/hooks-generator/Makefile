@@ -21,7 +21,7 @@ download_bbpress:
 	fi
 
 vendor: composer.json composer.lock
-	composer install --no-interaction --no-progress --classmap-authoritative
+	composer install --no-scripts --no-interaction --no-progress --classmap-authoritative
 
 generate_wordpress_hooks:
 	vendor/bin/wp-hooks-generator --input=.cache/wordpress --output=.cache/wordpress-hooks
