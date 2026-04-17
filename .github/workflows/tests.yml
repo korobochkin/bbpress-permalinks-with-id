@@ -134,7 +134,7 @@ jobs:
 
       - name: Composer Install
         working-directory: .github/php-stan
-        run: 'composer install --no-scripts --no-progress --classmap-authoritative'
+        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
 
       - name: Cache PHP Stan Stubs
         id: 'cache-php-stan-stubs'
