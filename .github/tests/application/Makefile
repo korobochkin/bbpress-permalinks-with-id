@@ -22,7 +22,7 @@ reset_logs:
 	docker exec syslog sh -c "find /var/log/remote -maxdepth 1 -type f -name '*.log' -exec truncate -s 0 {} \;"
 
 vendor: composer.json composer.lock
-	composer install --no-interaction --no-progress --classmap-authoritative
+	composer install --no-scripts --no-interaction --no-progress --classmap-authoritative
 
 composer_install_from_host:
 	docker exec php make vendor

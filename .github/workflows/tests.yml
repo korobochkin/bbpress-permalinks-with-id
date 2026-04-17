@@ -77,7 +77,8 @@ jobs:
             ${{ runner.os }}-composer-phpcs-
 
       - name: Composer Install
-        run: 'cd .github/phpcs && composer install --no-progress --classmap-authoritative'
+        working-directory: .github/phpcs
+        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
 
       - name: Run PHP Coding Standards and Compatibility
         run: '.github/phpcs/vendor/bin/phpcs --standard=.github/phpcs/phpcs.xml'
@@ -133,7 +134,7 @@ jobs:
 
       - name: Composer Install
         working-directory: .github/php-stan
-        run: 'composer install --no-progress --classmap-authoritative'
+        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
 
       - name: Cache PHP Stan Stubs
         id: 'cache-php-stan-stubs'
@@ -275,7 +276,7 @@ jobs:
 
       - name: Composer Install
         working-directory: .github/psalm
-        run: 'composer install --no-progress --classmap-authoritative'
+        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
 
       - name: Hooks Cache
         id: hooks-cache
@@ -350,7 +351,7 @@ jobs:
 
       - name: Composer Install
         working-directory: .github/psalm
-        run: 'composer install --no-progress --classmap-authoritative'
+        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
 
       - name: Composer Install. Tests Application
         working-directory: .github/tests/application
@@ -398,7 +399,7 @@ jobs:
 
       - name: Composer Install
         working-directory: .github/phpmd
-        run: 'composer install --no-progress --classmap-authoritative'
+        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
 
       - name: PHP Mess Detector Cache
         uses: actions/cache@v5
