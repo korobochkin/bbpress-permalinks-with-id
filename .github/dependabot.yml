@@ -2,7 +2,7 @@ version: 2
 updates:
   - package-ecosystem: composer
     directories:
-      - .github/hooks-generator
+      - development/hooks-generator
       - .github/php-stan
       - .github/phpcs
       - .github/phpmd

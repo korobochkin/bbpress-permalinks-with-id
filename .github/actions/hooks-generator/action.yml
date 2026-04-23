@@ -30,13 +30,13 @@ runs:
       with:
         path: |
           ${{ steps.composer-cache.outputs.cache-files-dir }}
-          .github/hooks-generator/vendor
-        key: ${{ runner.os }}-hooks-generator-composer-${{ hashFiles('.github/hooks-generator/composer.lock') }}
+          development/hooks-generator/vendor
+        key: ${{ runner.os }}-hooks-generator-composer-${{ hashFiles('development/hooks-generator/composer.lock') }}
         restore-keys: ${{ runner.os }}-hooks-generator-composer-
 
     - name: Composer Install
       shell: bash
-      working-directory: .github/hooks-generator
+      working-directory: development/hooks-generator
       run: make vendor --always-make
 
     - name: Dependencies cache
@@ -44,8 +44,8 @@ runs:
       uses: actions/cache@v5
       with:
         path: |
-          .github/hooks-generator/.cache/wordpress
-          .github/hooks-generator/.cache/bbpress
+          development/hooks-generator/.cache/wordpress
+          development/hooks-generator/.cache/bbpress
         key: hooks-generator-dependencies-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}
         restore-keys: hooks-generator-dependencies-
 
@@ -55,7 +55,7 @@ runs:
       with:
         repository: WordPress/WordPress
         ref: ${{ inputs.wordpress }}
-        path: .github/hooks-generator/.cache/wordpress
+        path: development/hooks-generator/.cache/wordpress
         show-progress: false
 
     - name: Checkout bbPress
@@ -64,16 +64,16 @@ runs:
       with:
         repository: bbpress/bbPress
         ref: ${{ inputs.bbpress }}
-        path: .github/hooks-generator/.cache/bbpress
+        path: development/hooks-generator/.cache/bbpress
         show-progress: false
 
     - name: Generate WordPress hooks
-      working-directory: .github/hooks-generator
+      working-directory: development/hooks-generator
       shell: bash
       run: make generate_wordpress_hooks
 
     - name: Generate bbPress hooks
-      working-directory: .github/hooks-generator
+      working-directory: development/hooks-generator
       shell: bash
       run: make generate_bbpress_hooks
 
@@ -82,8 +82,8 @@ runs:
       with:
         name: hooks-generator-hooks-wordpress-${{ inputs.wordpress }}-bbpress-${{ inputs.bbpress }}
         path: |
-          .github/hooks-generator/.cache/wordpress-hooks
-          .github/hooks-generator/.cache/bbpress-hooks
+          development/hooks-generator/.cache/wordpress-hooks
+          development/hooks-generator/.cache/bbpress-hooks
         if-no-files-found: error
         retention-days: 15
         overwrite: false
