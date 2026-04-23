@@ -14,13 +14,13 @@
     cacheDirectory=".github/psalm/.cache/psalm"
 >
     <extraFiles>
-        <directory name=".github/hooks-generator/.cache/bbpress" />
-        <directory name=".github/hooks-generator/.cache/wordpress" />
+        <directory name="development/hooks-generator/.cache/bbpress" />
+        <directory name="development/hooks-generator/.cache/wordpress" />
         <ignoreFiles allowMissingFiles="true">
-            <file name=".github/hooks-generator/.cache/wordpress/wp-admin/load-scripts.php" />
-            <file name=".github/hooks-generator/.cache/wordpress/wp-admin/load-styles.php" />
-            <file name=".github/hooks-generator/.cache/wordpress/wp-admin/includes/noop.php" />
-            <directory name=".github/hooks-generator/.cache/bbpress/tests" />
+            <file name="development/hooks-generator/.cache/wordpress/wp-admin/load-scripts.php" />
+            <file name="development/hooks-generator/.cache/wordpress/wp-admin/load-styles.php" />
+            <file name="development/hooks-generator/.cache/wordpress/wp-admin/includes/noop.php" />
+            <directory name="development/hooks-generator/.cache/bbpress/tests" />
         </ignoreFiles>
     </extraFiles>
     <projectFiles>
@@ -34,10 +34,10 @@
             <useDefaultStubs value="false" />
             <useDefaultHooks value="false" />
             <hooks>
-                <file name=".github/hooks-generator/.cache/bbpress-hooks/actions.json" />
-                <file name=".github/hooks-generator/.cache/bbpress-hooks/filters.json" />
-                <file name=".github/hooks-generator/.cache/wordpress-hooks/actions.json" />
-                <file name=".github/hooks-generator/.cache/wordpress-hooks/filters.json" />
+                <file name="development/hooks-generator/.cache/bbpress-hooks/actions.json" />
+                <file name="development/hooks-generator/.cache/bbpress-hooks/filters.json" />
+                <file name="development/hooks-generator/.cache/wordpress-hooks/actions.json" />
+                <file name="development/hooks-generator/.cache/wordpress-hooks/filters.json" />
             </hooks>
         </pluginClass>
     </plugins>
