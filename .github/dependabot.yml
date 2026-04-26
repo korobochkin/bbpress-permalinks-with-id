@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: composer
     directories:
       - development/hooks-generator
-      - .github/php-stan
+      - development/php-stan
       - .github/phpcs
       - .github/phpmd
       - .github/psalm
