@@ -127,21 +127,21 @@ jobs:
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
-            .github/php-stan/vendor
-          key: ${{ runner.os }}-composer-php-stan-${{ hashFiles('.github/php-stan/composer.lock') }}
+            development/php-stan/vendor
+          key: ${{ runner.os }}-composer-php-stan-${{ hashFiles('development/php-stan/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-php-stan-
 
       - name: Composer Install
-        working-directory: .github/php-stan
-        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
+        working-directory: development/php-stan
+        run: make vendor
 
       - name: Cache PHP Stan Stubs
         id: 'cache-php-stan-stubs'
         uses: actions/cache@v5
         with:
           path: |
-            .github/php-stan/.cache
+            development/php-stan/.cache
           key: php-stan-stubs-${{ matrix.config.wordpress }}--${{ matrix.config.bbpress }}
           restore-keys: |
             php-stan-stubs-
@@ -152,7 +152,7 @@ jobs:
         with:
           repository: WordPress/WordPress
           ref: ${{ matrix.config.wordpress }}
-          path: .github/php-stan/.cache/wordpress
+          path: development/php-stan/.cache/wordpress
           show-progress: false
 
       - name: Checkout bbPress
@@ -161,22 +161,21 @@ jobs:
         with:
           repository: bbpress/bbPress
           ref: ${{ matrix.config.bbpress }}
-          path: .github/php-stan/.cache/bbpress
+          path: development/php-stan/.cache/bbpress
           show-progress: false
 
       - name: Generate PHP Stan Stubs. WordPress ${{ matrix.config.wordpress }}
         if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
-        working-directory: .github/php-stan
-        run: 'test -f .cache/stubs/wordpress.stub && rm .cache/stubs/wordpress.stub; vendor/bin/generate-stubs --no-interaction .cache/wordpress --out=.cache/stubs/wordpress.stub'
+        working-directory: development/php-stan
+        run: make .cache/stubs/wordpress.stub --always-make
 
       - name: Generate PHP Stan Stubs. bbPress ${{ matrix.config.bbpress }}
         if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
-        working-directory: .github/php-stan
-        run: 'test -f .cache/stubs/bbpress.stub && rm .cache/stubs/bbpress.stub; vendor/bin/generate-stubs --no-interaction .cache/bbpress --out=.cache/stubs/bbpress.stub'
+        working-directory: development/php-stan
+        run: make .cache/stubs/bbpress.stub --always-make
 
       - name: Run PHP Stan
-        working-directory: .github/php-stan
-        run: 'vendor/bin/phpstan analyse --no-interaction --no-progress --configuration=php-stan.neon'
+        run: make phpstan
         continue-on-error: true # TODO: remove this parameter after fixing the code
 
   psalm-pre:
