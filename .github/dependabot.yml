@@ -4,7 +4,7 @@ updates:
     directories:
       - development/hooks-generator
       - development/php-stan
-      - .github/phpcs
+      - development/phpcs
       - .github/phpmd
       - .github/psalm
       - .github/tests/application
