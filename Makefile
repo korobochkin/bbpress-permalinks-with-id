@@ -1,5 +1,5 @@
 phpcs:
-	.github/phpcs/vendor/bin/phpcs --standard=.github/phpcs/phpcs.xml
+	development/phpcs/vendor/bin/phpcs --standard=development/phpcs/phpcs.xml
 
 phpstan:
 	development/php-stan/vendor/bin/phpstan analyse --no-interaction --no-progress --configuration=development/php-stan/php-stan.neon

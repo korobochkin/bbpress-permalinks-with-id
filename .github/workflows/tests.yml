@@ -71,17 +71,17 @@ jobs:
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
-            .github/phpcs/vendor
-          key: ${{ runner.os }}-composer-phpcs-${{ hashFiles('.github/phpcs/composer.lock') }}
+            development/phpcs/vendor
+          key: ${{ runner.os }}-composer-phpcs-${{ hashFiles('development/phpcs/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-phpcs-
 
       - name: Composer Install
-        working-directory: .github/phpcs
-        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
+        working-directory: development/phpcs
+        run: make vendor
 
       - name: Run PHP Coding Standards and Compatibility
-        run: '.github/phpcs/vendor/bin/phpcs --standard=.github/phpcs/phpcs.xml'
+        run: make phpcs
 
   php-stan:
     name: 'PHP Stan. WordPress ${{ matrix.config.wordpress }}. bbPress ${{ matrix.config.bbpress }}'
