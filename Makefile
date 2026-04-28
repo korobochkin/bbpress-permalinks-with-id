@@ -1,3 +1,5 @@
+PHPMD_OUTPUT_TYPE := ansi
+
 phpcs:
 	development/phpcs/vendor/bin/phpcs --standard=development/phpcs/phpcs.xml
 
@@ -11,13 +13,13 @@ psalm-tests-application:
 	.github/psalm/vendor/bin/psalm --config=".github/psalm/psalm-tests-application.xml"
 
 phpmd:
-	@.github/phpmd/vendor/bin/phpmd \
+	development/phpmd/vendor/bin/phpmd \
 		plugin.php \
-		ansi \
-		.github/phpmd/phpmd.xml \
+		$(PHPMD_OUTPUT_TYPE) \
+		development/phpmd/phpmd.xml \
 		-vvv \
 		--cache \
-		--cache-file=.github/phpmd/.cache/.phpmd.result-cache.php
+		--cache-file=development/phpmd/.cache/.phpmd.result-cache.php
 
 plugin-check:
 	@wp plugin check \
