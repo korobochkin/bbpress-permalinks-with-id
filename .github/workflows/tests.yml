@@ -392,30 +392,23 @@ jobs:
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
-            .github/phpmd/vendor
-          key: ${{ runner.os }}-composer-phpmd-${{ hashFiles('.github/phpmd/composer.lock') }}
+            development/phpmd/vendor
+          key: ${{ runner.os }}-composer-phpmd-${{ hashFiles('development/phpmd/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-phpmd-
 
       - name: Composer Install
-        working-directory: .github/phpmd
-        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
+        working-directory: development/phpmd
+        run: make vendor
 
       - name: PHP Mess Detector Cache
         uses: actions/cache@v5
         with:
-          path: .github/phpmd/.cache
+          path: development/phpmd/.cache
           key: phpmd-cache-${{ github.ref_type == 'branch' && github.ref_name || 'main' }}
           restore-keys: phpmd-cache-
 
       - name: Run PHP Mess Detector
-        run: |
-          .github/phpmd/vendor/bin/phpmd \
-          	plugin.php \
-          	github \
-          	.github/phpmd/phpmd.xml \
-          	-vvv \
-            --cache \
-            --cache-file=.github/phpmd/.cache/.phpmd.result-cache.php
+        run: make phpmd PHPMD_OUTPUT_TYPE=github
         continue-on-error: true # TODO: remove this parameter after fixing the code
 
   tests-application:

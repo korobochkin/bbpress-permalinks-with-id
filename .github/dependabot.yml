@@ -5,7 +5,7 @@ updates:
       - development/hooks-generator
       - development/php-stan
       - development/phpcs
-      - .github/phpmd
+      - development/phpmd
       - .github/psalm
       - .github/tests/application
     versioning-strategy: increase
