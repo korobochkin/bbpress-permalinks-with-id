@@ -269,13 +269,13 @@ jobs:
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
-            .github/psalm/vendor
-          key: ${{ runner.os }}-psalm-composer-${{ hashFiles('.github/psalm/composer.lock') }}
+            development/psalm/vendor
+          key: ${{ runner.os }}-psalm-composer-${{ hashFiles('development/psalm/composer.lock') }}
           restore-keys: ${{ runner.os }}-psalm-composer-
 
       - name: Composer Install
-        working-directory: .github/psalm
-        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
+        working-directory: development/psalm
+        run: make vendor
 
       - name: Hooks Cache
         id: hooks-cache
@@ -302,12 +302,12 @@ jobs:
       - name: Psalm Cache
         uses: actions/cache@v5
         with:
-          path: .github/psalm/.cache/psalm
+          path: development/psalm/.cache/psalm
           key: psalm-cache-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
           restore-keys: psalm-cache-
 
       - name: Psalm
-        run: .github/psalm/vendor/bin/psalm --config=".github/psalm/psalm.xml"
+        run: make psalm
         continue-on-error: true
 
   psalm-tests-application:
@@ -337,8 +337,8 @@ jobs:
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
-            .github/psalm/vendor
-          key: ${{ runner.os }}-psalm-composer-${{ hashFiles('.github/psalm/composer.lock') }}
+            development/psalm/vendor
+          key: ${{ runner.os }}-psalm-composer-${{ hashFiles('development/psalm/composer.lock') }}
           restore-keys: ${{ runner.os }}-psalm-composer-
 
       - name: Composer Cache. Tests Application
@@ -349,22 +349,22 @@ jobs:
           restore-keys: ${{ runner.os }}-tests-application-composer-
 
       - name: Composer Install
-        working-directory: .github/psalm
-        run: 'composer install --no-scripts --no-interaction --no-progress --classmap-authoritative'
+        working-directory: development/psalm
+        run: make vendor
 
       - name: Composer Install. Tests Application
         working-directory: .github/tests/application
-        run: 'make vendor'
+        run: make vendor
 
       - name: Psalm Cache
         uses: actions/cache@v5
         with:
-          path: .github/psalm/.cache/psalm-tests-application
+          path: development/psalm/.cache/psalm-tests-application
           key: psalm-tests-application-${{ github.ref_type == 'branch' && github.ref_name || 'main' }}
           restore-keys: psalm-tests-application-
 
       - name: Psalm
-        run: 'make psalm-tests-application'
+        run: make psalm-tests-application
 
   phpmd:
     name: 'PHP Mess Detector'
