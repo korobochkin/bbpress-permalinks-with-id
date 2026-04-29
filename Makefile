@@ -7,10 +7,10 @@ phpstan:
 	development/php-stan/vendor/bin/phpstan analyse --no-interaction --no-progress --configuration=development/php-stan/php-stan.neon
 
 psalm:
-	.github/psalm/vendor/bin/psalm --config=".github/psalm/psalm.xml"
+	development/psalm/vendor/bin/psalm --config="development/psalm/psalm.xml"
 
 psalm-tests-application:
-	.github/psalm/vendor/bin/psalm --config=".github/psalm/psalm-tests-application.xml"
+	development/psalm/vendor/bin/psalm --config="development/psalm/psalm-tests-application.xml"
 
 phpmd:
 	development/phpmd/vendor/bin/phpmd \

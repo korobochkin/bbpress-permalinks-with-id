@@ -6,7 +6,7 @@ updates:
       - development/php-stan
       - development/phpcs
       - development/phpmd
-      - .github/psalm
+      - development/psalm
       - .github/tests/application
     versioning-strategy: increase
     cooldown:
