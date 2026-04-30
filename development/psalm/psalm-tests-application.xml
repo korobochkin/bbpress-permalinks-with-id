@@ -9,7 +9,7 @@
     findUnusedCode="true"
     checkForThrowsDocblock="true"
     ensureArrayStringOffsetsExist="true"
-    cacheDirectory=".github/psalm/.cache/psalm-tests-application"
+    cacheDirectory="development/psalm/.cache/psalm-tests-application"
     autoloader=".github/tests/application/vendor/autoload.php"
 >
     <projectFiles>

@@ -11,7 +11,7 @@
     allowStringToStandInForClass="false"
     checkForThrowsDocblock="true"
     ensureArrayStringOffsetsExist="true"
-    cacheDirectory=".github/psalm/.cache/psalm"
+    cacheDirectory="development/psalm/.cache/psalm"
 >
     <extraFiles>
         <directory name="development/hooks-generator/.cache/bbpress" />
@@ -26,7 +26,7 @@
     <projectFiles>
         <file name="plugin.php" />
         <ignoreFiles>
-            <directory name=".github/psalm/vendor" />
+            <directory name="development/psalm/vendor" />
         </ignoreFiles>
     </projectFiles>
     <plugins>
