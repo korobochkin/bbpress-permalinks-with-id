@@ -10,14 +10,14 @@
     checkForThrowsDocblock="true"
     ensureArrayStringOffsetsExist="true"
     cacheDirectory="development/psalm/.cache/psalm-tests-application"
-    autoloader=".github/tests/application/vendor/autoload.php"
+    autoloader="tests/application/vendor/autoload.php"
 >
     <projectFiles>
-        <directory name=".github/tests/application"/>
+        <directory name="tests/application"/>
         <ignoreFiles>
-            <directory name=".github/tests/application/.cache"/>
-            <directory name=".github/tests/application/containers"/>
-            <directory name=".github/tests/application/vendor"/>
+            <directory name="tests/application/.cache"/>
+            <directory name="tests/application/containers"/>
+            <directory name="tests/application/vendor"/>
         </ignoreFiles>
     </projectFiles>
     <plugins>
