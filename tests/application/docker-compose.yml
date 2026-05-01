@@ -46,7 +46,7 @@ services:
         define( 'WP_POST_REVISIONS', false );
     volumes:
       - wordpress_data:/var/www/html
-      - ../../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id
+      - ../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id
     logging:
       driver: syslog
       options:
