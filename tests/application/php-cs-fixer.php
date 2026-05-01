@@ -18,6 +18,7 @@ return new Config()
             'import_symbols' => true,
             'phpdoc_tags' => [],
         ],
+        'declare_strict_types' => ['strategy' => 'enforce'],
     ])
     ->setFinder($finder)
 ;
