@@ -29,10 +29,25 @@ plugin-check:
 		--ignore-codes=trademarked_term \
 		--checks=code_obfuscation,file_type,plugin_header_fields,plugin_updater,plugin_uninstall,plugin_readme,localhost,no_unfiltered_uploads,trademarks,offloading_files
 
+php-syntax-check:
+	find . -type f -name "*.php" -not -path "./.github/*" -not -path "./development/*" -not -path "./tests/application/*" -print0 \
+	| \
+	xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check
+
+php-syntax-check-tests-application:
+	find tests/application -type f -name "*.php" \
+	-not -path "tests/application/.cache/*" \
+	-not -path "tests/application/vendor/*" \
+	-print0 \
+	| \
+	xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check
+
 .PHONY: \
 	phpcs \
 	phpstan \
 	psalm \
 	psalm-tests-application \
 	phpmd \
-	plugin-check
+	plugin-check \
+	php-syntax-check \
+	php-syntax-check-tests-application
