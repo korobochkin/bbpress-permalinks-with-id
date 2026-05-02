@@ -30,15 +30,16 @@ plugin-check:
 		--checks=code_obfuscation,file_type,plugin_header_fields,plugin_updater,plugin_uninstall,plugin_readme,localhost,no_unfiltered_uploads,trademarks,offloading_files
 
 php-syntax-check:
-	find . -type f -name "*.php" -not -path "./.github/*" -not -path "./development/*" -not -path "./tests/application/*" -print0 \
+	find . \
+	\( -path "./.github" -o -path "./development" -o -path "./tests/application" \) -prune \
+	-o -type f -name "*.php" -print0 \
 	| \
 	xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check
 
 php-syntax-check-tests-application:
-	find tests/application -type f -name "*.php" \
-	-not -path "tests/application/.cache/*" \
-	-not -path "tests/application/vendor/*" \
-	-print0 \
+	find tests/application \
+	\( -path "tests/application/.cache" -o -path "tests/application/vendor" \) -prune \
+	-o -type f -name "*.php" -print0 \
 	| \
 	xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check
 
