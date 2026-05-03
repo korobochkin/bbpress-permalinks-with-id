@@ -7,7 +7,7 @@ updates:
       - development/phpcs
       - development/phpmd
       - development/psalm
-      - .github/tests/application
+      - tests/application
     versioning-strategy: increase
     cooldown:
       default-days: 10

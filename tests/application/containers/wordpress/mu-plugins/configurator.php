@@ -1,6 +1,8 @@
 <?php
 
-function configurator_disable_auto_updates()
+declare(strict_types=1);
+
+function configurator_disable_auto_updates(): void
 {
     remove_action('admin_notices', 'update_nag', 3);
     remove_action('network_admin_notices', 'update_nag', 3);

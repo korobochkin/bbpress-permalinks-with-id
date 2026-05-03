@@ -43,7 +43,27 @@ jobs:
           php-version: ${{ matrix.php-versions }}
 
       - name: Run PHP Syntax Check
-        run: 'find . -type f -name "*.php" -not -path "./.github/*" -print0 | xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check'
+        run: make php-syntax-check
+
+  php-syntax-check-tests-application:
+    name: 'PHP Syntax Check. Tests. Application'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          extensions: none
+          tools: none
+          ini-file: development
+          php-version: 8.4
+
+      - name: Run PHP Syntax Check
+        run: make php-syntax-check-tests-application
 
   phpcs:
     name: 'PHP Coding Standards and Compatibility'
@@ -344,8 +364,8 @@ jobs:
       - name: Composer Cache. Tests Application
         uses: actions/cache@v5
         with:
-          path: .github/tests/application/vendor
-          key: ${{ runner.os }}-tests-application-composer-${{ hashFiles('.github/tests/application/composer.lock') }}
+          path: tests/application/vendor
+          key: ${{ runner.os }}-tests-application-composer-${{ hashFiles('tests/application/composer.lock') }}
           restore-keys: ${{ runner.os }}-tests-application-composer-
 
       - name: Composer Install
@@ -353,7 +373,7 @@ jobs:
         run: make vendor
 
       - name: Composer Install. Tests Application
-        working-directory: .github/tests/application
+        working-directory: tests/application
         run: make vendor
 
       - name: Psalm Cache

@@ -24,10 +24,24 @@ phpmd:
 plugin-check:
 	@wp plugin check \
 		bbpress-permalinks-with-id \
-		--exclude-directories='.github,.idea,.wordpress-org,development' \
+		--exclude-directories='.github,.idea,.wordpress-org,development,tests' \
 		--exclude-files='.distignore,.gitattributes,.gitignore' \
 		--ignore-codes=trademarked_term \
 		--checks=code_obfuscation,file_type,plugin_header_fields,plugin_updater,plugin_uninstall,plugin_readme,localhost,no_unfiltered_uploads,trademarks,offloading_files
+
+php-syntax-check:
+	find . \
+	\( -path "./.github" -o -path "./development" -o -path "./tests/application" \) -prune \
+	-o -type f -name "*.php" -print0 \
+	| \
+	xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check
+
+php-syntax-check-tests-application:
+	find tests/application \
+	\( -path "tests/application/.cache" -o -path "tests/application/vendor" \) -prune \
+	-o -type f -name "*.php" -print0 \
+	| \
+	xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check
 
 .PHONY: \
 	phpcs \
@@ -35,4 +49,6 @@ plugin-check:
 	psalm \
 	psalm-tests-application \
 	phpmd \
-	plugin-check
+	plugin-check \
+	php-syntax-check \
+	php-syntax-check-tests-application
