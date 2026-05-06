@@ -1,9 +1,14 @@
 ---
+name: bbpress-permalinks-with-id-development
 services:
   php:
     build:
       dockerfile: ./containers/php/Dockerfile
       context: ./
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
     init: true
     tty: true
     volumes:
