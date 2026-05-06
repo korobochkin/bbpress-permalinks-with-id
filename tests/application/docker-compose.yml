@@ -1,4 +1,5 @@
 ---
+name: bbpress-permalinks-with-id-application-tests
 services:
   syslog:
     container_name: syslog
