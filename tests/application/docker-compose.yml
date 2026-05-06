@@ -1,4 +1,5 @@
 ---
+name: bbpress-permalinks-with-id-application-tests
 services:
   syslog:
     container_name: syslog
@@ -100,7 +101,7 @@ services:
     volumes_from:
       - wordpress
     volumes:
-      - ./shells/:/tmp/shells/:ro
+      - ./containers/cli/shells/:/tmp/shells/:ro
     depends_on:
       wordpress:
         condition: service_healthy
@@ -116,7 +117,7 @@ services:
     init: true
     volumes:
       - ./:/root/tests-application
-      - ./php-configs/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./containers/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - syslog_data:/var/log/remote:ro
     ports:
       - '127.0.0.1:9009:9009'
