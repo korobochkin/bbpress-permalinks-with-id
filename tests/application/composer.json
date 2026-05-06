@@ -20,5 +20,8 @@
         "symfony/http-client": "^8.0",
         "symfony/mime": "^8.0",
         "friendsofphp/php-cs-fixer": "^3.95"
+    },
+    "require": {
+        "php": "^8.5"
     }
 }
