@@ -2,7 +2,6 @@
 name: bbpress-permalinks-with-id-application-tests
 services:
   syslog:
-    container_name: syslog
     build:
       context: ./containers/syslog
       dockerfile: ./syslog.Dockerfile
@@ -18,7 +17,6 @@ services:
       retries: 3
 
   wordpress:
-    container_name: wordpress
     build:
       context: ./containers/wordpress
       dockerfile: ./wordpress.Dockerfile
@@ -66,7 +64,6 @@ services:
       retries: 3
 
   db:
-    container_name: db
     image: mysql:8.0
     environment:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
@@ -85,7 +82,6 @@ services:
       - db_data:/var/lib/mysql
 
   cli:
-    container_name: cli
     image: "${CLI_ARG_BASE_IMAGE}"
     environment:
       WORDPRESS_DB_HOST: db
@@ -110,7 +106,6 @@ services:
     command: [ "bash", "/tmp/shells/install-wordpress.sh" ]
 
   php:
-    container_name: php
     build:
       dockerfile: ./containers/php/php.Dockerfile
     tty: true
