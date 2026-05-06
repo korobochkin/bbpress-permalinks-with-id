@@ -117,7 +117,7 @@ services:
     init: true
     volumes:
       - ./:/root/tests-application
-      - ./php-configs/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./containers/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - syslog_data:/var/log/remote:ro
     ports:
       - '127.0.0.1:9009:9009'
