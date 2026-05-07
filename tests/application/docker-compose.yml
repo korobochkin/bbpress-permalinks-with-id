@@ -80,6 +80,7 @@ services:
     security_opt:
       - no-new-privileges=true
     read_only: true
+    user: 10001:10001
     environment:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
@@ -93,6 +94,9 @@ services:
       start_interval: 10s
       timeout: 5s
       retries: 3
+    tmpfs:
+      - /tmp
+      - /var/run/mysqld
     volumes:
       - db_data:/var/lib/mysql
 
