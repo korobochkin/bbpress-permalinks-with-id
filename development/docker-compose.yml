@@ -9,6 +9,7 @@ services:
       - ALL
     security_opt:
       - no-new-privileges=true
+    read_only: true
     init: true
     tty: true
     volumes:
