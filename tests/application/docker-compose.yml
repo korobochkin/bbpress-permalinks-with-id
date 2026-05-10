@@ -69,7 +69,7 @@ services:
       syslog:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://${WORDPRESS_DOMAIN}:8080/index.php/wp-json/"]
+      test: ["CMD", "curl", "--fail", "--silent", "--output", "/dev/null", "http://${WORDPRESS_DOMAIN}:8080/index.php/wp-json/"]
       start_period: 2s
       start_interval: 5s
       timeout: 5s
