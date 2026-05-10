@@ -55,6 +55,8 @@ services:
         define( 'WP_POST_REVISIONS', false );
     tmpfs:
       - /var/run/apache2
+      - /tmp
+      - /var
     volumes:
       - wordpress_data:/var/www/html
       - ../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id
