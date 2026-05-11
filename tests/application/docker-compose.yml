@@ -143,7 +143,10 @@ services:
     read_only: true
     tty: true
     init: true
+    tmpfs:
+      - /tmp
     volumes:
+      - ./.cache/composer:/root/.composer
       - ./:/root/tests-application
       - ./containers/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - syslog_data:/var/log/remote:ro
