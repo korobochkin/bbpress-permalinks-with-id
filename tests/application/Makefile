@@ -28,6 +28,11 @@ reset_logs:
 	docker exec "$(CONTAINER_NAME_PREFIX)-syslog-1" sh -c "find /var/log/remote -maxdepth 1 -type f -name '*.log' -exec truncate -s 0 {} \;"
 
 vendor: composer.json composer.lock
+	whoami;
+	ls -alh;
+	@if [ ! -d vendor ]; then \
+		mkdir vendor; \
+	fi
 	composer install --no-scripts --no-interaction --no-progress --classmap-authoritative
 
 composer_install_from_host:
