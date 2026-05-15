@@ -30,6 +30,8 @@ reset_logs:
 vendor: composer.json composer.lock
 	whoami;
 	ls -alh;
+	chmod -R a+w .
+	ls -alh
 	@if [ ! -d vendor ]; then \
 		mkdir vendor; \
 	fi
