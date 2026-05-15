@@ -1,4 +1,27 @@
 ---
+
+x-php-build: &service-php-build
+  dockerfile: ./containers/php/php.Dockerfile
+  target: tests-runner
+
+x-php: &service-php
+  build:
+    <<: *service-php-build
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges=true
+  read_only: true
+  environment:
+    WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
+    WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
+    WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
+  depends_on:
+    wordpress:
+      condition: service_healthy
+    cli:
+      condition: service_completed_successfully
+
 name: bbpress-permalinks-with-id-application-tests
 services:
   syslog:
@@ -134,31 +157,28 @@ services:
     command: [ "bash", "/tmp/shells/install-wordpress.sh" ]
 
   php:
+    <<: *service-php
+    volumes:
+      - ./:/root/tests-application:read-only
+      - syslog_data:/var/log/remote:read-only
+    command: make run_tests
+
+  php-develop:
+    <<: *service-php
     build:
-      dockerfile: ./containers/php/php.Dockerfile
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges=true
-    read_only: true
+      <<: *service-php-build
+      target: develop
     tty: true
     init: true
+    ports:
+      - '127.0.0.1:9009:9009'
     tmpfs:
       - /tmp
     volumes:
       - ./.cache/composer:/root/.composer
-      - ./../application:/root/tests-application
-      - ./containers/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
-      - syslog_data:/var/log/remote:ro
-    ports:
-      - '127.0.0.1:9009:9009'
-    environment:
-      WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
-      WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
-      WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
-    depends_on:
-      wordpress:
-        condition: service_healthy
+      - ./:/root/tests-application
+      - ./containers/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:read-only
+      - syslog_data:/var/log/remote:read-only
 
 volumes:
   syslog_data:

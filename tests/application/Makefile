@@ -2,10 +2,16 @@
 CONTAINER_NAME_PREFIX := bbpress-permalinks-with-id-application-tests
 
 build:
-	docker compose build --quiet
+	docker compose build
+
+build-php:
+	docker compose build --quiet --with-dependencies php
 
 up:
 	docker compose up --detach --no-build --quiet-pull --remove-orphans --timeout=120 --wait-timeout=120 --wait --yes
+
+up-php:
+	docker compose up --no-build --quiet-pull --remove-orphans --timeout=120 --wait-timeout=120 --yes --abort-on-container-failure --attach php
 
 stop:
 	docker compose stop
@@ -28,33 +34,22 @@ reset_logs:
 	docker exec "$(CONTAINER_NAME_PREFIX)-syslog-1" sh -c "find /var/log/remote -maxdepth 1 -type f -name '*.log' -exec truncate -s 0 {} \;"
 
 vendor: composer.json composer.lock
-	whoami;
-	ls -alh;
-	@if [ ! -d vendor ]; then \
-		mkdir vendor; \
-	fi
 	composer install --no-scripts --no-interaction --no-progress --classmap-authoritative
-
-composer_install_from_host:
-	docker exec "$(CONTAINER_NAME_PREFIX)-php-1" make vendor
 
 run_tests:
 	 vendor/bin/phpunit --no-progress --testsuite=default
-
-run_tests_from_host:
-	docker exec "$(CONTAINER_NAME_PREFIX)-php-1" make run_tests
 
 php_cs_fixer:
 	vendor/bin/php-cs-fixer fix --config=php-cs-fixer.php --cache-file=.cache/.php-cs-fixer.cache --format=txt --no-interaction --allow-risky=yes
 
 .PHONY: \
 	build \
+	build-php \
 	up \
+	up-php \
 	stop \
 	down \
 	config \
 	reset_logs \
-	composer_install_from_host \
 	run_tests \
-	run_tests_from_host \
 	php_cs_fixer
