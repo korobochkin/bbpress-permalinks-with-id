@@ -8,10 +8,30 @@ build-php:
 	docker compose build --quiet --with-dependencies php
 
 up:
-	docker compose up --detach --no-build --quiet-pull --remove-orphans --timeout=120 --wait-timeout=120 --wait --yes
+	docker compose up \
+		--detach \
+		--no-build \
+		--quiet-pull \
+		--remove-orphans \
+		--timeout=120 \
+		--wait-timeout=120 \
+		--wait \
+		--yes \
+		php-develop
 
 up-php:
-	docker compose up --no-build --quiet-pull --remove-orphans --timeout=120 --wait-timeout=120 --yes --abort-on-container-failure --attach php
+	docker compose up \
+		--no-build \
+		--quiet-pull \
+		--remove-orphans \
+		--timeout=120 \
+		--wait-timeout=120 \
+		--yes \
+		--abort-on-container-failure \
+		--no-log-prefix \
+		--exit-code-from=php \
+		--attach=php \
+		php
 
 stop:
 	docker compose stop
