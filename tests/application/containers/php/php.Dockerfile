@@ -11,6 +11,7 @@ WORKDIR /root/tests-application
 FROM base AS dependencies
 
 RUN \
+    --mount=type=bind,source=tests,destination=./tests \
     --mount=type=bind,source=composer.json,destination=./composer.json \
     --mount=type=bind,source=composer.lock,destination=./composer.lock \
     --mount=type=bind,source=Makefile,destination=./Makefile \
@@ -21,7 +22,7 @@ FROM php:8.5-cli-bookworm AS tests-runner
 
 WORKDIR /root/tests-application
 
-COPY --from=dependencies /root/tests-application/vendor /root/tests-application
+COPY --from=dependencies /root/tests-application/vendor /root/tests-application/vendor
 
 FROM base AS develop
 
