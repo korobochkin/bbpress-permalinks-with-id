@@ -159,6 +159,7 @@ services:
   php:
     <<: *service-php
     volumes:
+      - ./.cache:/root/tests-application/.cache
       - ./tests:/root/tests-application/tests:read-only
       - ./Makefile:/root/tests-application/Makefile:read-only
       - ./phpunit.xml:/root/tests-application/phpunit.xml:read-only
