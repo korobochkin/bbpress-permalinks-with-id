@@ -147,7 +147,7 @@ services:
     volumes_from:
       - wordpress
     volumes:
-      - ./containers/cli/shells/:/tmp/shells/:ro
+      - ./containers/cli/shells/:/tmp/shells/:read-only
     depends_on:
       wordpress:
         condition: service_healthy
