@@ -22,6 +22,8 @@ FROM php:8.5-cli-bookworm AS tests-runner
 
 WORKDIR /root/tests-application
 
+ENTRYPOINT ["make", "run_tests"]
+
 COPY --from=dependencies /root/tests-application/vendor /root/tests-application/vendor
 
 FROM base AS develop

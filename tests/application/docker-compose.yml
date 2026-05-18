@@ -164,7 +164,6 @@ services:
       - ./phpunit.xml:/root/tests-application/phpunit.xml:read-only
       - ./phpunit-bootstrap.php:/root/tests-application/phpunit-bootstrap.php:read-only
       - syslog_data:/var/log/remote:read-only
-    command: make run_tests
 
   php-develop:
     <<: *service-php
