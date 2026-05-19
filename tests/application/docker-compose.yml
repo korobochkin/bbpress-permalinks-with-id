@@ -57,6 +57,7 @@ services:
     security_opt:
       - no-new-privileges=true
     read_only: true
+    user: 33:33
     networks:
       default:
         aliases:
@@ -77,9 +78,8 @@ services:
         define( 'AUTOMATIC_UPDATER_DISABLED', true );
         define( 'WP_POST_REVISIONS', false );
     tmpfs:
-      - /var/run/apache2
-      - /tmp
-      - /var
+      - /run:mode=770,uid=33,gid=33
+      - /tmp:mode=770,uid=33,gid=33
     volumes:
       - ../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id:read-only
     logging:
@@ -122,7 +122,8 @@ services:
       retries: 3
     tmpfs:
       - /tmp
-      - /var/run/mysqld
+      - /run
+      - /run/mysqld
     volumes:
       - db_data:/var/lib/mysql
 
