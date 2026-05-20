@@ -121,9 +121,8 @@ services:
       timeout: 5s
       retries: 3
     tmpfs:
-      - /tmp
-      - /run
-      - /run/mysqld
+      - /tmp:mode=770,uid=10001,gid=10001
+      - /run:mode=770,uid=10001,gid=10001
     volumes:
       - db_data:/var/lib/mysql
 
