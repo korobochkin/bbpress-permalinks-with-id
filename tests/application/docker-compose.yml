@@ -1,10 +1,38 @@
 ---
+
+x-php-build: &service-php-build
+  dockerfile: ./containers/php/php.Dockerfile
+  target: tests-runner
+
+x-php: &service-php
+  build:
+    <<: *service-php-build
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges=true
+  read_only: true
+  environment:
+    WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
+    WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
+    WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
+  depends_on:
+    wordpress:
+      condition: service_healthy
+    cli:
+      condition: service_completed_successfully
+
 name: bbpress-permalinks-with-id-application-tests
 services:
   syslog:
     build:
       context: ./containers/syslog
       dockerfile: ./syslog.Dockerfile
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
     volumes:
       - syslog_data:/var/log/remote
     ports:
@@ -24,6 +52,12 @@ services:
         WORDPRESS_ARG_BASE_IMAGE: "${WORDPRESS_ARG_BASE_IMAGE}"
         WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: "${WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL}"
         WORDPRESS_ARG_THEME_ZIP_URL: "${WORDPRESS_ARG_THEME_ZIP_URL}"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
+    user: 33:33
     networks:
       default:
         aliases:
@@ -43,9 +77,11 @@ services:
         define( 'WP_AUTO_UPDATE_CORE', false );
         define( 'AUTOMATIC_UPDATER_DISABLED', true );
         define( 'WP_POST_REVISIONS', false );
+    tmpfs:
+      - /run:mode=770,uid=33,gid=33
+      - /tmp:mode=770,uid=33,gid=33
     volumes:
-      - wordpress_data:/var/www/html
-      - ../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id
+      - ../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id:read-only
     logging:
       driver: syslog
       options:
@@ -57,14 +93,20 @@ services:
       syslog:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "test", "-f", "/var/www/html/wp-config.php"]
-      start_period: 5s
-      start_interval: 10s
+      test: ["CMD", "curl", "--fail", "--silent", "--output", "/dev/null", "http://${WORDPRESS_DOMAIN}:8080/wp-json/"]
+      start_period: 2s
+      start_interval: 5s
       timeout: 5s
       retries: 3
 
   db:
     image: mysql:8.0
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
+    user: 10001:10001
     environment:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
       MYSQL_USER: "${MYSQL_USER}"
@@ -78,11 +120,19 @@ services:
       start_interval: 10s
       timeout: 5s
       retries: 3
+    tmpfs:
+      - /tmp:mode=770,uid=10001,gid=10001
+      - /run:mode=770,uid=10001,gid=10001
     volumes:
       - db_data:/var/lib/mysql
 
   cli:
     image: "${CLI_ARG_BASE_IMAGE}"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_NAME: "${MYSQL_DATABASE}"
@@ -97,7 +147,7 @@ services:
     volumes_from:
       - wordpress
     volumes:
-      - ./containers/cli/shells/:/tmp/shells/:ro
+      - ./containers/cli/shells/:/tmp/shells/:read-only
     depends_on:
       wordpress:
         condition: service_healthy
@@ -106,23 +156,31 @@ services:
     command: [ "bash", "/tmp/shells/install-wordpress.sh" ]
 
   php:
+    <<: *service-php
+    volumes:
+      - ./.cache:/root/tests-application/.cache
+      - ./tests:/root/tests-application/tests:read-only
+      - ./Makefile:/root/tests-application/Makefile:read-only
+      - ./phpunit.xml:/root/tests-application/phpunit.xml:read-only
+      - ./phpunit-bootstrap.php:/root/tests-application/phpunit-bootstrap.php:read-only
+      - syslog_data:/var/log/remote:read-only
+
+  php-develop:
+    <<: *service-php
     build:
-      dockerfile: ./containers/php/php.Dockerfile
+      <<: *service-php-build
+      target: develop
     tty: true
     init: true
-    volumes:
-      - ./:/root/tests-application
-      - ./containers/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
-      - syslog_data:/var/log/remote:ro
     ports:
       - '127.0.0.1:9009:9009'
-    environment:
-      WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
-      WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
-      WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
-    depends_on:
-      wordpress:
-        condition: service_healthy
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./.cache/composer:/root/.composer
+      - ./:/root/tests-application
+      - ./containers/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:read-only
+      - syslog_data:/var/log/remote:read-only
 
 volumes:
   syslog_data:
@@ -131,5 +189,4 @@ volumes:
       type: tmpfs
       device: tmpfs
       o: size=10m
-  wordpress_data:
   db_data:

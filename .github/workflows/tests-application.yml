@@ -82,19 +82,11 @@ jobs:
 
     - name: Docker Compose Build
       working-directory: tests/application
-      run: make build
+      run: make build-php
 
-    - name: Docker Compose Up
+    - name: Docker Compose Up PHP
       working-directory: tests/application
-      run: make up
-
-    - name: Composer Install
-      working-directory: tests/application
-      run: make composer_install_from_host
-
-    - name: Run Application Tests
-      working-directory: tests/application
-      run: make run_tests_from_host
+      run: make up-php
 
     - name: Docker Compose Down
       working-directory: tests/application

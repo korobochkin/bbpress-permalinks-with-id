@@ -2,10 +2,36 @@
 CONTAINER_NAME_PREFIX := bbpress-permalinks-with-id-application-tests
 
 build:
-	docker compose build --quiet
+	docker compose build
+
+build-php:
+	docker compose build --quiet --with-dependencies php
 
 up:
-	docker compose up --detach --no-build --quiet-pull --remove-orphans --timeout=120 --wait-timeout=120 --wait --yes
+	docker compose up \
+		--detach \
+		--no-build \
+		--quiet-pull \
+		--remove-orphans \
+		--timeout=120 \
+		--wait-timeout=120 \
+		--wait \
+		--yes \
+		php-develop
+
+up-php:
+	docker compose up \
+		--no-build \
+		--quiet-pull \
+		--remove-orphans \
+		--timeout=120 \
+		--wait-timeout=120 \
+		--yes \
+		--abort-on-container-failure \
+		--no-log-prefix \
+		--exit-code-from=php \
+		--attach=php \
+		php
 
 stop:
 	docker compose stop
@@ -30,26 +56,20 @@ reset_logs:
 vendor: composer.json composer.lock
 	composer install --no-scripts --no-interaction --no-progress --classmap-authoritative
 
-composer_install_from_host:
-	docker exec "$(CONTAINER_NAME_PREFIX)-php-1" make vendor
-
 run_tests:
 	 vendor/bin/phpunit --no-progress --testsuite=default
-
-run_tests_from_host:
-	docker exec "$(CONTAINER_NAME_PREFIX)-php-1" make run_tests
 
 php_cs_fixer:
 	vendor/bin/php-cs-fixer fix --config=php-cs-fixer.php --cache-file=.cache/.php-cs-fixer.cache --format=txt --no-interaction --allow-risky=yes
 
 .PHONY: \
 	build \
+	build-php \
 	up \
+	up-php \
 	stop \
 	down \
 	config \
 	reset_logs \
-	composer_install_from_host \
 	run_tests \
-	run_tests_from_host \
 	php_cs_fixer

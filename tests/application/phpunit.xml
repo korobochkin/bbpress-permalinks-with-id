@@ -3,6 +3,7 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="phpunit-bootstrap.php"
          cacheDirectory=".cache/phpunit"
+         cacheResult="false"
          executionOrder="depends,defects"
          requireCoverageMetadata="true"
          beStrictAboutCoverageMetadata="true"
@@ -10,7 +11,10 @@
          displayDetailsOnPhpunitDeprecations="true"
          failOnPhpunitDeprecation="true"
          failOnRisky="true"
-         failOnWarning="true">
+         failOnWarning="true"
+         stopOnError="true"
+         stopOnFailure="true"
+>
     <testsuites>
         <testsuite name="default">
             <directory>tests/TestCases</directory>
