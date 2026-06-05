@@ -176,8 +176,6 @@ services:
       - source: php_xdebug
         target: /usr/local/etc/php/conf.d/xdebug.ini
         mode: 0400
-    ports:
-      - '127.0.0.1:9009:9009'
     tmpfs:
       - /tmp
     volumes:
