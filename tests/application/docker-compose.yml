@@ -16,11 +16,41 @@ x-php: &service-php
     WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
     WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
     WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
-  depends_on:
+  depends_on: &service-php-depends-on
     wordpress:
       condition: service_healthy
     cli:
       condition: service_completed_successfully
+
+x-cli: &service-cli
+  image: "${CLI_ARG_BASE_IMAGE}"
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges=true
+  read_only: true
+  environment:
+    WORDPRESS_DB_HOST: db
+    WORDPRESS_DB_NAME: "${MYSQL_DATABASE}"
+    WORDPRESS_DB_USER: "${MYSQL_USER}"
+    WORDPRESS_DB_PASSWORD: "${MYSQL_PASSWORD}"
+    WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
+    WORDPRESS_SITE_TITLE: "${WORDPRESS_SITE_TITLE}"
+    WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
+    WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
+    WORDPRESS_ADMIN_EMAIL: "${WORDPRESS_ADMIN_EMAIL}"
+    WORDPRESS_SITE_LOCALE: "${WORDPRESS_SITE_LOCALE}"
+  volumes_from:
+    - wordpress
+  volumes:
+    - ./containers/cli/shells/:/tmp/shells/:read-only
+  tmpfs:
+    - /tmp
+  depends_on:
+    wordpress:
+      condition: service_healthy
+    db:
+      condition: service_healthy
 
 name: bbpress-permalinks-with-id-application-tests
 services:
@@ -127,33 +157,13 @@ services:
       - db_data:/var/lib/mysql
 
   cli:
-    image: "${CLI_ARG_BASE_IMAGE}"
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges=true
-    read_only: true
-    environment:
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_NAME: "${MYSQL_DATABASE}"
-      WORDPRESS_DB_USER: "${MYSQL_USER}"
-      WORDPRESS_DB_PASSWORD: "${MYSQL_PASSWORD}"
-      WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
-      WORDPRESS_SITE_TITLE: "${WORDPRESS_SITE_TITLE}"
-      WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
-      WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
-      WORDPRESS_ADMIN_EMAIL: "${WORDPRESS_ADMIN_EMAIL}"
-      WORDPRESS_SITE_LOCALE: "${WORDPRESS_SITE_LOCALE}"
-    volumes_from:
-      - wordpress
-    volumes:
-      - ./containers/cli/shells/:/tmp/shells/:read-only
-    depends_on:
-      wordpress:
-        condition: service_healthy
-      db:
-        condition: service_healthy
+    <<: *service-cli
     command: [ "bash", "/tmp/shells/install-wordpress.sh" ]
+
+  cli-develop:
+    <<: *service-cli
+    init: true
+    tty: true
 
   php:
     <<: *service-php
@@ -182,6 +192,10 @@ services:
       - ./.cache/composer:/root/.composer
       - ./:/root/tests-application
       - syslog_data:/var/log/remote:read-only
+    depends_on:
+      <<: *service-php-depends-on
+      cli-develop:
+        condition: service_started
 
 volumes:
   syslog_data:
