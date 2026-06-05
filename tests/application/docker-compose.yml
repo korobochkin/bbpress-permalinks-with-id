@@ -1,12 +1,8 @@
 ---
-
-x-php-build: &service-php-build
-  dockerfile: ./containers/php/php.Dockerfile
-  target: tests-runner
-
 x-php: &service-php
-  build:
-    <<: *service-php-build
+  build: &service-php-build
+    dockerfile: ./containers/php/php.Dockerfile
+    target: tests-runner
   cap_drop:
     - ALL
   security_opt:
