@@ -20,7 +20,7 @@ RUN \
     apt-get update --quiet --assume-yes \
     && apt-get install --quiet --assume-yes --no-install-recommends --no-install-suggests unzip
 
-COPY --from=composer/composer:2.9-bin --chmod=0555 /composer /usr/bin/composer
+COPY --from=composer/composer:2.10-bin --chmod=0555 /composer /usr/bin/composer
 
 FROM php-base-with-composer AS develop
 
