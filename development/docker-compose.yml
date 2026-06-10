@@ -5,6 +5,11 @@ services:
     build:
       dockerfile: ./containers/php/Dockerfile
       context: ./
+      args:
+        UID: 1001
+        GID: 1001
+      provenance: false
+      sbom: false
     cap_drop:
       - ALL
     security_opt:
@@ -13,4 +18,7 @@ services:
     init: true
     tty: true
     volumes:
-      - ./../:/root/project
+      - ./../:/home/php/app
+      - ./../tmp/composer:/home/php/.composer
+    tmpfs:
+      - /tmp
