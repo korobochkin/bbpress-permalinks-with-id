@@ -3,8 +3,9 @@ name: bbpress-permalinks-with-id-development
 services:
   php:
     build:
-      dockerfile: ./containers/php/Dockerfile
+      dockerfile: ./../tests/application/containers/php/php.Dockerfile
       context: ./
+      target: php-base-with-composer
       args:
         UID: 1001
         GID: 1001
