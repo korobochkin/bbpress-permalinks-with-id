@@ -1,5 +1,7 @@
 FROM php:8.5-cli AS php-base
 
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
 ARG UID
 ARG GID
 
