@@ -18,6 +18,8 @@ services:
     read_only: true
     init: true
     tty: true
+    environment:
+      GITHUB_ACTIONS: ${GITHUB_ACTIONS:-false}
     volumes:
       - ./../:/home/php/app
       - ./../tmp/composer:/home/php/.composer
