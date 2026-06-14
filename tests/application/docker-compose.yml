@@ -3,6 +3,9 @@ x-php: &service-php
   build: &service-php-build
     dockerfile: ./containers/php/php.Dockerfile
     target: tests-runner
+    args:
+      UID: 1001
+      GID: 1001
   cap_drop:
     - ALL
   security_opt:
@@ -12,6 +15,7 @@ x-php: &service-php
     WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
     WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
     WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
+    GITHUB_ACTIONS: ${GITHUB_ACTIONS:-false}
   depends_on: &service-php-depends-on
     wordpress:
       condition: service_healthy
@@ -164,11 +168,11 @@ services:
   php:
     <<: *service-php
     volumes:
-      - ./.cache:/root/tests-application/.cache
-      - ./tests:/root/tests-application/tests:read-only
-      - ./Makefile:/root/tests-application/Makefile:read-only
-      - ./phpunit.xml:/root/tests-application/phpunit.xml:read-only
-      - ./phpunit-bootstrap.php:/root/tests-application/phpunit-bootstrap.php:read-only
+      - ./.cache:/home/php/app/.cache
+      - ./tests:/home/php/app/tests:read-only
+      - ./Makefile:/home/php/app/Makefile:read-only
+      - ./phpunit.xml:/home/php/app/phpunit.xml:read-only
+      - ./phpunit-bootstrap.php:/home/php/app/phpunit-bootstrap.php:read-only
       - syslog_data:/var/log/remote:read-only
 
   php-develop:
@@ -185,8 +189,8 @@ services:
     tmpfs:
       - /tmp
     volumes:
-      - ./.cache/composer:/root/.composer
-      - ./:/root/tests-application
+      - ./.cache/composer:/home/php/.composer
+      - ./:/home/php/app
       - syslog_data:/var/log/remote:read-only
     depends_on:
       <<: *service-php-depends-on

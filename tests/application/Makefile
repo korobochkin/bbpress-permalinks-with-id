@@ -1,11 +1,19 @@
 # docker-compose.yml -> name
 CONTAINER_NAME_PREFIX := bbpress-permalinks-with-id-application-tests
 
+ifeq ($(GITHUB_ACTIONS),true)
+	PHP_UNIT_PROGRESS := --no-progress
+	DOCKER_BUILD_QUIET := --quiet
+else
+	PHP_UNIT_PROGRESS :=
+	DOCKER_BUILD_QUIET :=
+endif
+
 build:
 	docker compose build
 
 build-php:
-	docker compose build --quiet --with-dependencies php
+	docker compose build $(DOCKER_BUILD_QUIET) --with-dependencies php
 
 up:
 	docker compose up \
@@ -57,7 +65,7 @@ vendor: composer.json composer.lock
 	composer install --no-scripts --no-interaction --no-progress --classmap-authoritative
 
 run_tests:
-	 vendor/bin/phpunit --no-progress --testsuite=default
+	vendor/bin/phpunit $(PHP_UNIT_PROGRESS) --testsuite=default
 
 php_cs_fixer:
 	vendor/bin/php-cs-fixer fix --config=php-cs-fixer.php --cache-file=.cache/.php-cs-fixer.cache --format=txt --no-interaction --allow-risky=yes
