@@ -63,6 +63,12 @@ services:
     security_opt:
       - no-new-privileges=true
     read_only: true
+    configs:
+      - source: syslog_main
+        target: /etc/rsyslog.conf
+        mode: 0400
+        uid: '0'
+        gid: '0'
     volumes:
       - syslog_data:/var/log/remote
     ports:
@@ -207,5 +213,7 @@ volumes:
   db_data:
 
 configs:
+  syslog_main:
+    file: ./containers/syslog/rsyslog.conf
   php_xdebug:
     file: ./containers/php/xdebug.ini

@@ -1,9 +1,9 @@
-FROM alpine:3
+FROM alpine:latest
+
+SHELL ["/bin/sh", "-euo", "pipefail", "-c"]
 
 RUN mkdir -p /var/log/remote && \
     apk --no-cache add rsyslog net-tools
-
-COPY rsyslog.conf /etc/rsyslog.conf
 
 EXPOSE 1514/udp
 
