@@ -24,6 +24,8 @@ FROM $WORDPRESS_ARG_BASE_IMAGE
 
 EXPOSE 8080/tcp
 
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
 RUN rm -rf /usr/src/wordpress/wp-content/plugins/* \
     && rm -rf /usr/src/wordpress/wp-content/themes/* \
     && rm /usr/src/php* \
