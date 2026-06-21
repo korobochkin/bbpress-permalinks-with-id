@@ -17,6 +17,31 @@ updates:
     assignees:
       - korobochkin
 
+  - package-ecosystem: docker
+    directories:
+      - ./tests/application/containers/php
+      - ./tests/application/containers/syslog
+      - ./tests/application/containers/wordpress
+    cooldown:
+      default-days: 10
+    open-pull-requests-limit: 5
+    schedule:
+      interval: weekly
+    assignees:
+      - korobochkin
+
+  - package-ecosystem: docker-compose
+    directories:
+      - ./development
+      - ./tests/application
+    cooldown:
+      default-days: 10
+    open-pull-requests-limit: 5
+    schedule:
+      interval: weekly
+    assignees:
+      - korobochkin
+
   - package-ecosystem: github-actions
     directories:
       - /
