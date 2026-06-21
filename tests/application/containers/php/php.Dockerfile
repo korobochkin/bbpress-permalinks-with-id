@@ -1,4 +1,4 @@
-FROM php:8.5-cli AS php-base
+FROM php:8.5.7-cli AS php-base
 
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
