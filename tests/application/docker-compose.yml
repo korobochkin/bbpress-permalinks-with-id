@@ -136,7 +136,7 @@ services:
       retries: 3
 
   db:
-    image: mysql:8.0
+    image: mysql:9.7.1
     cap_drop:
       - ALL
     security_opt:
