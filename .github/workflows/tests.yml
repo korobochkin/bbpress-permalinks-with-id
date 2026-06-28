@@ -87,7 +87,7 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
@@ -143,7 +143,7 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
@@ -158,7 +158,7 @@ jobs:
 
       - name: Cache PHP Stan Stubs
         id: 'cache-php-stan-stubs'
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             development/php-stan/.cache
@@ -224,7 +224,7 @@ jobs:
     steps:
       - name: Hooks cache
         id: hooks-cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             development/hooks-generator/.cache/wordpress-hooks
@@ -285,7 +285,7 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
@@ -299,7 +299,7 @@ jobs:
 
       - name: Hooks Cache
         id: hooks-cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             development/hooks-generator/.cache/wordpress-hooks
@@ -310,7 +310,7 @@ jobs:
 
       - name: Dependencies cache
         id: dependencies-cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             development/hooks-generator/.cache/wordpress
@@ -320,7 +320,7 @@ jobs:
           fail-on-cache-miss: true
 
       - name: Psalm Cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: development/psalm/.cache/psalm
           key: psalm-cache-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
@@ -353,7 +353,7 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
@@ -362,7 +362,7 @@ jobs:
           restore-keys: ${{ runner.os }}-psalm-composer-
 
       - name: Composer Cache. Tests Application
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: tests/application/vendor
           key: ${{ runner.os }}-tests-application-composer-${{ hashFiles('tests/application/composer.lock') }}
@@ -377,7 +377,7 @@ jobs:
         run: make vendor
 
       - name: Psalm Cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: development/psalm/.cache/psalm-tests-application
           key: psalm-tests-application-${{ github.ref_type == 'branch' && github.ref_name || 'main' }}
@@ -408,7 +408,7 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
@@ -421,7 +421,7 @@ jobs:
         run: make vendor
 
       - name: PHP Mess Detector Cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: development/phpmd/.cache
           key: phpmd-cache-${{ github.ref_type == 'branch' && github.ref_name || 'main' }}
