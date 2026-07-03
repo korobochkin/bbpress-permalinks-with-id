@@ -33,6 +33,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -53,6 +55,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -73,6 +77,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -129,6 +135,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -174,6 +182,7 @@ jobs:
           ref: ${{ matrix.config.wordpress }}
           path: development/php-stan/.cache/wordpress
           show-progress: false
+          persist-credentials: false
 
       - name: Checkout bbPress
         uses: actions/checkout@v7
@@ -183,6 +192,7 @@ jobs:
           ref: ${{ matrix.config.bbpress }}
           path: development/php-stan/.cache/bbpress
           show-progress: false
+          persist-credentials: false
 
       - name: Generate PHP Stan Stubs. WordPress ${{ matrix.config.wordpress }}
         if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
@@ -235,6 +245,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
         if: steps.hooks-cache.outputs.cache-hit != 'true'
+        with:
+          persist-credentials: false
 
       - name: Run Hooks Generator
         uses: ./.github/actions/hooks-generator
@@ -270,6 +282,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -338,6 +352,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -394,6 +410,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2

@@ -57,6 +57,7 @@ runs:
         ref: ${{ inputs.wordpress }}
         path: development/hooks-generator/.cache/wordpress
         show-progress: false
+        persist-credentials: false
 
     - name: Checkout bbPress
       if: steps.dependencies-cache.outputs.cache-hit != 'true'
@@ -66,6 +67,7 @@ runs:
         ref: ${{ inputs.bbpress }}
         path: development/hooks-generator/.cache/bbpress
         show-progress: false
+        persist-credentials: false
 
     - name: Generate WordPress hooks
       working-directory: development/hooks-generator
