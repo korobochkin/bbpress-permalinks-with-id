@@ -58,6 +58,9 @@ services:
     build:
       context: ./containers/syslog
       dockerfile: ./syslog.Dockerfile
+      args:
+        UID: 1001
+        GID: 1001
     cap_drop:
       - ALL
     security_opt:
@@ -67,8 +70,8 @@ services:
       - source: syslog_main
         target: /etc/rsyslog.conf
         mode: 0400
-        uid: '0'
-        gid: '0'
+        uid: '1001'
+        gid: '1001'
     volumes:
       - syslog_data:/var/log/remote
     ports:
