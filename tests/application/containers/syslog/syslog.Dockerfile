@@ -20,4 +20,4 @@ USER $UID:$GID
 
 EXPOSE 1514/udp
 
-CMD ["rsyslogd", "-n", "-f", "/etc/rsyslog.conf"]
+ENTRYPOINT ["rsyslogd", "-n", "-f", "/etc/rsyslog.conf"]
