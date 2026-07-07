@@ -195,6 +195,8 @@ services:
       - source: php_xdebug
         target: /usr/local/etc/php/conf.d/xdebug.ini
         mode: 0400
+        uid: '1001'
+        gid: '1001'
     tmpfs:
       - /tmp
     volumes:
