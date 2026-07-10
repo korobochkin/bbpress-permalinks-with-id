@@ -1,0 +1,86 @@
+---
+x-php-base: &service-php-base
+  build: &service-php-base-build
+    context: ../
+    dockerfile: ./development/containers/php/php-8.4.Dockerfile
+    target: php-base
+    args:
+      UID: 1001
+      GID: 1001
+    x-bake:
+      output:
+        - type=docker
+    cache_from:
+      - type=gha
+    cache_to:
+      - type=gha,mode=max
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges=true
+  read_only: true
+  user: 1001:1001
+  entrypoint: ["make", "php-syntax-check-busybox"]
+  volumes:
+    - ../:/home/php/app:read-only
+  tmpfs:
+    - /tmp
+    - /run
+
+name: bbpress-permalinks-with-id-tests
+services:
+  php-syntax-check-php-5.6:
+    <<: *service-php-base
+    build:
+      <<: *service-php-base-build
+      dockerfile: ./development/containers/php/php-5.6.Dockerfile
+      tags:
+        - bbpress-permalinks-with-id-tests-php-syntax-check-php-5.6:latest
+
+  php-syntax-check-php-7.4:
+    <<: *service-php-base
+    build:
+      <<: *service-php-base-build
+      dockerfile: ./development/containers/php/php-7.4.Dockerfile
+      tags:
+        - bbpress-permalinks-with-id-tests-php-syntax-check-php-7.4:latest
+
+  php-syntax-check-php-8.0:
+    <<: *service-php-base
+    build:
+      <<: *service-php-base-build
+      dockerfile: ./development/containers/php/php-8.0.Dockerfile
+      tags:
+        - bbpress-permalinks-with-id-tests-php-syntax-check-php-8.0:latest
+
+  php-syntax-check-php-8.1:
+    <<: *service-php-base
+    build:
+      <<: *service-php-base-build
+      dockerfile: ./development/containers/php/php-8.1.Dockerfile
+      tags:
+        - bbpress-permalinks-with-id-tests-php-syntax-check-php-8.1:latest
+
+  php-syntax-check-php-8.2:
+    <<: *service-php-base
+    build:
+      <<: *service-php-base-build
+      dockerfile: ./development/containers/php/php-8.2.Dockerfile
+      tags:
+        - bbpress-permalinks-with-id-tests-php-syntax-check-php-8.2:latest
+
+  php-syntax-check-php-8.3:
+    <<: *service-php-base
+    build:
+      <<: *service-php-base-build
+      dockerfile: ./development/containers/php/php-8.3.Dockerfile
+      tags:
+        - bbpress-permalinks-with-id-tests-php-syntax-check-php-8.3:latest
+
+  php-syntax-check-php-8.4:
+    <<: *service-php-base
+    build:
+      <<: *service-php-base-build
+      dockerfile: ./development/containers/php/php-8.4.Dockerfile
+      tags:
+        - bbpress-permalinks-with-id-tests-php-syntax-check-php-8.4:latest
