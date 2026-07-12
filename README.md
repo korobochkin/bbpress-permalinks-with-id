@@ -6,6 +6,8 @@ This plugin transforms default bbPress permalinks (URLs) that use slugs into per
 
 Stable version on WordPress.org — [wordpress.org/plugins/bbpress-permalinks-with-id/](https://wordpress.org/plugins/bbpress-permalinks-with-id/).
 
+![Banner for "Permalinks with ID for bbPress" plugin](.wordpress-org/banner-1544x500.png)
+
 ## FAQ
 
 ### How to install the plugin?
@@ -80,7 +82,3 @@ The plugin undergoes manual testing with the latest WordPress and bbPress versio
 * Forum and topic titles include non-letter symbols (emojis, special characters such as `<`).
 * You frequently update slugs and titles of forums and topics and require more reliable and permanent URLs.
 * Shorter, cleaner URLs that are easier to share and remember.
-
-## Credits
-
-Photo on banner created by [Jay Mantri](https://stocksnap.io/photo/BD7R33PKME).
