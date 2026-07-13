@@ -1,6 +1,6 @@
 # Default branch to checkout (can be overridden with make download BRANCH=your-branch)
-WORDPRESS_BRANCH ?= '6.8-branch'
-BBPRESS_BRANCH ?= '2.6'
+WORDPRESS_BRANCH ?= 7.0-branch
+BBPRESS_BRANCH ?= 2.6
 
 download_wordpress:
 	@if [ ! -d .cache/wordpress ] || [ ! -d .cache/wordpress/.git ]; then \
