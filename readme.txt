@@ -37,8 +37,9 @@ Please star the [GitHub repository](https://github.com/korobochkin/bbpress-perma
 
 == Screenshots ==
 
-1. Forum URL. The plugin adopts to your permalinks settings (you can change it on default bbPress settings page).
-2. Topic edit URL. With this plugin all pages and links correctly opens.
+1. bbPress Forum page.
+2. bbPress Topic page.
+3. bbPress Edit Reply page.
 
 == Frequently Asked Questions ==
 
