@@ -2,9 +2,6 @@ name: Code Testing
 
 on:
   pull_request:
-  push:
-    branches:
-      - 'develop'
   workflow_dispatch:
   workflow_call:
 
