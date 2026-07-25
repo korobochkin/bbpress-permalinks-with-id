@@ -11,27 +11,6 @@ concurrency:
 
 permissions: {}
 
-.x-jobs-strategy-psalm-matrix: &jobs-strategy-psalm-matrix
-  config:
-    # Lowest supported versions of WordPress and bbPress
-    - wordpress: 4.1-branch
-      bbpress: 2.5
-
-    - wordpress: 5.9-branch
-      bbpress: 2.5
-
-    - wordpress: 6.0-branch
-      bbpress: 2.6
-
-    - wordpress: 6.8-branch
-      bbpress: 2.6
-
-    - wordpress: 6.9-branch
-      bbpress: 2.6
-
-    - wordpress: 7.0-branch
-      bbpress: 2.6
-
 jobs:
   php-syntax-check:
     name: 'PHP ${{ matrix.php-versions }} Syntax Check'
@@ -234,7 +213,25 @@ jobs:
     uses: ./.github/workflows/psalm-hooks-generator.yml
     strategy:
       matrix:
-        <<: *jobs-strategy-psalm-matrix
+        config: &jobs-psalm-strategy-matrix-config
+          # Lowest supported versions of WordPress and bbPress
+          - wordpress: 4.1-branch
+            bbpress: 2.5
+
+          - wordpress: 5.9-branch
+            bbpress: 2.5
+
+          - wordpress: 6.0-branch
+            bbpress: 2.6
+
+          - wordpress: 6.8-branch
+            bbpress: 2.6
+
+          - wordpress: 6.9-branch
+            bbpress: 2.6
+
+          - wordpress: 7.0-branch
+            bbpress: 2.6
     with:
       wordpress_version: ${{ matrix.config.wordpress }}
       bbpress_version: ${{ matrix.config.bbpress }}
@@ -245,7 +242,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        <<: *jobs-strategy-psalm-matrix
+        <<: *jobs-psalm-strategy-matrix-config
     permissions:
       contents: read
     steps:
