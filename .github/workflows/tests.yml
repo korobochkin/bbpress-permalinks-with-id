@@ -11,6 +11,27 @@ concurrency:
 
 permissions: {}
 
+.x-jobs-strategy-psalm-matrix: &jobs-strategy-psalm-matrix
+  config:
+    # Lowest supported versions of WordPress and bbPress
+    - wordpress: 4.1-branch
+      bbpress: 2.5
+
+    - wordpress: 5.9-branch
+      bbpress: 2.5
+
+    - wordpress: 6.0-branch
+      bbpress: 2.6
+
+    - wordpress: 6.8-branch
+      bbpress: 2.6
+
+    - wordpress: 6.9-branch
+      bbpress: 2.6
+
+    - wordpress: 7.0-branch
+      bbpress: 2.6
+
 jobs:
   php-syntax-check:
     name: 'PHP ${{ matrix.php-versions }} Syntax Check'
@@ -208,81 +229,23 @@ jobs:
         run: make phpstan
         continue-on-error: true # TODO: remove this parameter after fixing the code
 
-  psalm-pre:
-    name: Prepare Psalm
-    runs-on: ubuntu-latest
+  psalm-hooks-generator:
+    name: Psalm. Hooks Generator
+    uses: ./.github/workflows/psalm-hooks-generator.yml
     strategy:
       matrix:
-        config:
-          # Lowest supported versions of WordPress and bbPress
-          - wordpress: 4.1-branch
-            bbpress: 2.5
-
-          - wordpress: 5.9-branch
-            bbpress: 2.5
-
-          - wordpress: 6.0-branch
-            bbpress: 2.6
-
-          - wordpress: 6.8-branch
-            bbpress: 2.6
-
-          - wordpress: 6.9-branch
-            bbpress: 2.6
-
-          - wordpress: 7.0-branch
-            bbpress: 2.6
-    permissions:
-      contents: read
-    steps:
-      - name: Hooks cache
-        id: hooks-cache
-        uses: actions/cache@v6
-        with:
-          path: |
-            development/hooks-generator/.cache/wordpress-hooks
-            development/hooks-generator/.cache/bbpress-hooks
-          key: hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
-          restore-keys: hooks-generator-hooks-
-
-      - name: Checkout code
-        uses: actions/checkout@v7
-        if: steps.hooks-cache.outputs.cache-hit != 'true'
-        with:
-          persist-credentials: false
-
-      - name: Run Hooks Generator
-        uses: ./.github/actions/hooks-generator
-        if: steps.hooks-cache.outputs.cache-hit != 'true'
-        with:
-          wordpress: ${{ matrix.config.wordpress }}
-          bbpress: ${{ matrix.config.bbpress }}
+        <<: *jobs-strategy-psalm-matrix
+    with:
+      wordpress_version: ${{ matrix.config.wordpress }}
+      bbpress_version: ${{ matrix.config.bbpress }}
 
   psalm:
-    needs: psalm-pre
+    needs: psalm-hooks-generator
     name: Psalm
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        config:
-          # Lowest supported versions of WordPress and bbPress
-          - wordpress: 4.1-branch
-            bbpress: 2.5
-
-          - wordpress: 5.9-branch
-            bbpress: 2.5
-
-          - wordpress: 6.0-branch
-            bbpress: 2.6
-
-          - wordpress: 6.8-branch
-            bbpress: 2.6
-
-          - wordpress: 6.9-branch
-            bbpress: 2.6
-
-          - wordpress: 7.0-branch
-            bbpress: 2.6
+        <<: *jobs-strategy-psalm-matrix
     permissions:
       contents: read
     steps:
