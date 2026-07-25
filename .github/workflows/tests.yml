@@ -211,6 +211,8 @@ jobs:
   psalm-hooks-generator:
     name: Psalm. Hooks Generator
     uses: ./.github/workflows/psalm-hooks-generator.yml
+    permissions:
+      contents: read
     strategy:
       matrix:
         config: &jobs-psalm-strategy-matrix-config
