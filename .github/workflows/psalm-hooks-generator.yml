@@ -11,7 +11,7 @@ on:
         required: true
 
 concurrency:
-  group: psalm-hooks-generator
+  group: psalm-hooks-generator-${{ inputs.wordpress_version }}-${{ inputs.bbpress_version }}
   cancel-in-progress: true
 
 permissions: {}
@@ -34,11 +34,14 @@ jobs:
           restore-keys: hooks-generator-hooks-
           lookup-only: true
 
-      - name: Does cache exist?
+      - name: Checkout code
         if: steps.hooks-cache.outputs.cache-hit != 'true'
-        run: echo "Cache does not exist. Next steps will build it."
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
         uses: shivammathur/setup-php@v2
         with:
           php-version: 7.0
@@ -47,10 +50,12 @@ jobs:
           tools: composer
 
       - name: Detect Composer Cache Directory
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
         id: composer-cache
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
         uses: actions/cache@v6
         with:
           path: |
@@ -60,10 +65,12 @@ jobs:
           restore-keys: ${{ runner.os }}-hooks-generator-composer-
 
       - name: Composer Install
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
         working-directory: development/hooks-generator
         run: make vendor --always-make
 
       - name: Dependencies cache
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
         id: dependencies-cache
         uses: actions/cache@v6
         with:
@@ -74,7 +81,7 @@ jobs:
           restore-keys: hooks-generator-dependencies-
 
       - name: Checkout WordPress
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
+        if: steps.hooks-cache.outputs.cache-hit != 'true' && steps.dependencies-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v7
         with:
           repository: WordPress/WordPress
@@ -84,7 +91,7 @@ jobs:
           persist-credentials: false
 
       - name: Checkout bbPress
-        if: steps.dependencies-cache.outputs.cache-hit != 'true'
+        if: steps.hooks-cache.outputs.cache-hit != 'true' && steps.dependencies-cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v7
         with:
           repository: bbpress/bbPress
@@ -94,14 +101,17 @@ jobs:
           persist-credentials: false
 
       - name: Generate WordPress hooks
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
         working-directory: development/hooks-generator
         run: make generate_wordpress_hooks
 
       - name: Generate bbPress hooks
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
         working-directory: development/hooks-generator
         run: make generate_bbpress_hooks
 
       - name: Upload artifact
+        if: steps.hooks-cache.outputs.cache-hit != 'true'
         uses: actions/upload-artifact@v7
         with:
           name: hooks-generator-hooks-wordpress-${{ inputs.wordpress_version }}-bbpress-${{ inputs.bbpress_version }}
