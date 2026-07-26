@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require-dev": {
-        "wp-coding-standards/wpcs": "^3.3",
+        "wp-coding-standards/wpcs": "^3.4",
         "phpcompatibility/phpcompatibility-wp": "^2.1"
     },
     "config": {
