@@ -48,7 +48,6 @@ jobs:
 
       - name: Detect Composer Cache Directory
         id: composer-cache
-        shell: bash
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
@@ -61,7 +60,6 @@ jobs:
           restore-keys: ${{ runner.os }}-hooks-generator-composer-
 
       - name: Composer Install
-        shell: bash
         working-directory: development/hooks-generator
         run: make vendor --always-make
 
@@ -97,12 +95,10 @@ jobs:
 
       - name: Generate WordPress hooks
         working-directory: development/hooks-generator
-        shell: bash
         run: make generate_wordpress_hooks
 
       - name: Generate bbPress hooks
         working-directory: development/hooks-generator
-        shell: bash
         run: make generate_bbpress_hooks
 
       - name: Upload artifact
