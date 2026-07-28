@@ -219,19 +219,19 @@ jobs:
           # Lowest supported versions of WordPress and bbPress
           - wordpress: 4.1-branch
             bbpress: 2.5
-            hooks_generator_php: 8.5
+            hooks_generator_php: 7.0
 
           - wordpress: 5.9-branch
             bbpress: 2.5
-            hooks_generator_php: 8.5
+            hooks_generator_php: 7.0
 
           - wordpress: 6.0-branch
             bbpress: 2.6
-            hooks_generator_php: 8.5
+            hooks_generator_php: 7.0
 
           - wordpress: 6.8-branch
             bbpress: 2.6
-            hooks_generator_php: 8.5
+            hooks_generator_php: 7.0
 
           - wordpress: 6.9-branch
             bbpress: 2.6
