@@ -9,9 +9,6 @@ on:
       bbpress_version:
         type: string
         required: true
-      php_version:
-        type: string
-        required: true
 
 concurrency:
   group: psalm-hooks-generator-${{ inputs.wordpress_version }}-${{ inputs.bbpress_version }}
@@ -47,7 +44,7 @@ jobs:
         if: steps.hooks-cache.outputs.cache-hit != 'true'
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ inputs.php_version }}
+          php-version: 7.0
           ini-file: development
           extensions: ''
           tools: composer
