@@ -215,7 +215,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        config: &jobs-psalm-hooks-generator-strategy-matrix-config
+        config:
           # Lowest supported versions of WordPress and bbPress
           - wordpress: 4.1-branch
             bbpress: 2.5
@@ -239,7 +239,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        config: &jobs-psalm-hooks-generator-php-8-5-strategy-matrix-config
+        config:
           - wordpress: 6.9-branch
             bbpress: 2.6
 
@@ -258,8 +258,24 @@ jobs:
     strategy:
       matrix:
         config:
-          - *jobs-psalm-hooks-generator-strategy-matrix-config
-          - *jobs-psalm-hooks-generator-php-8-5-strategy-matrix-config
+          # Lowest supported versions of WordPress and bbPress
+          - wordpress: 4.1-branch
+            bbpress: 2.5
+
+          - wordpress: 5.9-branch
+            bbpress: 2.5
+
+          - wordpress: 6.0-branch
+            bbpress: 2.6
+
+          - wordpress: 6.8-branch
+            bbpress: 2.6
+
+          - wordpress: 6.9-branch
+            bbpress: 2.6
+
+          - wordpress: 7.0-branch
+            bbpress: 2.6
     permissions:
       contents: read
     steps:
