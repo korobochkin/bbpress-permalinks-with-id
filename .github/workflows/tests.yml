@@ -215,7 +215,7 @@ jobs:
       contents: read
     strategy:
       matrix:
-        config: &jobs-psalm-strategy-matrix-config
+        config: &jobs-psalm-hooks-generator-strategy-matrix-config
           # Lowest supported versions of WordPress and bbPress
           - wordpress: 4.1-branch
             bbpress: 2.5
@@ -228,7 +228,18 @@ jobs:
 
           - wordpress: 6.8-branch
             bbpress: 2.6
+    with:
+      wordpress_version: ${{ matrix.config.wordpress }}
+      bbpress_version: ${{ matrix.config.bbpress }}
 
+  psalm-hooks-generator-php-8-5:
+    name: Psalm. Hooks Generator PHP 8.5
+    uses: ./.github/workflows/psalm-hooks-generator-php-8-5.yml
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        config: &jobs-psalm-hooks-generator-php-8-5-strategy-matrix-config
           - wordpress: 6.9-branch
             bbpress: 2.6
 
@@ -239,12 +250,16 @@ jobs:
       bbpress_version: ${{ matrix.config.bbpress }}
 
   psalm:
-    needs: psalm-hooks-generator
+    needs:
+      - psalm-hooks-generator
+      - psalm-hooks-generator-php-8-5
     name: Psalm
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        <<: *jobs-psalm-strategy-matrix-config
+        config:
+          - *jobs-psalm-hooks-generator-strategy-matrix-config
+          - *jobs-psalm-hooks-generator-php-8-5-strategy-matrix-config
     permissions:
       contents: read
     steps:
