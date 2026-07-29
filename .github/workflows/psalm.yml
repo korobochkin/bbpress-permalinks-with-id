@@ -1,0 +1,88 @@
+name: Psalm
+
+on:
+  workflow_call:
+    inputs:
+      wordpress_version:
+        type: string
+        required: true
+      bbpress_version:
+        type: string
+        required: true
+
+concurrency:
+  group: psalm-${{ github.ref }}-${{ inputs.wordpress_version }}-${{ inputs.bbpress_version }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  psalm:
+    name: Psalm
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.5
+          ini-file: development
+          extensions: ''
+          tools: composer
+
+      - name: Detect Composer Cache Directory
+        id: composer-cache
+        shell: bash
+        run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
+
+      - name: Composer Cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            ${{ steps.composer-cache.outputs.cache-files-dir }}
+            development/psalm/vendor
+          key: ${{ runner.os }}-psalm-composer-${{ hashFiles('development/psalm/composer.lock') }}
+          restore-keys: ${{ runner.os }}-psalm-composer-
+
+      - name: Composer Install
+        working-directory: development/psalm
+        run: make vendor
+
+      - name: Hooks Cache
+        id: hooks-cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            development/hooks-generator/.cache/wordpress-hooks
+            development/hooks-generator/.cache/bbpress-hooks
+          key: hooks-generator-hooks-wordpress-${{ inputs.wordpress_version }}-bbpress-${{ inputs.bbpress_version }}
+          restore-keys: hooks-generator-hooks-
+          fail-on-cache-miss: true
+
+      - name: Dependencies cache
+        id: dependencies-cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            development/hooks-generator/.cache/wordpress
+            development/hooks-generator/.cache/bbpress
+          key: hooks-generator-dependencies-wordpress-${{ inputs.wordpress_version }}-bbpress-${{ inputs.bbpress_version }}
+          restore-keys: hooks-generator-dependencies-
+          fail-on-cache-miss: true
+
+      - name: Psalm Cache
+        uses: actions/cache@v6
+        with:
+          path: development/psalm/.cache/psalm
+          key: psalm-cache-wordpress-${{ inputs.wordpress_version }}-bbpress-${{ inputs.bbpress_version }}
+          restore-keys: psalm-cache-
+
+      - name: Psalm
+        run: make psalm
+        continue-on-error: true

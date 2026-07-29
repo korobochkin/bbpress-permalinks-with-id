@@ -254,7 +254,9 @@ jobs:
       - psalm-hooks-generator
       - psalm-hooks-generator-php-8-5
     name: Psalm
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/psalm.yml
+    permissions:
+      contents: read
     strategy:
       matrix:
         config:
@@ -276,72 +278,9 @@ jobs:
 
           - wordpress: 7.0-branch
             bbpress: 2.6
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Set up the PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.5
-          ini-file: development
-          extensions: ''
-          tools: composer
-
-      - name: Detect Composer Cache Directory
-        id: composer-cache
-        shell: bash
-        run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
-
-      - name: Composer Cache
-        uses: actions/cache@v6
-        with:
-          path: |
-            ${{ steps.composer-cache.outputs.cache-files-dir }}
-            development/psalm/vendor
-          key: ${{ runner.os }}-psalm-composer-${{ hashFiles('development/psalm/composer.lock') }}
-          restore-keys: ${{ runner.os }}-psalm-composer-
-
-      - name: Composer Install
-        working-directory: development/psalm
-        run: make vendor
-
-      - name: Hooks Cache
-        id: hooks-cache
-        uses: actions/cache@v6
-        with:
-          path: |
-            development/hooks-generator/.cache/wordpress-hooks
-            development/hooks-generator/.cache/bbpress-hooks
-          key: hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
-          restore-keys: hooks-generator-hooks-
-          fail-on-cache-miss: true
-
-      - name: Dependencies cache
-        id: dependencies-cache
-        uses: actions/cache@v6
-        with:
-          path: |
-            development/hooks-generator/.cache/wordpress
-            development/hooks-generator/.cache/bbpress
-          key: hooks-generator-dependencies-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
-          restore-keys: hooks-generator-dependencies-
-          fail-on-cache-miss: true
-
-      - name: Psalm Cache
-        uses: actions/cache@v6
-        with:
-          path: development/psalm/.cache/psalm
-          key: psalm-cache-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
-          restore-keys: psalm-cache-
-
-      - name: Psalm
-        run: make psalm
-        continue-on-error: true
+    with:
+      wordpress_version: ${{ matrix.config.wordpress }}
+      bbpress_version: ${{ matrix.config.bbpress }}
 
   psalm-tests-application:
     name: Psalm. Tests Application
