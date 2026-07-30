@@ -61,8 +61,8 @@ jobs:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
             development/hooks-generator-php-8-5/vendor
-          key: ${{ runner.os }}-hooks-generator-composer-${{ hashFiles('development/hooks-generator/composer.lock') }}
-          restore-keys: ${{ runner.os }}-hooks-generator-composer-
+          key: ${{ runner.os }}-hooks-generator-php-8-5-composer-${{ hashFiles('development/hooks-generator-php-8-5/composer.lock') }}
+          restore-keys: ${{ runner.os }}-hooks-generator-php-8-5-composer-
 
       - name: Composer Install
         if: steps.hooks-cache.outputs.cache-hit != 'true'
