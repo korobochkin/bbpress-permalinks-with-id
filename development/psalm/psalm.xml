@@ -21,6 +21,9 @@
             <file name="development/hooks-generator/.cache/wordpress/wp-admin/load-styles.php" />
             <file name="development/hooks-generator/.cache/wordpress/wp-admin/includes/noop.php" />
             <directory name="development/hooks-generator/.cache/bbpress/tests" />
+
+            <!-- Added temporarily. Psalm fails on files in the directory for WordPress 6.9 -->
+            <directory name="development/hooks-generator/.cache/wordpress/wp-includes/abilities-api" />
         </ignoreFiles>
     </extraFiles>
     <projectFiles>

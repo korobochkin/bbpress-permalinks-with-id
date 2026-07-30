@@ -1,4 +1,4 @@
-WORDPRESS_BRANCH ?= 6.9-branch
+WORDPRESS_BRANCH ?= 7.0-branch
 BBPRESS_BRANCH ?= 2.6
 
 download-wordpress:

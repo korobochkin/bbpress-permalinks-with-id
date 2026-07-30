@@ -24,10 +24,10 @@ vendor: composer.json composer.lock
 	composer install --no-scripts --no-interaction --no-progress --classmap-authoritative
 
 generate_wordpress_hooks:
-	vendor/bin/wp-hooks-generator --input=.cache/wordpress --output=.cache/wordpress-hooks
+	vendor/bin/wp-hooks-generator --input=../hooks-generator/.cache/wordpress --output=../hooks-generator/.cache/wordpress-hooks
 
 generate_bbpress_hooks:
-	vendor/bin/wp-hooks-generator --input=.cache/bbpress --output=.cache/bbpress-hooks
+	vendor/bin/wp-hooks-generator --input=../hooks-generator/.cache/bbpress --output=../hooks-generator/.cache/bbpress-hooks
 
 .cache/wordpress-hooks: \
 	vendor \
