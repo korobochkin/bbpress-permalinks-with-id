@@ -20,8 +20,18 @@ services:
     tty: true
     environment:
       GITHUB_ACTIONS: ${GITHUB_ACTIONS:-false}
+    configs:
+      - source: php
+        target: /usr/local/etc/php/php.ini
+        mode: 0400
+        uid: '1001'
+        gid: '1001'
     volumes:
       - ./../:/home/php/app
       - ./../tmp/composer:/home/php/.composer
     tmpfs:
       - /tmp
+
+configs:
+  php:
+    file: ./../tests/application/containers/php/php-production.ini
