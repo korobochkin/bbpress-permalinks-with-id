@@ -8,7 +8,7 @@
  * Version: 1.0.8
  * Text Domain: bbpress-permalinks-with-id
  * Requires at least: 4.1
- * Tested up to: 6.8
+ * Tested up to: 7.0
  * Requires PHP: 5.6
  * Requires Plugins: bbpress
  * License: GPLv2 or later
