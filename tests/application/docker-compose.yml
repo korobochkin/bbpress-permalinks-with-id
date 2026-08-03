@@ -11,6 +11,12 @@ x-php: &service-php
   security_opt:
     - no-new-privileges=true
   read_only: true
+  configs:
+    - source: php
+      target: /usr/local/etc/php/php.ini
+      mode: 0400
+      uid: '1001'
+      gid: '1001'
   environment:
     WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
     WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
@@ -192,6 +198,11 @@ services:
     tty: true
     init: true
     configs:
+      - source: php
+        target: /usr/local/etc/php/php.ini
+        mode: 0400
+        uid: '1001'
+        gid: '1001'
       - source: php_xdebug
         target: /usr/local/etc/php/conf.d/xdebug.ini
         mode: 0400
@@ -220,5 +231,7 @@ volumes:
 configs:
   syslog_main:
     file: ./containers/syslog/rsyslog.conf
+  php:
+    file: ./containers/php/php-production.ini
   php_xdebug:
     file: ./containers/php/xdebug.ini
