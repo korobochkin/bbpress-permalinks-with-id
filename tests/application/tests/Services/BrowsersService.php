@@ -63,12 +63,12 @@ final class BrowsersService
      */
     private function getEnvOrThrowError(TestSiteCredentials $name): string
     {
+        $value = getenv($name->value);
         if (
-            isset($_ENV[$name->value])
-            && \is_string($_ENV[$name->value])
-            && '' !== $_ENV[$name->value]
+            \is_string($value)
+            && '' !== $value
         ) {
-            return $_ENV[$name->value];
+            return $value;
         }
 
         throw new \InvalidArgumentException("Required ENV variable is not defined: {$name->value}");
