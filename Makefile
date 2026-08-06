@@ -18,6 +18,12 @@ phpcs:
 phpstan:
 	development/php-stan/vendor/bin/phpstan analyse --no-interaction --no-progress --configuration=development/php-stan/php-stan.neon
 
+phpstan-debug:
+	development/php-stan/vendor/bin/phpstan \
+		analyse \
+		--memory-limit=2048M \
+		--configuration=development/php-stan/php-stan.neon
+
 psalm:
 	development/psalm/vendor/bin/psalm --config="development/psalm/psalm.xml"
 
@@ -62,6 +68,7 @@ php-syntax-check-tests-application:
 	down \
 	phpcs \
 	phpstan \
+	phpstan-debug \
 	psalm \
 	psalm-tests-application \
 	phpmd \

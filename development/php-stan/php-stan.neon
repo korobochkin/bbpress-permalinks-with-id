@@ -19,3 +19,5 @@ parameters:
 		max: 80499
 	errorFormat: github
 	tipsOfTheDay: false
+	parallel:
+		maximumNumberOfProcesses: 1
