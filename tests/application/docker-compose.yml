@@ -145,7 +145,7 @@ services:
       retries: 3
 
   db:
-    image: mysql:9.7.1
+    image: mysql:9.7.2
     cap_drop:
       - ALL
     security_opt:
@@ -161,9 +161,9 @@ services:
       - '127.0.0.1:3306:3306'
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "--host=127.0.0.1", "--user=$$MYSQL_USER", "--password=$$MYSQL_PASSWORD" ]
-      start_period: 5s
-      start_interval: 10s
-      timeout: 5s
+      start_period: 15s
+      start_interval: 15s
+      timeout: 10s
       retries: 3
     tmpfs:
       - /tmp:mode=770,uid=10001,gid=10001
