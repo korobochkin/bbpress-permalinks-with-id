@@ -12,6 +12,7 @@ jobs:
   ci-debug:
     name: 'Debug environment variables'
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
       - name: Debug GITHUB_ Variables
         run: env | grep GITHUB_

@@ -27,6 +27,7 @@ jobs:
           - '8.4'
     permissions:
       contents: read
+    timeout-minutes: 2
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -49,6 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    timeout-minutes: 2
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -71,6 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    timeout-minutes: 2
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -185,6 +188,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    timeout-minutes: 3
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -243,6 +247,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    timeout-minutes: 2
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
