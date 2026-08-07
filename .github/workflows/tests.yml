@@ -296,7 +296,6 @@ jobs:
     permissions:
       contents: read
     strategy:
-      max-parallel: 1
       matrix:
         config:
           - wordpress_arg_base_image: 'wordpress:latest'

@@ -34,6 +34,7 @@ jobs:
       - precheck
     permissions:
       contents: read
+    secrets: inherit
 
   plugin-check:
     name: 'Plugin Check'
