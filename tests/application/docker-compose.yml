@@ -1,0 +1,237 @@
+---
+x-php: &service-php
+  build: &service-php-build
+    dockerfile: ./containers/php/php.Dockerfile
+    target: tests-runner
+    args:
+      UID: 1001
+      GID: 1001
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges=true
+  read_only: true
+  configs:
+    - source: php
+      target: /usr/local/etc/php/php.ini
+      mode: 0400
+      uid: '1001'
+      gid: '1001'
+  environment:
+    WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
+    WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
+    WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
+    GITHUB_ACTIONS: ${GITHUB_ACTIONS:-false}
+  depends_on: &service-php-depends-on
+    wordpress:
+      condition: service_healthy
+    cli:
+      condition: service_completed_successfully
+
+x-cli: &service-cli
+  image: "${CLI_ARG_BASE_IMAGE}"
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges=true
+  read_only: true
+  environment:
+    WORDPRESS_DB_HOST: db
+    WORDPRESS_DB_NAME: "${MYSQL_DATABASE}"
+    WORDPRESS_DB_USER: "${MYSQL_USER}"
+    WORDPRESS_DB_PASSWORD: "${MYSQL_PASSWORD}"
+    WORDPRESS_SITE_HOME: "http://${WORDPRESS_DOMAIN}:8080"
+    WORDPRESS_SITE_TITLE: "${WORDPRESS_SITE_TITLE}"
+    WORDPRESS_ADMIN_LOGIN: "${WORDPRESS_ADMIN_LOGIN}"
+    WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
+    WORDPRESS_ADMIN_EMAIL: "${WORDPRESS_ADMIN_EMAIL}"
+    WORDPRESS_SITE_LOCALE: "${WORDPRESS_SITE_LOCALE}"
+  volumes_from:
+    - wordpress
+  volumes:
+    - ./containers/cli/shells/:/tmp/shells/:read-only
+  tmpfs:
+    - /tmp
+  depends_on:
+    wordpress:
+      condition: service_healthy
+    db:
+      condition: service_healthy
+
+name: bbpress-permalinks-with-id-application-tests
+services:
+  syslog:
+    build:
+      context: ./containers/syslog
+      dockerfile: ./syslog.Dockerfile
+      args:
+        UID: 1001
+        GID: 1001
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
+    configs:
+      - source: syslog_main
+        target: /etc/rsyslog.conf
+        mode: 0400
+        uid: '1001'
+        gid: '1001'
+    volumes:
+      - syslog_data:/var/log/remote
+    ports:
+      - '127.0.0.1:1514:1514/udp'
+    healthcheck:
+      test: ["CMD-SHELL", "netstat -uln | grep -q 1514"]
+      start_period: 3s
+      start_interval: 1s
+      timeout: 2s
+      retries: 3
+
+  wordpress:
+    build:
+      context: ./containers/wordpress
+      dockerfile: ./wordpress.Dockerfile
+      args:
+        WORDPRESS_ARG_BASE_IMAGE: "${WORDPRESS_ARG_BASE_IMAGE}"
+        WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: "${WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL}"
+        WORDPRESS_ARG_THEME_ZIP_URL: "${WORDPRESS_ARG_THEME_ZIP_URL}"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
+    user: 33:33
+    networks:
+      default:
+        aliases:
+          - "${WORDPRESS_DOMAIN}"
+    ports:
+      - '127.0.0.1:8080:8080'
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: "${MYSQL_DATABASE}"
+      WORDPRESS_DB_USER: "${MYSQL_USER}"
+      WORDPRESS_DB_PASSWORD: "${MYSQL_PASSWORD}"
+      WORDPRESS_DEBUG: true
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_DEBUG_LOG', true );
+        define( 'WP_DEBUG_DISPLAY', false );
+        define( 'DISABLE_WP_CRON', true );
+        define( 'WP_AUTO_UPDATE_CORE', false );
+        define( 'AUTOMATIC_UPDATER_DISABLED', true );
+        define( 'WP_POST_REVISIONS', false );
+    tmpfs:
+      - /run:mode=770,uid=33,gid=33
+      - /tmp:mode=770,uid=33,gid=33
+    volumes:
+      - ../../:/var/www/html/wp-content/plugins/bbpress-permalinks-with-id:read-only
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://127.0.0.1:1514"
+        tag: "wordpress"
+    depends_on:
+      db:
+        condition: service_healthy
+      syslog:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "--output", "/dev/null", "http://${WORDPRESS_DOMAIN}:8080/wp-json/"]
+      start_period: 2s
+      start_interval: 5s
+      timeout: 5s
+      retries: 3
+
+  db:
+    image: mysql:9.7.2
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
+    user: 10001:10001
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    ports:
+      - '127.0.0.1:3306:3306'
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "--host=127.0.0.1", "--user=$$MYSQL_USER", "--password=$$MYSQL_PASSWORD" ]
+      start_period: 15s
+      start_interval: 15s
+      timeout: 10s
+      retries: 3
+    tmpfs:
+      - /tmp:mode=770,uid=10001,gid=10001
+      - /run:mode=770,uid=10001,gid=10001
+    volumes:
+      - db_data:/var/lib/mysql
+
+  cli:
+    <<: *service-cli
+    command: [ "bash", "/tmp/shells/install-wordpress.sh" ]
+
+  cli-develop:
+    <<: *service-cli
+    init: true
+    tty: true
+
+  php:
+    <<: *service-php
+    volumes:
+      - ./.cache:/home/php/app/.cache
+      - ./tests:/home/php/app/tests:read-only
+      - ./Makefile:/home/php/app/Makefile:read-only
+      - ./phpunit.xml:/home/php/app/phpunit.xml:read-only
+      - ./phpunit-bootstrap.php:/home/php/app/phpunit-bootstrap.php:read-only
+      - syslog_data:/var/log/remote:read-only
+
+  php-develop:
+    <<: *service-php
+    build:
+      <<: *service-php-build
+      target: develop
+    tty: true
+    init: true
+    configs:
+      - source: php
+        target: /usr/local/etc/php/php.ini
+        mode: 0400
+        uid: '1001'
+        gid: '1001'
+      - source: php_xdebug
+        target: /usr/local/etc/php/conf.d/xdebug.ini
+        mode: 0400
+        uid: '1001'
+        gid: '1001'
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./.cache/composer:/home/php/.composer
+      - ./:/home/php/app
+      - syslog_data:/var/log/remote:read-only
+    depends_on:
+      <<: *service-php-depends-on
+      cli-develop:
+        condition: service_started
+
+volumes:
+  syslog_data:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: size=10m
+  db_data:
+
+configs:
+  syslog_main:
+    file: ./containers/syslog/rsyslog.conf
+  php:
+    file: ./containers/php/php-production.ini
+  php_xdebug:
+    file: ./containers/php/xdebug.ini

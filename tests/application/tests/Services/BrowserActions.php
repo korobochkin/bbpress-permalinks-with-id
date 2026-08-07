@@ -1,0 +1,171 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services;
+
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\PostInterface;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Status;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\TypesUtilities;
+use Symfony\Component\DomCrawler\Crawler;
+
+final class BrowserActions
+{
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    public static function createPostViaWPAdmin(HttpBrowser $browser, Forum|Page|Reply|Topic $post): void
+    {
+        if ($post instanceof Page) {
+            self::createNativePostTypes($browser, $post);
+        } else {
+            self::createBbPressPostTypes($browser, $post);
+        }
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function createNativePostTypes(HttpBrowser $browser, Page $post): void
+    {
+        $crawler = self::requestPostNewPage($browser, $post);
+
+        $nonce = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]')->attr('value'));
+
+        // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
+        $postID = self::getPostId($crawler);
+
+        $postType = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="post_type" or @name="post_type") and @type="hidden"]')->attr('value'));
+        $action = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="hiddenaction" or @name="action") and @type="hidden"]')->attr('value'));
+        $originalAction = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="originalaction" or @name="originalaction") and @type="hidden"]')->attr('value'));
+        $userID = self::getUserId($crawler);
+        $originalPostStatus = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]')->attr('value'));
+        $referredBy = TypesUtilities::getNonFalsyString($crawler->filterXPath('//form//input[(@id="referredby" or @name="referredby") and @type="hidden"]')->attr('value'));
+
+        // XPath for a form element with all required fields: //form[input[(@id="_wpnonce" or @name="_wpnonce") and @type="hidden"]]
+
+        $post->setId($postID);
+        $post->setAuthorId($userID);
+
+        $browser->request(
+            'POST',
+            '/wp-admin/post.php',
+            [
+                '_wpnonce' => $nonce,
+                '_wp_http_referer' => '/wp-admin/post-new.php?post_type='.$post->getType()->value,
+                'action' => $action,
+                'originalaction' => $originalAction,
+                'post_author' => $userID,
+                'post_type' => $postType,
+                'original_post_status' => $originalPostStatus,
+                'referredby' => $referredBy,
+                'post_ID' => $postID,
+                'post_title' => $post->getTitle(),
+                'content' => $post->getContent(),
+                'post_status' => $post->getStatus()->value, // 'draft'
+                'post_name' => $post->getName(), // slug
+            ],
+        );
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function createBbPressPostTypes(HttpBrowser $browser, BbPressPostInterface $post): void
+    {
+        $crawler = self::requestPostNewPage($browser, $post);
+
+        $form = $crawler->filterXPath('//body//div[@id="wpbody"]//input[@id="publish"]')->form();
+
+        $post->setId(self::getPostId($crawler));
+        $post->setAuthorId(self::getUserId($crawler));
+
+        $formData = [
+            'post_title' => $post->getTitle(),
+            'content' => $post->getContent(),
+            'post_name' => $post->getName(),
+
+            // Publish date
+            'aa' => $post->getPostDate()->format('Y'), // year
+            'mm' => $post->getPostDate()->format('m'), // month
+            'jj' => $post->getPostDate()->format('d'), // date
+            // Publish time
+            'hh' => $post->getPostDate()->format('H'), // hour
+            'mn' => $post->getPostDate()->format('i'), // minute
+            'ss' => $post->getPostDate()->format('s'), // second
+        ];
+
+        if ($post instanceof Topic) {
+            $formData['parent_id'] = $post->getParentForumId();
+        } elseif ($post instanceof Reply) {
+            if ($form->has('bbp_forum_id')) {
+                // For bbPress 2.5. Newer versions 2.6 do not have this field.
+                $formData['bbp_forum_id'] = $post->getParentForumId();
+            }
+            $formData['parent_id'] = $post->getParentTopicId();
+        }
+
+        $savedPostCrawler = $browser->submit($form, $formData);
+
+        $post->setStatus(self::getPostStatus($savedPostCrawler));
+        $post->setSamplePermalink(self::getSamplePermalink($savedPostCrawler));
+    }
+
+    private static function requestPostNewPage(HttpBrowser $browser, PostInterface $post): Crawler
+    {
+        return $browser->request('GET', '/wp-admin/post-new.php?post_type='.$post->getType()->value);
+    }
+
+    /**
+     * @return positive-int
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function getPostId(Crawler $crawler): int
+    {
+        // In WordPress 5.9.3 "//form/input//[...] doesn't work. Probably because some markup are invalid.
+        return TypesUtilities::getPositiveInt($crawler->filterXPath('//input[(@id="post_ID" or @name="post_ID") and @type="hidden"]')->attr('value'));
+    }
+
+    /**
+     * @return positive-int
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function getUserId(Crawler $crawler): int
+    {
+        return TypesUtilities::getPositiveInt($crawler->filterXPath('//form//input[(@id="user-id" or @name="user_ID") and @type="hidden"]')->attr('value'));
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function getPostStatus(Crawler $crawler): Status
+    {
+        return Status::from(
+            $crawler->filterXPath('//form//input[(@id="original_post_status" or @name="original_post_status") and @type="hidden"]')->attr('value') ?? throw new \RuntimeException()
+        );
+    }
+
+    /**
+     * @return non-falsy-string
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function getSamplePermalink(Crawler $crawler): string
+    {
+        return TypesUtilities::getNonFalsyString($crawler->filterXPath('//body//*[contains(@id, "edit-slug-box")]//a')->attr('href'));
+    }
+}

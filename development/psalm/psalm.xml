@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="1"
+    resolveFromConfigFile="false"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+    allFunctionsGlobal="true"
+    allowStringToStandInForClass="false"
+    checkForThrowsDocblock="true"
+    ensureArrayStringOffsetsExist="true"
+    cacheDirectory="development/psalm/.cache/psalm"
+>
+    <extraFiles>
+        <directory name="development/hooks-generator/.cache/bbpress" />
+        <directory name="development/hooks-generator/.cache/wordpress" />
+        <ignoreFiles allowMissingFiles="true">
+            <file name="development/hooks-generator/.cache/wordpress/wp-admin/load-scripts.php" />
+            <file name="development/hooks-generator/.cache/wordpress/wp-admin/load-styles.php" />
+            <file name="development/hooks-generator/.cache/wordpress/wp-admin/includes/noop.php" />
+            <directory name="development/hooks-generator/.cache/bbpress/tests" />
+
+            <!-- Added temporarily. Psalm fails on files in the directory for WordPress 6.9 -->
+            <directory name="development/hooks-generator/.cache/wordpress/wp-includes/abilities-api" />
+        </ignoreFiles>
+    </extraFiles>
+    <projectFiles>
+        <file name="plugin.php" />
+        <ignoreFiles>
+            <directory name="development/psalm/vendor" />
+        </ignoreFiles>
+    </projectFiles>
+    <plugins>
+        <pluginClass class="PsalmWordPress\Plugin">
+            <useDefaultStubs value="false" />
+            <useDefaultHooks value="false" />
+            <hooks>
+                <file name="development/hooks-generator/.cache/bbpress-hooks/actions.json" />
+                <file name="development/hooks-generator/.cache/bbpress-hooks/filters.json" />
+                <file name="development/hooks-generator/.cache/wordpress-hooks/actions.json" />
+                <file name="development/hooks-generator/.cache/wordpress-hooks/filters.json" />
+            </hooks>
+        </pluginClass>
+    </plugins>
+</psalm>

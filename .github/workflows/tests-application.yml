@@ -1,0 +1,104 @@
+name: Application Tests
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      MYSQL_DATABASE:
+        required: true
+      MYSQL_USER:
+        required: true
+      MYSQL_PASSWORD:
+        required: true
+      MYSQL_ROOT_PASSWORD:
+        required: true
+
+      WORDPRESS_ADMIN_LOGIN:
+        required: true
+      WORDPRESS_ADMIN_PASSWORD:
+        required: true
+      WORDPRESS_ADMIN_EMAIL:
+        required: true
+
+    inputs:
+      WORDPRESS_ARG_BASE_IMAGE:
+        type: string
+        description: 'wordpress:latest'
+        required: true
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL:
+        type: string
+        description: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
+        required: true
+      WORDPRESS_ARG_THEME_ZIP_URL:
+        type: string
+        description: 'https://downloads.wordpress.org/theme/twentytwelve.4.7.zip'
+        required: true
+      WORDPRESS_DOMAIN:
+        type: string
+        default: 'one.wordpress.test'
+        required: false
+      WORDPRESS_SITE_TITLE:
+        type: string
+        default: 'Test Site'
+        required: false
+      WORDPRESS_SITE_LOCALE:
+        type: string
+        default: 'en_US'
+        required: false
+      CLI_ARG_BASE_IMAGE:
+        type: string
+        description: 'wordpress:cli'
+        required: true
+
+jobs:
+  application-tests:
+    name: Application Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 7
+    env:
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      WORDPRESS_ADMIN_LOGIN: ${{ secrets.WORDPRESS_ADMIN_LOGIN }}
+      WORDPRESS_ADMIN_PASSWORD: ${{ secrets.WORDPRESS_ADMIN_PASSWORD }}
+      WORDPRESS_ADMIN_EMAIL: ${{ secrets.WORDPRESS_ADMIN_EMAIL }}
+      WORDPRESS_ARG_BASE_IMAGE: ${{ inputs.WORDPRESS_ARG_BASE_IMAGE }}
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: ${{ inputs.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL }}
+      WORDPRESS_ARG_THEME_ZIP_URL: ${{ inputs.WORDPRESS_ARG_THEME_ZIP_URL }}
+      WORDPRESS_DOMAIN: ${{ inputs.WORDPRESS_DOMAIN }}
+      WORDPRESS_SITE_TITLE: ${{ inputs.WORDPRESS_SITE_TITLE }}
+      WORDPRESS_SITE_LOCALE: ${{ inputs.WORDPRESS_SITE_LOCALE }}
+      CLI_ARG_BASE_IMAGE: ${{ inputs.CLI_ARG_BASE_IMAGE }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v7
+      with:
+        persist-credentials: false
+
+    - name: Docker Buildx
+      uses: docker/setup-buildx-action@v4
+      with:
+        cleanup: true
+
+    - name: Docker Compose Build
+      working-directory: tests/application
+      run: make build-php
+
+    - name: Docker Compose Up PHP
+      working-directory: tests/application
+      run: make up-php
+
+    - name: Docker Compose Logs
+      working-directory: tests/application
+      if: failure()
+      run: |
+        docker compose logs db
+        docker compose ps -a
+
+    - name: Docker Compose Down
+      working-directory: tests/application
+      if: always()
+      run: make down

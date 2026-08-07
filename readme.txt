@@ -2,8 +2,8 @@
 Contributors: korobochkin
 Tags: bbpress, permalink, url, rewrite rule
 Requires at least: 4.1
-Tested up to: 6.8
-Stable tag: 1.0.7
+Tested up to: 7.0
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,8 +37,9 @@ Please star the [GitHub repository](https://github.com/korobochkin/bbpress-perma
 
 == Screenshots ==
 
-1. Forum URL. The plugin adopts to your permalinks settings (you can change it on default bbPress settings page).
-2. Topic edit URL. With this plugin all pages and links correctly opens.
+1. bbPress Forum page.
+2. bbPress Topic page.
+3. bbPress Edit Reply page.
 
 == Frequently Asked Questions ==
 
@@ -70,6 +71,10 @@ The plugin undergoes manual testing with the latest WordPress and bbPress versio
 * Shorter, cleaner URLs that are easier to share and remember.
 
 == Changelog ==
+
+= 1.0.8 =
+
+No code changes. Updated icons, banners, and screenshots for WordPress.org. Added automated GitHub tests that spin up a full WordPress environment in containers across multiple PHP/WordPress version combinations, install the plugin, and verify bbPress pages load correctly (HTTP status, PHP errors, HTML structure).
 
 = 1.0.7 =
 

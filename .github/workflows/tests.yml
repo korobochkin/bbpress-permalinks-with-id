@@ -2,10 +2,7 @@ name: Code Testing
 
 on:
   pull_request:
-  push:
-    branches:
-      - 'develop'
-      - 'feature/**'
+  workflow_dispatch:
   workflow_call:
 
 concurrency:
@@ -30,9 +27,12 @@ jobs:
           - '8.4'
     permissions:
       contents: read
+    timeout-minutes: 2
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -43,16 +43,42 @@ jobs:
           php-version: ${{ matrix.php-versions }}
 
       - name: Run PHP Syntax Check
-        run: 'find . -type f -name "*.php" -not -path "./.github/*" -print0 | xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check'
+        run: make php-syntax-check
+
+  php-syntax-check-tests-application:
+    name: 'PHP Syntax Check. Tests. Application'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up the PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          extensions: none
+          tools: none
+          ini-file: development
+          php-version: 8.4
+
+      - name: Run PHP Syntax Check
+        run: make php-syntax-check-tests-application
 
   phpcs:
     name: 'PHP Coding Standards and Compatibility'
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    timeout-minutes: 2
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -67,24 +93,27 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
-            .github/phpcs/vendor
-          key: ${{ runner.os }}-composer-phpcs-${{ hashFiles('.github/phpcs/composer.lock') }}
+            development/phpcs/vendor
+          key: ${{ runner.os }}-composer-phpcs-${{ hashFiles('development/phpcs/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-phpcs-
 
       - name: Composer Install
-        run: 'cd .github/phpcs && composer install --no-progress --classmap-authoritative'
+        working-directory: development/phpcs
+        run: make vendor
 
       - name: Run PHP Coding Standards and Compatibility
-        run: '.github/phpcs/vendor/bin/phpcs --standard=.github/phpcs/phpcs.xml'
+        run: make phpcs
 
-  php-stan:
-    name: 'PHP Stan. WordPress ${{ matrix.config.wordpress }}. bbPress ${{ matrix.config.bbpress }}'
-    runs-on: ubuntu-latest
+  psalm-hooks-generator:
+    name: Psalm. Hooks Generator
+    uses: ./.github/workflows/psalm-hooks-generator.yml
+    permissions:
+      contents: read
     strategy:
       matrix:
         config:
@@ -92,140 +121,43 @@ jobs:
           - wordpress: 4.1-branch
             bbpress: 2.5
 
-          # Latest WordPress 5.*
           - wordpress: 5.9-branch
             bbpress: 2.5
 
-          # WordPress 6.0.*
           - wordpress: 6.0-branch
             bbpress: 2.6
 
-          # Latest versions of WordPress and bbPress
           - wordpress: 6.8-branch
             bbpress: 2.6
+    with:
+      wordpress_version: ${{ matrix.config.wordpress }}
+      bbpress_version: ${{ matrix.config.bbpress }}
+
+  psalm-hooks-generator-php-8-5:
+    name: Psalm. Hooks Generator PHP 8.5
+    uses: ./.github/workflows/psalm-hooks-generator-php-8-5.yml
     permissions:
       contents: read
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Set up the PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.4
-          ini-file: development
-          extensions: ''
-          tools: composer
-
-      - name: Detect Composer Cache Directory
-        id: composer-cache
-        run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
-
-      - name: Composer Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ${{ steps.composer-cache.outputs.cache-files-dir }}
-            .github/php-stan/vendor
-          key: ${{ runner.os }}-composer-php-stan-${{ hashFiles('.github/php-stan/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-php-stan-
-
-      - name: Composer Install
-        working-directory: .github/php-stan
-        run: 'composer install --no-progress --classmap-authoritative'
-
-      - name: Cache PHP Stan Stubs
-        id: 'cache-php-stan-stubs'
-        uses: actions/cache@v4
-        with:
-          path: |
-            .github/php-stan/.cache
-          key: php-stan-stubs-${{ matrix.config.wordpress }}--${{ matrix.config.bbpress }}
-          restore-keys: |
-            php-stan-stubs-
-
-      - name: Checkout WordPress
-        uses: actions/checkout@v5
-        if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
-        with:
-          repository: WordPress/WordPress
-          ref: ${{ matrix.config.wordpress }}
-          path: .github/php-stan/.cache/wordpress
-          show-progress: false
-
-      - name: Checkout bbPress
-        uses: actions/checkout@v5
-        if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
-        with:
-          repository: bbpress/bbPress
-          ref: ${{ matrix.config.bbpress }}
-          path: .github/php-stan/.cache/bbpress
-          show-progress: false
-
-      - name: Generate PHP Stan Stubs. WordPress ${{ matrix.config.wordpress }}
-        if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
-        working-directory: .github/php-stan
-        run: 'vendor/bin/generate-stubs --no-interaction ./.cache/wordpress --out=./.cache/stubs/wordpress.stub'
-
-      - name: Generate PHP Stan Stubs. bbPress ${{ matrix.config.bbpress }}
-        if: steps.cache-php-stan-stubs.outputs.cache-hit != 'true'
-        working-directory: .github/php-stan
-        run: 'vendor/bin/generate-stubs --no-interaction ./.cache/bbpress --out=./.cache/stubs/bbpress.stub'
-
-      - name: Run PHP Stan
-        run: '.github/php-stan/vendor/bin/phpstan analyse --no-interaction --no-progress --configuration=.github/php-stan/php-stan.neon'
-        continue-on-error: true # TODO: remove this parameter after fixing the code
-
-  psalm-pre:
-    name: Prepare Psalm
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         config:
-          # Lowest supported versions of WordPress and bbPress
-          - wordpress: 4.1-branch
-            bbpress: 2.5
-
-          # Latest WordPress 5.*
-          - wordpress: 5.9-branch
-            bbpress: 2.5
-
-          # WordPress 6.0.*
-          - wordpress: 6.0-branch
+          - wordpress: 6.9-branch
             bbpress: 2.6
 
-          # Latest versions of WordPress and bbPress
-          - wordpress: 6.8-branch
+          - wordpress: 7.0-branch
             bbpress: 2.6
-    permissions:
-      contents: read
-    steps:
-      - name: Hooks cache
-        id: hooks-cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .github/hooks-generator/.cache/wordpress-hooks
-            .github/hooks-generator/.cache/bbpress-hooks
-          key: hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
-          restore-keys: hooks-generator-hooks-
-
-      - name: Checkout code
-        uses: actions/checkout@v5
-        if: steps.hooks-cache.outputs.cache-hit != 'true'
-
-      - name: Run Hooks Generator
-        uses: ./.github/actions/hooks-generator
-        if: steps.hooks-cache.outputs.cache-hit != 'true'
-        with:
-          wordpress: ${{ matrix.config.wordpress }}
-          bbpress: ${{ matrix.config.bbpress }}
+    with:
+      wordpress_version: ${{ matrix.config.wordpress }}
+      bbpress_version: ${{ matrix.config.bbpress }}
 
   psalm:
-    needs: psalm-pre
+    needs:
+      - psalm-hooks-generator
+      - psalm-hooks-generator-php-8-5
     name: Psalm
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/psalm.yml
+    permissions:
+      contents: read
     strategy:
       matrix:
         config:
@@ -233,27 +165,40 @@ jobs:
           - wordpress: 4.1-branch
             bbpress: 2.5
 
-          # Latest WordPress 5.*
           - wordpress: 5.9-branch
             bbpress: 2.5
 
-          # WordPress 6.0.*
           - wordpress: 6.0-branch
             bbpress: 2.6
 
-          # Latest versions of WordPress and bbPress
           - wordpress: 6.8-branch
             bbpress: 2.6
+
+          - wordpress: 6.9-branch
+            bbpress: 2.6
+
+          - wordpress: 7.0-branch
+            bbpress: 2.6
+    with:
+      wordpress_version: ${{ matrix.config.wordpress }}
+      bbpress_version: ${{ matrix.config.bbpress }}
+
+  psalm-tests-application:
+    name: Psalm. Tests Application
+    runs-on: ubuntu-latest
     permissions:
       contents: read
+    timeout-minutes: 3
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
+          php-version: 8.5
           ini-file: development
           extensions: ''
           tools: composer
@@ -264,59 +209,50 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
-            .github/psalm/vendor
-          key: ${{ runner.os }}-psalm-composer-${{ hashFiles('.github/psalm/composer.lock') }}
+            development/psalm/vendor
+          key: ${{ runner.os }}-psalm-composer-${{ hashFiles('development/psalm/composer.lock') }}
           restore-keys: ${{ runner.os }}-psalm-composer-
 
+      - name: Composer Cache. Tests Application
+        uses: actions/cache@v6
+        with:
+          path: tests/application/vendor
+          key: ${{ runner.os }}-tests-application-composer-${{ hashFiles('tests/application/composer.lock') }}
+          restore-keys: ${{ runner.os }}-tests-application-composer-
+
       - name: Composer Install
-        working-directory: .github/psalm
-        run: 'composer install --no-progress --classmap-authoritative'
+        working-directory: development/psalm
+        run: make vendor
 
-      - name: Hooks Cache
-        id: hooks-cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .github/hooks-generator/.cache/wordpress-hooks
-            .github/hooks-generator/.cache/bbpress-hooks
-          key: hooks-generator-hooks-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
-          restore-keys: hooks-generator-hooks-
-          fail-on-cache-miss: true
-
-      - name: Dependencies cache
-        id: dependencies-cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .github/hooks-generator/.cache/wordpress
-            .github/hooks-generator/.cache/bbpress
-          key: hooks-generator-dependencies-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
-          restore-keys: hooks-generator-dependencies-
-          fail-on-cache-miss: true
+      - name: Composer Install. Tests Application
+        working-directory: tests/application
+        run: make vendor
 
       - name: Psalm Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
-          path: .github/psalm/.cache/psalm
-          key: psalm-cache-wordpress-${{ matrix.config.wordpress }}-bbpress-${{ matrix.config.bbpress }}
-          restore-keys: psalm-cache-
+          path: development/psalm/.cache/psalm-tests-application
+          key: psalm-tests-application-${{ github.ref_type == 'branch' && github.ref_name || 'main' }}
+          restore-keys: psalm-tests-application-
 
       - name: Psalm
-        run: .github/psalm/vendor/bin/psalm --config=".github/psalm/psalm.xml"
-        continue-on-error: true
+        run: make psalm-tests-application
 
   phpmd:
     name: 'PHP Mess Detector'
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    timeout-minutes: 2
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
@@ -331,32 +267,98 @@ jobs:
         run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
 
       - name: Composer Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ${{ steps.composer-cache.outputs.cache-files-dir }}
-            .github/phpmd/vendor
-          key: ${{ runner.os }}-composer-phpmd-${{ hashFiles('.github/phpmd/composer.lock') }}
+            development/phpmd/vendor
+          key: ${{ runner.os }}-composer-phpmd-${{ hashFiles('development/phpmd/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-phpmd-
 
       - name: Composer Install
-        working-directory: .github/phpmd
-        run: 'composer install --no-progress --classmap-authoritative'
+        working-directory: development/phpmd
+        run: make vendor
 
       - name: PHP Mess Detector Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
-          path: .github/phpmd/.cache
+          path: development/phpmd/.cache
           key: phpmd-cache-${{ github.ref_type == 'branch' && github.ref_name || 'main' }}
           restore-keys: phpmd-cache-
 
       - name: Run PHP Mess Detector
-        run: |
-          .github/phpmd/vendor/bin/phpmd \
-          	plugin.php \
-          	github \
-          	.github/phpmd/phpmd.xml \
-          	-vvv \
-            --cache \
-            --cache-file=.github/phpmd/.cache/.phpmd.result-cache.php
+        run: make phpmd PHPMD_OUTPUT_TYPE=github
         continue-on-error: true # TODO: remove this parameter after fixing the code
+
+  tests-application:
+    name: Application Tests
+    uses: ./.github/workflows/tests-application.yml
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        config:
+          - wordpress_arg_base_image: 'wordpress:latest'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.9'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.8'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.7'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.6'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.5'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.4'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.3'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.2'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.1'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:6.0'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+          - wordpress_arg_base_image: 'wordpress:5.9'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.5.14.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+    secrets:
+      MYSQL_DATABASE: ${{ secrets.APPLICATION_TESTS_MYSQL_DATABASE }}
+      MYSQL_USER: ${{ secrets.APPLICATION_TESTS_MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.APPLICATION_TESTS_MYSQL_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.APPLICATION_TESTS_MYSQL_ROOT_PASSWORD }}
+      WORDPRESS_ADMIN_LOGIN: ${{ secrets.APPLICATION_TESTS_WORDPRESS_ADMIN_LOGIN }}
+      WORDPRESS_ADMIN_PASSWORD: ${{ secrets.APPLICATION_TESTS_WORDPRESS_ADMIN_PASSWORD }}
+      WORDPRESS_ADMIN_EMAIL: ${{ secrets.APPLICATION_TESTS_WORDPRESS_ADMIN_EMAIL }}
+    with:
+      WORDPRESS_ARG_BASE_IMAGE: ${{ matrix.config.wordpress_arg_base_image }}
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: ${{ matrix.config.wordpress_arg_plugin_bbpress_zip_url }}
+      WORDPRESS_ARG_THEME_ZIP_URL: ${{ matrix.config.wordpress_arg_theme_zip_url }}
+      CLI_ARG_BASE_IMAGE: ${{ matrix.config.cli_arg_base_image }}
+      WORDPRESS_DOMAIN: 'one.wordpress.test'
+      WORDPRESS_SITE_TITLE: 'Test Site'
+      WORDPRESS_SITE_LOCALE: 'en_US'

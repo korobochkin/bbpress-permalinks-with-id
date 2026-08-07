@@ -1,0 +1,37 @@
+---
+name: bbpress-permalinks-with-id-development
+services:
+  php:
+    build:
+      dockerfile: ./../tests/application/containers/php/php.Dockerfile
+      context: ./
+      target: develop
+      args:
+        UID: 1001
+        GID: 1001
+      provenance: false
+      sbom: false
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    read_only: true
+    init: true
+    tty: true
+    environment:
+      GITHUB_ACTIONS: ${GITHUB_ACTIONS:-false}
+    configs:
+      - source: php
+        target: /usr/local/etc/php/php.ini
+        mode: 0400
+        uid: '1001'
+        gid: '1001'
+    volumes:
+      - ./../:/home/php/app
+      - ./../tmp/composer:/home/php/.composer
+    tmpfs:
+      - /tmp
+
+configs:
+  php:
+    file: ./../tests/application/containers/php/php-production.ini
