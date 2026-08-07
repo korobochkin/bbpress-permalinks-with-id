@@ -32,8 +32,8 @@ up-php:
 		--no-build \
 		--quiet-pull \
 		--remove-orphans \
-		--timeout=120 \
-		--wait-timeout=120 \
+		--timeout=240 \
+		--wait-timeout=240 \
 		--yes \
 		--abort-on-container-failure \
 		--no-log-prefix \
