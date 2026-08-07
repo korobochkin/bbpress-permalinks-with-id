@@ -91,6 +91,13 @@ jobs:
       working-directory: tests/application
       run: make up-php
 
+    - name: Docker Compose Logs
+      working-directory: tests/application
+      if: failure()
+      run: |
+        docker compose logs db
+        docker compose ps -a
+
     - name: Docker Compose Down
       working-directory: tests/application
       if: always()
