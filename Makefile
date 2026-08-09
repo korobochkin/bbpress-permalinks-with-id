@@ -54,6 +54,13 @@ php-syntax-check:
 	| \
 	xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check
 
+php-syntax-check-busybox:
+	find . \
+	\( -path "./.github" -o -path "./development" -o -path "./tests/application" \) -prune \
+	-o -type f -name "*.php" -print0 \
+	| \
+	xargs -0 -t -P 4 -n 1 php --syntax-check
+
 php-syntax-check-tests-application:
 	find tests/application \
 	\( -path "tests/application/.cache" -o -path "tests/application/vendor" \) -prune \
@@ -74,4 +81,5 @@ php-syntax-check-tests-application:
 	phpmd \
 	plugin-check \
 	php-syntax-check \
+	php-syntax-check-busybox \
 	php-syntax-check-tests-application
