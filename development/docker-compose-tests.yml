@@ -92,3 +92,12 @@ services:
       dockerfile: ./development/containers/php/php-8.5.Dockerfile
       tags:
         - bbpress-permalinks-with-id-tests-php-syntax-check-php-8.5:latest
+
+  php-syntax-check-tests-application:
+    <<: *service-php-base
+    build:
+      <<: *service-php-base-build
+      dockerfile: ./development/containers/php/php-8.5.Dockerfile
+      tags:
+        - bbpress-permalinks-with-id-tests-php-syntax-check-tests-application:latest
+    entrypoint: [ "make", "php-syntax-check-tests-application-busybox" ]
