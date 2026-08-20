@@ -121,6 +121,36 @@ jobs:
       - name: Run PHP Coding Standards and Compatibility
         run: make phpcs
 
+  php-stan:
+    name: PHP Stan
+    uses: ./.github/workflows/php-stan.yml
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        config:
+          # Lowest supported versions of WordPress and bbPress
+          - wordpress: 4.1-branch
+            bbpress: 2.5
+
+          - wordpress: 5.9-branch
+            bbpress: 2.5
+
+          - wordpress: 6.0-branch
+            bbpress: 2.6
+
+          - wordpress: 6.8-branch
+            bbpress: 2.6
+
+          - wordpress: 6.9-branch
+            bbpress: 2.6
+
+          - wordpress: 7.0-branch
+            bbpress: 2.6
+    with:
+      wordpress_version: ${{ matrix.config.wordpress }}
+      bbpress_version: ${{ matrix.config.bbpress }}
+
   psalm-hooks-generator:
     name: Psalm. Hooks Generator
     uses: ./.github/workflows/psalm-hooks-generator.yml
