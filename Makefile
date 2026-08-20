@@ -68,6 +68,13 @@ php-syntax-check-tests-application:
 	| \
 	xargs --null --verbose --max-procs=4 --max-args=1 php --syntax-check
 
+php-syntax-check-tests-application-busybox:
+	find tests/application \
+	\( -path "tests/application/.cache" -o -path "tests/application/vendor" \) -prune \
+	-o -type f -name "*.php" -print0 \
+	| \
+	xargs -0 -t -P 4 -n 1 php --syntax-check
+
 .PHONY: \
 	build \
 	up \
@@ -82,4 +89,5 @@ php-syntax-check-tests-application:
 	plugin-check \
 	php-syntax-check \
 	php-syntax-check-busybox \
-	php-syntax-check-tests-application
+	php-syntax-check-tests-application \
+	php-syntax-check-tests-application-busybox

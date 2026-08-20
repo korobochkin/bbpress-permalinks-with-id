@@ -34,6 +34,8 @@ up-php-syntax-check-php-8.4: _up-php-syntax-check-php-8.4
 
 up-php-syntax-check-php-8.5: _up-php-syntax-check-php-8.5
 
+up-php-syntax-check-tests-application: _up-php-syntax-check-tests-application
+
 stop:
 	docker compose --file=docker-compose-tests.yml stop
 
@@ -51,5 +53,6 @@ down:
 	up-php-syntax-check-php-8.3 \
 	up-php-syntax-check-php-8.4 \
 	up-php-syntax-check-php-8.5 \
+	up-php-syntax-check-tests-application \
 	stop \
 	down
