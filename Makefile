@@ -89,4 +89,5 @@ php-syntax-check-tests-application-busybox:
 	plugin-check \
 	php-syntax-check \
 	php-syntax-check-busybox \
-	php-syntax-check-tests-application
+	php-syntax-check-tests-application \
+	php-syntax-check-tests-application-busybox
