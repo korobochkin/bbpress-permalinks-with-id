@@ -1,0 +1,76 @@
+name: Trivy
+
+on:
+  schedule:
+    - cron: 0 0 * * 0
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  workflow_call:
+
+concurrency:
+  group: trivy
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  trivy:
+    name: Trivy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v4
+        with:
+          cleanup: true
+
+      - name: Docker Bake
+        uses: docker/bake-action@v7
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          files: tests/application/docker-compose.yml
+          source: ./
+
+      - name: Run Trivy. Application Tests [syslog]
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: syslog:latest
+          format: sarif
+          output: ${{ runner.temp }}/trivy/trivy-results--tests-application-syslog.sarif
+
+      - name: Run Trivy. Application Tests [php]
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: php:latest
+          format: sarif
+          output: ${{ runner.temp }}/trivy/trivy-results--tests-application-php.sarif
+
+      - name: Run Trivy. Application Tests [php-develop]
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: php-develop:latest
+          format: sarif
+          output: ${{ runner.temp }}/trivy/trivy-results--tests-application-php-develop.sarif
+
+      - name: Run Trivy. Application Tests [wordpress]
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: wordpress:latest
+          format: sarif
+          output: ${{ runner.temp }}/trivy/trivy-results--tests-application-wordpress.sarif
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ runner.temp }}/trivy
