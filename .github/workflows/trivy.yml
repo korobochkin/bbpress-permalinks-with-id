@@ -39,8 +39,8 @@ jobs:
         uses: docker/bake-action@v7
         with:
           builder: ${{ steps.buildx.outputs.name }}
-          files: tests/application/docker-compose.yml
-          source: ./
+          files: docker-compose.yml
+          source: ./tests/application
 
       - name: Run Trivy. Application Tests [syslog]
         uses: aquasecurity/trivy-action@v0.36.0
