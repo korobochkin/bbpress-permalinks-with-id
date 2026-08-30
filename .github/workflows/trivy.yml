@@ -70,6 +70,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           files: docker-compose.yml
           source: ./tests/application
+          targets: php,php-develop,syslog,wordpress
         env:
           #MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
           #MYSQL_USER: ${{ secrets.MYSQL_USER }}
