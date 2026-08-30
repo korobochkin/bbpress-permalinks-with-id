@@ -29,7 +29,12 @@ x-php: &service-php
       condition: service_completed_successfully
 
 x-cli: &service-cli
-  image: "${CLI_ARG_BASE_IMAGE}"
+  build:
+    dockerfile_inline: |
+      ARG CLI_ARG_BASE_IMAGE
+      FROM $CLI_ARG_BASE_IMAGE
+    args:
+      CLI_ARG_BASE_IMAGE: ${CLI_ARG_BASE_IMAGE}
   cap_drop:
     - ALL
   security_opt:
