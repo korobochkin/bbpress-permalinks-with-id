@@ -71,21 +71,11 @@ jobs:
           files: docker-compose.yml
           source: ./tests/application
           targets: php,php-develop,syslog,wordpress
-        env:
-          #MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          #MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          #MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          #MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          #WORDPRESS_ADMIN_LOGIN: ${{ secrets.WORDPRESS_ADMIN_LOGIN }}
-          #WORDPRESS_ADMIN_PASSWORD: ${{ secrets.WORDPRESS_ADMIN_PASSWORD }}
-          #WORDPRESS_ADMIN_EMAIL: ${{ secrets.WORDPRESS_ADMIN_EMAIL }}
-          WORDPRESS_ARG_BASE_IMAGE: ${{ inputs.WORDPRESS_ARG_BASE_IMAGE }}
-          WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: ${{ inputs.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL }}
-          WORDPRESS_ARG_THEME_ZIP_URL: ${{ inputs.WORDPRESS_ARG_THEME_ZIP_URL }}
-          #WORDPRESS_DOMAIN: ${{ inputs.WORDPRESS_DOMAIN }}
-          #WORDPRESS_SITE_TITLE: ${{ inputs.WORDPRESS_SITE_TITLE }}
-          #WORDPRESS_SITE_LOCALE: ${{ inputs.WORDPRESS_SITE_LOCALE }}
-          CLI_ARG_BASE_IMAGE: ${{ inputs.CLI_ARG_BASE_IMAGE }}
+          set: |
+            wordpress.args.WORDPRESS_ARG_BASE_IMAGE=${{ inputs.WORDPRESS_ARG_BASE_IMAGE }}
+            wordpress.args.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL=${{ inputs.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL }}
+            wordpress.args.WORDPRESS_ARG_THEME_ZIP_URL=${{ inputs.WORDPRESS_ARG_THEME_ZIP_URL }}
+            wordpress.args.CLI_ARG_BASE_IMAGE=${{ inputs.CLI_ARG_BASE_IMAGE }}
 
       - name: Run Trivy. Application Tests [syslog]
         uses: aquasecurity/trivy-action@v0.36.0
