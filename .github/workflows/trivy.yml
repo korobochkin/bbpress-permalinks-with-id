@@ -8,35 +8,6 @@ on:
       - main
   workflow_dispatch:
   workflow_call:
-    inputs:
-      WORDPRESS_ARG_BASE_IMAGE:
-        type: string
-        default: 'wordpress:latest'
-        required: true
-      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL:
-        type: string
-        default: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
-        required: true
-      WORDPRESS_ARG_THEME_ZIP_URL:
-        type: string
-        default: 'https://downloads.wordpress.org/theme/twentytwelve.4.7.zip'
-        required: true
-#      WORDPRESS_DOMAIN:
-#        type: string
-#        default: 'one.wordpress.test'
-#        required: false
-#      WORDPRESS_SITE_TITLE:
-#        type: string
-#        default: 'Test Site'
-#        required: false
-#      WORDPRESS_SITE_LOCALE:
-#        type: string
-#        default: 'en_US'
-#        required: false
-      CLI_ARG_BASE_IMAGE:
-        type: string
-        default: 'wordpress:cli'
-        required: true
 
 concurrency:
   group: trivy
@@ -52,11 +23,6 @@ jobs:
       contents: read
       security-events: write
     timeout-minutes: 5
-    env:
-      WORDPRESS_ARG_BASE_IMAGE: ${{ inputs.WORDPRESS_ARG_BASE_IMAGE }}
-      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: ${{ inputs.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL }}
-      WORDPRESS_ARG_THEME_ZIP_URL: ${{ inputs.WORDPRESS_ARG_THEME_ZIP_URL }}
-      CLI_ARG_BASE_IMAGE: ${{ inputs.CLI_ARG_BASE_IMAGE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -77,10 +43,10 @@ jobs:
           source: ./tests/application
           targets: php,php-develop,syslog,wordpress
           set: |
-            wordpress.args.WORDPRESS_ARG_BASE_IMAGE=${{ env.WORDPRESS_ARG_BASE_IMAGE }}
-            wordpress.args.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL=${{ env.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL }}
-            wordpress.args.WORDPRESS_ARG_THEME_ZIP_URL=${{ env.WORDPRESS_ARG_THEME_ZIP_URL }}
-            wordpress.args.CLI_ARG_BASE_IMAGE=${{ env.CLI_ARG_BASE_IMAGE }}
+            wordpress.args.WORDPRESS_ARG_BASE_IMAGE=wordpress:latest
+            wordpress.args.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL=https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip
+            wordpress.args.WORDPRESS_ARG_THEME_ZIP_URL=https://downloads.wordpress.org/theme/twentytwelve.4.7.zip
+            wordpress.args.CLI_ARG_BASE_IMAGE=wordpress:cli
 
       - name: Run Trivy. Application Tests [syslog]
         uses: aquasecurity/trivy-action@v0.36.0
