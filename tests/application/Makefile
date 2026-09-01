@@ -15,6 +15,9 @@ build:
 build-php:
 	docker compose build $(DOCKER_BUILD_QUIET) --with-dependencies php
 
+docker-bake.json: docker-compose.yml
+	docker buildx bake --file docker-compose.yml --print > docker-bake.json
+
 up:
 	docker compose up \
 		--detach \
