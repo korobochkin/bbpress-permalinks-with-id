@@ -48,6 +48,10 @@ jobs:
             wordpress.args.WORDPRESS_ARG_THEME_ZIP_URL=https://downloads.wordpress.org/theme/twentytwelve.4.7.zip
             wordpress.args.CLI_ARG_BASE_IMAGE=wordpress:cli
 
+      - name: Docker Compose. List images
+        working-directory: ./tests/application
+        run: docker compose images
+
       - name: Run Trivy. Application Tests [syslog]
         uses: aquasecurity/trivy-action@v0.36.0
         with:
