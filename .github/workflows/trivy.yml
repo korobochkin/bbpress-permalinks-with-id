@@ -51,28 +51,28 @@ jobs:
       - name: Run Trivy. Application Tests [syslog]
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: syslog:latest
+          image-ref: bbpress-permalinks-with-id-application-tests-syslog:latest
           format: sarif
           output: ${{ runner.temp }}/trivy/trivy-results--tests-application-syslog.sarif
 
       - name: Run Trivy. Application Tests [php]
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: php:latest
+          image-ref: bbpress-permalinks-with-id-application-tests-php:latest
           format: sarif
           output: ${{ runner.temp }}/trivy/trivy-results--tests-application-php.sarif
 
       - name: Run Trivy. Application Tests [php-develop]
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: php-develop:latest
+          image-ref: bbpress-permalinks-with-id-application-tests-php-develop:latest
           format: sarif
           output: ${{ runner.temp }}/trivy/trivy-results--tests-application-php-develop.sarif
 
       - name: Run Trivy. Application Tests [wordpress]
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: wordpress:latest
+          image-ref: bbpress-permalinks-with-id-application-tests-wordpress:latest
           format: sarif
           output: ${{ runner.temp }}/trivy/trivy-results--tests-application-wordpress.sarif
 
