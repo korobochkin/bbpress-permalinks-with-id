@@ -43,10 +43,14 @@ jobs:
           source: ./tests/application
           targets: php,php-develop,syslog,wordpress
           set: |
+            php.output.type=docker
+            php-develop.output.type=docker
+            syslog.output.type=docker
             wordpress.args.WORDPRESS_ARG_BASE_IMAGE=wordpress:latest
             wordpress.args.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL=https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip
             wordpress.args.WORDPRESS_ARG_THEME_ZIP_URL=https://downloads.wordpress.org/theme/twentytwelve.4.7.zip
             wordpress.args.CLI_ARG_BASE_IMAGE=wordpress:cli
+            wordpress.output.type=docker
 
       - name: Docker Compose. List images
         working-directory: ./tests/application
