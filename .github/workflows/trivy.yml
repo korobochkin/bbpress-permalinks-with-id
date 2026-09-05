@@ -88,7 +88,26 @@ jobs:
           output: ${{ runner.temp }}/trivy/trivy-results--tests-application-wordpress.sarif
           skip-setup-trivy: true
 
-      - name: Upload Trivy scan results to GitHub Security tab
+      - name: Upload Trivy scan [syslog]
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: ${{ runner.temp }}/trivy
+          sarif_file: ${{ runner.temp }}/trivy/trivy-results--tests-application-syslog.sarif
+          category: trivy-results--tests-application-syslog
+
+      - name: Upload Trivy scan [php]
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ runner.temp }}/trivy/trivy-results--tests-application-php.sarif
+          category: trivy-results--tests-application-php
+
+      - name: Upload Trivy scan [php-develop]
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ runner.temp }}/trivy/trivy-results--tests-application-php-develop.sarif
+          category: trivy-results--tests-application-php-develop
+
+      - name: Upload Trivy scan [wordpress]
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ runner.temp }}/trivy/trivy-results--tests-application-wordpress.sarif
+          category: trivy-results--tests-application-wordpress
