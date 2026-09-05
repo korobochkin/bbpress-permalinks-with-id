@@ -29,7 +29,7 @@ x-php: &service-php
       condition: service_completed_successfully
 
 x-cli: &service-cli
-  build:
+  build: &service-cli-build
     dockerfile_inline: |
       ARG CLI_ARG_BASE_IMAGE
       FROM $CLI_ARG_BASE_IMAGE
@@ -66,13 +66,14 @@ x-cli: &service-cli
 name: bbpress-permalinks-with-id-application-tests
 services:
   syslog:
-    image: syslog
     build:
       context: ./containers/syslog
       dockerfile: ./syslog.Dockerfile
       args:
         UID: 1001
         GID: 1001
+      tags:
+        - bbpress-permalinks-with-id-application-tests-syslog:latest
     cap_drop:
       - ALL
     security_opt:
@@ -96,7 +97,6 @@ services:
       retries: 3
 
   wordpress:
-    image: wordpress
     build:
       context: ./containers/wordpress
       dockerfile: ./wordpress.Dockerfile
@@ -104,6 +104,8 @@ services:
         WORDPRESS_ARG_BASE_IMAGE: "${WORDPRESS_ARG_BASE_IMAGE}"
         WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: "${WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL}"
         WORDPRESS_ARG_THEME_ZIP_URL: "${WORDPRESS_ARG_THEME_ZIP_URL}"
+      tags:
+        - bbpress-permalinks-with-id-application-tests-wordpress:latest
     cap_drop:
       - ALL
     security_opt:
@@ -180,18 +182,27 @@ services:
 
   cli:
     <<: *service-cli
-    image: cli
+    build:
+      <<: *service-cli-build
+      tags:
+        - bbpress-permalinks-with-id-application-tests-cli:latest
     command: [ "bash", "/tmp/shells/install-wordpress.sh" ]
 
   cli-develop:
     <<: *service-cli
-    image: cli-develop
+    build:
+      <<: *service-cli-build
+      tags:
+        - bbpress-permalinks-with-id-application-tests-cli-develop:latest
     init: true
     tty: true
 
   php:
     <<: *service-php
-    image: php
+    build:
+      <<: *service-php-build
+      tags:
+        - bbpress-permalinks-with-id-application-tests-php:latest
     volumes:
       - ./.cache:/home/php/app/.cache
       - ./tests:/home/php/app/tests:read-only
@@ -202,10 +213,11 @@ services:
 
   php-develop:
     <<: *service-php
-    image: php-develop
     build:
       <<: *service-php-build
       target: develop
+      tags:
+        - bbpress-permalinks-with-id-application-tests-php-develop:latest
     tty: true
     init: true
     configs:
