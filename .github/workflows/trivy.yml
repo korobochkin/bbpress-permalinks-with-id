@@ -53,6 +53,10 @@ jobs:
         working-directory: ./tests/application
         run: docker images
 
+      - name: Create folder for Trivy files
+        working-directory: ${{ runner.temp }}
+        run: mkdir trivy
+
       - name: Run Trivy. Application Tests [syslog]
         uses: aquasecurity/trivy-action@v0.36.0
         with:
