@@ -66,6 +66,7 @@ x-cli: &service-cli
 name: bbpress-permalinks-with-id-application-tests
 services:
   syslog:
+    image: syslog
     build:
       context: ./containers/syslog
       dockerfile: ./syslog.Dockerfile
@@ -95,6 +96,7 @@ services:
       retries: 3
 
   wordpress:
+    image: wordpress
     build:
       context: ./containers/wordpress
       dockerfile: ./wordpress.Dockerfile
@@ -178,15 +180,18 @@ services:
 
   cli:
     <<: *service-cli
+    image: cli
     command: [ "bash", "/tmp/shells/install-wordpress.sh" ]
 
   cli-develop:
     <<: *service-cli
+    image: cli-develop
     init: true
     tty: true
 
   php:
     <<: *service-php
+    image: php
     volumes:
       - ./.cache:/home/php/app/.cache
       - ./tests:/home/php/app/tests:read-only
@@ -197,6 +202,7 @@ services:
 
   php-develop:
     <<: *service-php
+    image: php-develop
     build:
       <<: *service-php-build
       target: develop
