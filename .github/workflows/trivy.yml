@@ -70,6 +70,7 @@ jobs:
           image-ref: bbpress-permalinks-with-id-application-tests-php:latest
           format: sarif
           output: ${{ runner.temp }}/trivy/trivy-results--tests-application-php.sarif
+          skip-setup-trivy: true
 
       - name: Run Trivy. Application Tests [php-develop]
         uses: aquasecurity/trivy-action@v0.36.0
@@ -77,6 +78,7 @@ jobs:
           image-ref: bbpress-permalinks-with-id-application-tests-php-develop:latest
           format: sarif
           output: ${{ runner.temp }}/trivy/trivy-results--tests-application-php-develop.sarif
+          skip-setup-trivy: true
 
       - name: Run Trivy. Application Tests [wordpress]
         uses: aquasecurity/trivy-action@v0.36.0
@@ -84,6 +86,7 @@ jobs:
           image-ref: bbpress-permalinks-with-id-application-tests-wordpress:latest
           format: sarif
           output: ${{ runner.temp }}/trivy/trivy-results--tests-application-wordpress.sarif
+          skip-setup-trivy: true
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v4
