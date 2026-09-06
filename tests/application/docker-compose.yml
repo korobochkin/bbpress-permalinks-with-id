@@ -6,6 +6,10 @@ x-php: &service-php
     args:
       UID: 1001
       GID: 1001
+    cache_from:
+      - type=gha
+    cache_to:
+      - type=gha,mode=max
   cap_drop:
     - ALL
   security_opt:
@@ -35,6 +39,10 @@ x-cli: &service-cli
       FROM $CLI_ARG_BASE_IMAGE
     args:
       CLI_ARG_BASE_IMAGE: ${CLI_ARG_BASE_IMAGE}
+    cache_from:
+      - type=gha
+    cache_to:
+      - type=gha,mode=max
   cap_drop:
     - ALL
   security_opt:
@@ -72,6 +80,10 @@ services:
       args:
         UID: 1001
         GID: 1001
+      cache_from:
+        - type=gha
+      cache_to:
+        - type=gha,mode=max
       tags:
         - bbpress-permalinks-with-id-application-tests-syslog:latest
     cap_drop:
@@ -104,6 +116,10 @@ services:
         WORDPRESS_ARG_BASE_IMAGE: "${WORDPRESS_ARG_BASE_IMAGE}"
         WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: "${WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL}"
         WORDPRESS_ARG_THEME_ZIP_URL: "${WORDPRESS_ARG_THEME_ZIP_URL}"
+      cache_from:
+        - type=gha
+      cache_to:
+        - type=gha,mode=max
       tags:
         - bbpress-permalinks-with-id-application-tests-wordpress:latest
     cap_drop:
