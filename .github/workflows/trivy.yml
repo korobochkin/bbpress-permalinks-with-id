@@ -1,13 +1,54 @@
 name: Trivy
 
 on:
-  schedule:
-    - cron: 0 0 * * 0
-  push:
-    branches:
-      - main
   workflow_dispatch:
   workflow_call:
+    secrets:
+      MYSQL_DATABASE:
+        required: true
+      MYSQL_USER:
+        required: true
+      MYSQL_PASSWORD:
+        required: true
+      MYSQL_ROOT_PASSWORD:
+        required: true
+
+      WORDPRESS_ADMIN_LOGIN:
+        required: true
+      WORDPRESS_ADMIN_PASSWORD:
+        required: true
+      WORDPRESS_ADMIN_EMAIL:
+        required: true
+
+    inputs:
+      WORDPRESS_ARG_BASE_IMAGE:
+        type: string
+        description: 'wordpress:latest'
+        required: true
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL:
+        type: string
+        description: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
+        required: true
+      WORDPRESS_ARG_THEME_ZIP_URL:
+        type: string
+        description: 'https://downloads.wordpress.org/theme/twentytwelve.4.7.zip'
+        required: true
+      WORDPRESS_DOMAIN:
+        type: string
+        default: 'one.wordpress.test'
+        required: false
+      WORDPRESS_SITE_TITLE:
+        type: string
+        default: 'Test Site'
+        required: false
+      WORDPRESS_SITE_LOCALE:
+        type: string
+        default: 'en_US'
+        required: false
+      CLI_ARG_BASE_IMAGE:
+        type: string
+        description: 'wordpress:cli'
+        required: true
 
 concurrency:
   group: trivy
@@ -23,6 +64,21 @@ jobs:
       contents: read
       security-events: write
     timeout-minutes: 5
+    env:
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      WORDPRESS_ADMIN_LOGIN: ${{ secrets.WORDPRESS_ADMIN_LOGIN }}
+      WORDPRESS_ADMIN_PASSWORD: ${{ secrets.WORDPRESS_ADMIN_PASSWORD }}
+      WORDPRESS_ADMIN_EMAIL: ${{ secrets.WORDPRESS_ADMIN_EMAIL }}
+      WORDPRESS_ARG_BASE_IMAGE: ${{ inputs.WORDPRESS_ARG_BASE_IMAGE }}
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: ${{ inputs.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL }}
+      WORDPRESS_ARG_THEME_ZIP_URL: ${{ inputs.WORDPRESS_ARG_THEME_ZIP_URL }}
+      WORDPRESS_DOMAIN: ${{ inputs.WORDPRESS_DOMAIN }}
+      WORDPRESS_SITE_TITLE: ${{ inputs.WORDPRESS_SITE_TITLE }}
+      WORDPRESS_SITE_LOCALE: ${{ inputs.WORDPRESS_SITE_LOCALE }}
+      CLI_ARG_BASE_IMAGE: ${{ inputs.CLI_ARG_BASE_IMAGE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -43,11 +99,6 @@ jobs:
           source: ./tests/application
           targets: php,php-develop,syslog,wordpress
           load: true
-          set: |
-            wordpress.args.WORDPRESS_ARG_BASE_IMAGE=wordpress:latest
-            wordpress.args.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL=https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip
-            wordpress.args.WORDPRESS_ARG_THEME_ZIP_URL=https://downloads.wordpress.org/theme/twentytwelve.4.7.zip
-            wordpress.args.CLI_ARG_BASE_IMAGE=wordpress:cli
 
       - name: Docker. List images
         working-directory: ./tests/application
