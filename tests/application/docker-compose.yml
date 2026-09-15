@@ -7,9 +7,9 @@ x-php: &service-php
       UID: 1001
       GID: 1001
     cache_from:
-      - type=gha
+      - type=gha,scope=application-tests-php
     cache_to:
-      - type=gha,mode=max
+      - type=gha,scope=application-tests-php,mode=max
   cap_drop:
     - ALL
   security_opt:
@@ -40,9 +40,9 @@ x-cli: &service-cli
     args:
       CLI_ARG_BASE_IMAGE: ${CLI_ARG_BASE_IMAGE}
     cache_from:
-      - type=gha
+      - type=gha,scope=application-tests-cli
     cache_to:
-      - type=gha,mode=max
+      - type=gha,scope=application-tests-cli,mode=max
   cap_drop:
     - ALL
   security_opt:
@@ -81,9 +81,9 @@ services:
         UID: 1001
         GID: 1001
       cache_from:
-        - type=gha
+        - type=gha,scope=application-tests-syslog
       cache_to:
-        - type=gha,mode=max
+        - type=gha,scope=application-tests-syslog,mode=max
       tags:
         - bbpress-permalinks-with-id-application-tests-syslog:latest
     cap_drop:
@@ -117,9 +117,9 @@ services:
         WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: "${WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL}"
         WORDPRESS_ARG_THEME_ZIP_URL: "${WORDPRESS_ARG_THEME_ZIP_URL}"
       cache_from:
-        - type=gha
+        - type=gha,scope=application-tests-wordpress
       cache_to:
-        - type=gha,mode=max
+        - type=gha,scope=application-tests-wordpress,mode=max
       tags:
         - bbpress-permalinks-with-id-application-tests-wordpress:latest
     cap_drop:
@@ -208,6 +208,10 @@ services:
     <<: *service-cli
     build:
       <<: *service-cli-build
+      cache_from:
+        - type=gha,scope=application-tests-cli-develop
+      cache_to:
+        - type=gha,scope=application-tests-cli-develop,mode=max
       tags:
         - bbpress-permalinks-with-id-application-tests-cli-develop:latest
     init: true
@@ -232,6 +236,10 @@ services:
     build:
       <<: *service-php-build
       target: develop
+      cache_from:
+        - type=gha,scope=application-tests-php-develop
+      cache_to:
+        - type=gha,scope=application-tests-php-develop,mode=max
       tags:
         - bbpress-permalinks-with-id-application-tests-php-develop:latest
     tty: true
