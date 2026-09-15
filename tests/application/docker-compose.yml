@@ -6,6 +6,10 @@ x-php: &service-php
     args:
       UID: 1001
       GID: 1001
+    cache_from:
+      - type=gha,scope=application-tests-php
+    cache_to:
+      - type=gha,scope=application-tests-php,mode=max
   cap_drop:
     - ALL
   security_opt:
@@ -29,7 +33,16 @@ x-php: &service-php
       condition: service_completed_successfully
 
 x-cli: &service-cli
-  image: "${CLI_ARG_BASE_IMAGE}"
+  build: &service-cli-build
+    dockerfile_inline: |
+      ARG CLI_ARG_BASE_IMAGE
+      FROM $CLI_ARG_BASE_IMAGE
+    args:
+      CLI_ARG_BASE_IMAGE: ${CLI_ARG_BASE_IMAGE}
+    cache_from:
+      - type=gha,scope=application-tests-cli
+    cache_to:
+      - type=gha,scope=application-tests-cli,mode=max
   cap_drop:
     - ALL
   security_opt:
@@ -67,6 +80,12 @@ services:
       args:
         UID: 1001
         GID: 1001
+      cache_from:
+        - type=gha,scope=application-tests-syslog
+      cache_to:
+        - type=gha,scope=application-tests-syslog,mode=max
+      tags:
+        - bbpress-permalinks-with-id-application-tests-syslog:latest
     cap_drop:
       - ALL
     security_opt:
@@ -97,6 +116,12 @@ services:
         WORDPRESS_ARG_BASE_IMAGE: "${WORDPRESS_ARG_BASE_IMAGE}"
         WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: "${WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL}"
         WORDPRESS_ARG_THEME_ZIP_URL: "${WORDPRESS_ARG_THEME_ZIP_URL}"
+      cache_from:
+        - type=gha,scope=application-tests-wordpress
+      cache_to:
+        - type=gha,scope=application-tests-wordpress,mode=max
+      tags:
+        - bbpress-permalinks-with-id-application-tests-wordpress:latest
     cap_drop:
       - ALL
     security_opt:
@@ -173,15 +198,31 @@ services:
 
   cli:
     <<: *service-cli
+    build:
+      <<: *service-cli-build
+      tags:
+        - bbpress-permalinks-with-id-application-tests-cli:latest
     command: [ "bash", "/tmp/shells/install-wordpress.sh" ]
 
   cli-develop:
     <<: *service-cli
+    build:
+      <<: *service-cli-build
+      cache_from:
+        - type=gha,scope=application-tests-cli-develop
+      cache_to:
+        - type=gha,scope=application-tests-cli-develop,mode=max
+      tags:
+        - bbpress-permalinks-with-id-application-tests-cli-develop:latest
     init: true
     tty: true
 
   php:
     <<: *service-php
+    build:
+      <<: *service-php-build
+      tags:
+        - bbpress-permalinks-with-id-application-tests-php:latest
     volumes:
       - ./.cache:/home/php/app/.cache
       - ./tests:/home/php/app/tests:read-only
@@ -195,6 +236,12 @@ services:
     build:
       <<: *service-php-build
       target: develop
+      cache_from:
+        - type=gha,scope=application-tests-php-develop
+      cache_to:
+        - type=gha,scope=application-tests-php-develop,mode=max
+      tags:
+        - bbpress-permalinks-with-id-application-tests-php-develop:latest
     tty: true
     init: true
     configs:
