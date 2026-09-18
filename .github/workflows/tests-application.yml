@@ -27,11 +27,11 @@ on:
         required: true
       WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL:
         type: string
-        description: 'https://downloads.wordpress.org/plugin/bbpress.2.6.0.zip'
+        description: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
         required: true
       WORDPRESS_ARG_THEME_ZIP_URL:
         type: string
-        description: 'https://downloads.wordpress.org/theme/twentytwelve.4.7.zip'
+        description: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
         required: true
       WORDPRESS_DOMAIN:
         type: string

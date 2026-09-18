@@ -1,5 +1,5 @@
 # Default branch to checkout (can be overridden with make download BRANCH=your-branch)
-WORDPRESS_BRANCH ?= 7.0-branch
+WORDPRESS_BRANCH ?= 7.1-branch
 BBPRESS_BRANCH ?= 2.6
 
 download_wordpress:
