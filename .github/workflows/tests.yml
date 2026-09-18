@@ -169,6 +169,9 @@ jobs:
 
           - wordpress: 7.0-branch
             bbpress: 2.6
+
+          - wordpress: 7.1-branch
+            bbpress: 2.6
     with:
       wordpress_version: ${{ matrix.config.wordpress }}
       bbpress_version: ${{ matrix.config.bbpress }}
@@ -201,6 +204,9 @@ jobs:
             bbpress: 2.6
 
           - wordpress: 7.0-branch
+            bbpress: 2.6
+
+          - wordpress: 7.1-branch
             bbpress: 2.6
     with:
       wordpress_version: ${{ matrix.config.wordpress }}
@@ -322,6 +328,10 @@ jobs:
       matrix:
         config:
           - wordpress_arg_base_image: 'wordpress:latest'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
+          - wordpress_arg_base_image: 'wordpress:7.0'
             cli_arg_base_image: 'wordpress:cli'
             wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
             wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
