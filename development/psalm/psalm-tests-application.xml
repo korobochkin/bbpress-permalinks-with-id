@@ -5,6 +5,7 @@
     resolveFromConfigFile="false"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    phpVersion="8.5"
     findUnusedBaselineEntry="true"
     findUnusedCode="true"
     checkForThrowsDocblock="true"

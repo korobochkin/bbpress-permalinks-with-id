@@ -1,0 +1,164 @@
+name: Trivy
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      MYSQL_DATABASE:
+        required: true
+      MYSQL_USER:
+        required: true
+      MYSQL_PASSWORD:
+        required: true
+      MYSQL_ROOT_PASSWORD:
+        required: true
+
+      WORDPRESS_ADMIN_LOGIN:
+        required: true
+      WORDPRESS_ADMIN_PASSWORD:
+        required: true
+      WORDPRESS_ADMIN_EMAIL:
+        required: true
+
+    inputs:
+      WORDPRESS_ARG_BASE_IMAGE:
+        type: string
+        description: 'wordpress:latest'
+        required: true
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL:
+        type: string
+        description: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+        required: true
+      WORDPRESS_ARG_THEME_ZIP_URL:
+        type: string
+        description: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
+        required: true
+      WORDPRESS_DOMAIN:
+        type: string
+        default: 'one.wordpress.test'
+        required: false
+      WORDPRESS_SITE_TITLE:
+        type: string
+        default: 'Test Site'
+        required: false
+      WORDPRESS_SITE_LOCALE:
+        type: string
+        default: 'en_US'
+        required: false
+      CLI_ARG_BASE_IMAGE:
+        type: string
+        description: 'wordpress:cli'
+        required: true
+
+concurrency:
+  group: trivy
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  trivy:
+    name: Trivy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    timeout-minutes: 5
+    env:
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+      WORDPRESS_ADMIN_LOGIN: ${{ secrets.WORDPRESS_ADMIN_LOGIN }}
+      WORDPRESS_ADMIN_PASSWORD: ${{ secrets.WORDPRESS_ADMIN_PASSWORD }}
+      WORDPRESS_ADMIN_EMAIL: ${{ secrets.WORDPRESS_ADMIN_EMAIL }}
+      WORDPRESS_ARG_BASE_IMAGE: ${{ inputs.WORDPRESS_ARG_BASE_IMAGE }}
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: ${{ inputs.WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL }}
+      WORDPRESS_ARG_THEME_ZIP_URL: ${{ inputs.WORDPRESS_ARG_THEME_ZIP_URL }}
+      WORDPRESS_DOMAIN: ${{ inputs.WORDPRESS_DOMAIN }}
+      WORDPRESS_SITE_TITLE: ${{ inputs.WORDPRESS_SITE_TITLE }}
+      WORDPRESS_SITE_LOCALE: ${{ inputs.WORDPRESS_SITE_LOCALE }}
+      CLI_ARG_BASE_IMAGE: ${{ inputs.CLI_ARG_BASE_IMAGE }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v4
+        with:
+          cleanup: true
+
+      - name: Docker Bake
+        uses: docker/bake-action@v7
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          files: docker-compose.yml
+          source: ./tests/application
+          targets: php,php-develop,syslog,wordpress
+          load: true
+
+      - name: Docker. List images
+        working-directory: ./tests/application
+        run: docker images
+
+      - name: Create folder for Trivy files
+        working-directory: ${{ runner.temp }}
+        run: mkdir trivy
+
+      - name: Run Trivy. Application Tests [syslog]
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: bbpress-permalinks-with-id-application-tests-syslog:latest
+          format: sarif
+          output: ${{ runner.temp }}/trivy/trivy-results--tests-application-syslog.sarif
+
+      - name: Run Trivy. Application Tests [php]
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: bbpress-permalinks-with-id-application-tests-php:latest
+          format: sarif
+          output: ${{ runner.temp }}/trivy/trivy-results--tests-application-php.sarif
+          skip-setup-trivy: true
+
+      - name: Run Trivy. Application Tests [php-develop]
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: bbpress-permalinks-with-id-application-tests-php-develop:latest
+          format: sarif
+          output: ${{ runner.temp }}/trivy/trivy-results--tests-application-php-develop.sarif
+          skip-setup-trivy: true
+
+      - name: Run Trivy. Application Tests [wordpress]
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: bbpress-permalinks-with-id-application-tests-wordpress:latest
+          format: sarif
+          output: ${{ runner.temp }}/trivy/trivy-results--tests-application-wordpress.sarif
+          skip-setup-trivy: true
+
+      - name: Upload Trivy scan [syslog]
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ runner.temp }}/trivy/trivy-results--tests-application-syslog.sarif
+          category: trivy-results--tests-application-syslog
+
+      - name: Upload Trivy scan [php]
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ runner.temp }}/trivy/trivy-results--tests-application-php.sarif
+          category: trivy-results--tests-application-php
+
+      - name: Upload Trivy scan [php-develop]
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ runner.temp }}/trivy/trivy-results--tests-application-php-develop.sarif
+          category: trivy-results--tests-application-php-develop
+
+      - name: Upload Trivy scan [wordpress]
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ${{ runner.temp }}/trivy/trivy-results--tests-application-wordpress.sarif
+          category: trivy-results--tests-application-wordpress

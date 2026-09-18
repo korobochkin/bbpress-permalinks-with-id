@@ -13,7 +13,7 @@ permissions: {}
 
 jobs:
   php-syntax-check:
-    name: 'PHP ${{ matrix.php-versions }} Syntax Check'
+    name: PHP Syntax ${{ matrix.php-versions }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,6 +25,7 @@ jobs:
           - '8.2'
           - '8.3'
           - '8.4'
+          - '8.5'
     permissions:
       contents: read
     timeout-minutes: 2
@@ -34,19 +35,30 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up the PHP
-        uses: shivammathur/setup-php@v2
+      - name: Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v4
         with:
-          extensions: none
-          tools: none
-          ini-file: development
-          php-version: ${{ matrix.php-versions }}
+          cleanup: true
 
-      - name: Run PHP Syntax Check
-        run: make php-syntax-check
+      - name: Docker Bake
+        uses: docker/bake-action@v7
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          files: development/docker-compose-tests.yml
+          targets: php-syntax-check-php-${{ matrix.php-versions }}
+
+      - name: Docker Compose Up. PHP Syntax Check
+        working-directory: development
+        run: make up-php-syntax-check-php-${{ matrix.php-versions }}
+
+      - name: Docker Compose Down
+        if: always()
+        working-directory: development
+        run: make down
 
   php-syntax-check-tests-application:
-    name: 'PHP Syntax Check. Tests. Application'
+    name: PHP Syntax. Tests. Application
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -57,16 +69,27 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up the PHP
-        uses: shivammathur/setup-php@v2
+      - name: Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v4
         with:
-          extensions: none
-          tools: none
-          ini-file: development
-          php-version: 8.4
+          cleanup: true
 
-      - name: Run PHP Syntax Check
-        run: make php-syntax-check-tests-application
+      - name: Docker Bake
+        uses: docker/bake-action@v7
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          files: development/docker-compose-tests.yml
+          targets: php-syntax-check-tests-application
+
+      - name: Docker Compose Up. PHP Syntax Check
+        working-directory: development
+        run: make up-php-syntax-check-tests-application
+
+      - name: Docker Compose Down
+        if: always()
+        working-directory: development
+        run: make down
 
   phpcs:
     name: 'PHP Coding Standards and Compatibility'
@@ -146,6 +169,9 @@ jobs:
 
           - wordpress: 7.0-branch
             bbpress: 2.6
+
+          - wordpress: 7.1-branch
+            bbpress: 2.6
     with:
       wordpress_version: ${{ matrix.config.wordpress }}
       bbpress_version: ${{ matrix.config.bbpress }}
@@ -178,6 +204,9 @@ jobs:
             bbpress: 2.6
 
           - wordpress: 7.0-branch
+            bbpress: 2.6
+
+          - wordpress: 7.1-branch
             bbpress: 2.6
     with:
       wordpress_version: ${{ matrix.config.wordpress }}
@@ -257,7 +286,7 @@ jobs:
       - name: Set up the PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.4
+          php-version: 8.5
           ini-file: development
           extensions: ''
           tools: composer
@@ -300,52 +329,86 @@ jobs:
         config:
           - wordpress_arg_base_image: 'wordpress:latest'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
+          - wordpress_arg_base_image: 'wordpress:7.0'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.9'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.8'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.7'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.6'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.5'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.4'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.3'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.2'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.1'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:6.0'
             cli_arg_base_image: 'wordpress:cli'
-            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
           - wordpress_arg_base_image: 'wordpress:5.9'
             cli_arg_base_image: 'wordpress:cli'
             wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.5.14.zip'
-            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.8.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
+    secrets:
+      MYSQL_DATABASE: ${{ secrets.APPLICATION_TESTS_MYSQL_DATABASE }}
+      MYSQL_USER: ${{ secrets.APPLICATION_TESTS_MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.APPLICATION_TESTS_MYSQL_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${{ secrets.APPLICATION_TESTS_MYSQL_ROOT_PASSWORD }}
+      WORDPRESS_ADMIN_LOGIN: ${{ secrets.APPLICATION_TESTS_WORDPRESS_ADMIN_LOGIN }}
+      WORDPRESS_ADMIN_PASSWORD: ${{ secrets.APPLICATION_TESTS_WORDPRESS_ADMIN_PASSWORD }}
+      WORDPRESS_ADMIN_EMAIL: ${{ secrets.APPLICATION_TESTS_WORDPRESS_ADMIN_EMAIL }}
+    with:
+      WORDPRESS_ARG_BASE_IMAGE: ${{ matrix.config.wordpress_arg_base_image }}
+      WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL: ${{ matrix.config.wordpress_arg_plugin_bbpress_zip_url }}
+      WORDPRESS_ARG_THEME_ZIP_URL: ${{ matrix.config.wordpress_arg_theme_zip_url }}
+      CLI_ARG_BASE_IMAGE: ${{ matrix.config.cli_arg_base_image }}
+      WORDPRESS_DOMAIN: 'one.wordpress.test'
+      WORDPRESS_SITE_TITLE: 'Test Site'
+      WORDPRESS_SITE_LOCALE: 'en_US'
+
+  trivy:
+    name: Trivy
+    uses: ./.github/workflows/trivy.yml
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      matrix:
+        config:
+          - wordpress_arg_base_image: 'wordpress:latest'
+            cli_arg_base_image: 'wordpress:cli'
+            wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+            wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
     secrets:
       MYSQL_DATABASE: ${{ secrets.APPLICATION_TESTS_MYSQL_DATABASE }}
       MYSQL_USER: ${{ secrets.APPLICATION_TESTS_MYSQL_USER }}
