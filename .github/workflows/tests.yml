@@ -6,7 +6,7 @@ on:
   workflow_call:
 
 concurrency:
-  group: '${{ github.ref }}'
+  group: ${{ github.ref }}
   cancel-in-progress: true
 
 permissions: {}
@@ -92,7 +92,7 @@ jobs:
         run: make down
 
   phpcs:
-    name: 'PHP Coding Standards and Compatibility'
+    name: PHP Coding Standards and Compatibility
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -272,7 +272,7 @@ jobs:
         run: make psalm-tests-application
 
   phpmd:
-    name: 'PHP Mess Detector'
+    name: PHP Mess Detector
     runs-on: ubuntu-latest
     permissions:
       contents: read

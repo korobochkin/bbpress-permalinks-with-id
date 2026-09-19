@@ -13,14 +13,14 @@ permissions: {}
 
 jobs:
   precheck:
-    name: 'Precheck'
+    name: Precheck
     runs-on: ubuntu-latest
     if: ${{ !github.event.release.prerelease && github.ref_type == 'tag' }}
     outputs:
       version: ${{ steps.find-version.outputs.version }}
     timeout-minutes: 2
     steps:
-      - name: 'Find version'
+      - name: Find version
         id: find-version
         run: |
           VERSION="${GITHUB_REF#refs/tags/}"
@@ -28,7 +28,7 @@ jobs:
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
   tests:
-    name: 'Tests'
+    name: Tests
     uses: ./.github/workflows/tests.yml
     needs:
       - precheck
@@ -38,7 +38,7 @@ jobs:
     secrets: inherit
 
   plugin-check:
-    name: 'Plugin Check'
+    name: Plugin Check
     uses: ./.github/workflows/plugin-check.yml
     needs:
       - precheck
@@ -46,7 +46,7 @@ jobs:
       contents: read
 
   deploy:
-    name: 'Deploy'
+    name: Deploy
     runs-on: ubuntu-latest
     needs:
       - precheck
