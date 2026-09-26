@@ -27,7 +27,7 @@ on:
         required: true
       WORDPRESS_ARG_PLUGIN_BBPRESS_ZIP_URL:
         type: string
-        description: 'https://downloads.wordpress.org/plugin/bbpress.2.6.17.zip'
+        description: 'https://downloads.wordpress.org/plugin/bbpress.2.6.18.zip'
         required: true
       WORDPRESS_ARG_THEME_ZIP_URL:
         type: string
