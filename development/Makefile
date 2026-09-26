@@ -1,6 +1,6 @@
 
 build:
-	docker compose --file docker-compose-tests.yml build
+	docker compose --file docker-compose-tests.yml build --pull
 
 _up-%:
 	docker compose \

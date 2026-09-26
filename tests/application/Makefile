@@ -10,7 +10,7 @@ else
 endif
 
 build:
-	docker compose build
+	docker compose build --pull
 
 build-php:
 	docker compose build $(DOCKER_BUILD_QUIET) --with-dependencies php
