@@ -6,7 +6,8 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 enum PermalinkStructureEnum: string
 {
-    case PLAIN = 'plain';
+    case PLAIN_NUMERIC = 'plain-numeric';
+    case PLAIN_SLUG = 'plain-slug';
     case SLUG = 'slug';
     case NUMERIC = 'numeric';
 }
