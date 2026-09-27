@@ -157,7 +157,12 @@ abstract class AbstractPost implements PostInterface
      */
     public function getPlainNumericPermalink(string $home): string
     {
-        return $home.'/?p='.$this->getId();
+        $query = http_build_query([
+            'post_type' => $this->getType()->value,
+            'p' => $this->getId(),
+        ]);
+
+        return $home.'/?'.$query;
     }
 
     /**
@@ -167,7 +172,11 @@ abstract class AbstractPost implements PostInterface
      */
     public function getPlainSlugPermalink(string $home): string
     {
-        return $home.'/?'.$this->getType()->value.'='.$this->getName();
+        $query = http_build_query([
+            $this->getType()->value => $this->getName(),
+        ]);
+
+        return $home.'/?'.$query;
     }
 
     #[\Override]
