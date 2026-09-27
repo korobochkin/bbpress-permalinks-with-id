@@ -53,7 +53,7 @@ final class BrowsersService
     /**
      * @throws \InvalidArgumentException
      */
-    private function getHomePageURL(): string
+    public function getHomePageURL(): string
     {
         return $this->getEnvOrThrowError(TestSiteCredentials::HOME);
     }

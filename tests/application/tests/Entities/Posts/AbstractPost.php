@@ -150,6 +150,26 @@ abstract class AbstractPost implements PostInterface
         return $result;
     }
 
+    /**
+     * @param non-falsy-string $home
+     *
+     * @return non-falsy-string
+     */
+    public function getPlainNumericPermalink(string $home): string
+    {
+        return $home.'/?p='.$this->getId();
+    }
+
+    /**
+     * @param non-falsy-string $home
+     *
+     * @return non-falsy-string
+     */
+    public function getPlainSlugPermalink(string $home): string
+    {
+        return $home.'/?'.$this->getType()->value.'='.$this->getName();
+    }
+
     #[\Override]
     public function getPostDate(): \DateTime
     {
