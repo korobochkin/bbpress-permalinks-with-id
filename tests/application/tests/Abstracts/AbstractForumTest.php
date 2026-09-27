@@ -35,6 +35,9 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
     protected function testForum(HttpBrowser $browser, Forum $forum): Crawler
     {
         $browser->followRedirects(false);
+
+        $this->testForumPlainPermalink($browser, $forum);
+
         $crawler = $browser->request('GET', $this->useNumericPermalinksRequests ? $forum->getNumericPermalink() : $forum->getSamplePermalink());
 
         $this->assertPageStatusIs200($browser->getResponse());
@@ -50,6 +53,18 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
         }
 
         return $crawler;
+    }
+
+    protected function testForumPlainPermalink(HttpBrowser $browser, Forum $forum): void
+    {
+        $browser->request('GET', $forum->getPlainNumericPermalink($this->browsers->getHomePageURL()));
+
+        $this->assertIsRedirect($browser->getResponse());
+        $this->assertLocation(
+            $this->useNumericPermalinksHTML
+                ? $forum->getNumericPermalink() : $forum->getSamplePermalink(),
+            $browser->getResponse()
+        );
     }
 
     protected function testNotLoggedIn(Crawler $crawler): void
