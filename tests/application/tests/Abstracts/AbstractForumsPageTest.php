@@ -12,13 +12,13 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
     public function testForumsPageAsGuest(Page $forumsPage): void
     {
         $this->requestForumsPage($this->browsers->guest);
-        $this->assertForumsPageAccessible($this->browsers->guest, $forumsPage);
+        $this->assertForumsPage($this->browsers->guest, $forumsPage);
     }
 
     public function testForumsPageAsAdmin(Page $forumsPage): void
     {
         $this->requestForumsPage($this->browsers->admin);
-        $this->assertForumsPageAccessible($this->browsers->admin, $forumsPage);
+        $this->assertForumsPage($this->browsers->admin, $forumsPage);
     }
 
     protected function requestForumsPage(HttpBrowser $browser): void
@@ -27,7 +27,7 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
         $browser->request('GET', '/forums/');
     }
 
-    protected function assertForumsPageAccessible(HttpBrowser $browser, Page $forumsPage): void
+    protected function assertForumsPage(HttpBrowser $browser, Page $forumsPage): void
     {
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($forumsPage->getTitle(), $browser->getCrawler());
