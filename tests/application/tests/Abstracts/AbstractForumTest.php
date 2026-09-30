@@ -6,6 +6,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractForumTest extends AbstractHttpTestCase
@@ -40,7 +41,14 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 
         $crawler = $browser->request('GET', $this->useNumericPermalinksRequests ? $forum->getNumericPermalink() : $forum->getSamplePermalink());
 
-        $this->assertPageStatusIs200($browser->getResponse());
+        $this->testForumPage($forum, $browser->getResponse(), $crawler);
+
+        return $crawler;
+    }
+
+    protected function testForumPage(Forum $forum, Response $response, Crawler $crawler): void
+    {
+        $this->assertPageStatusIs200($response);
         $this->assertPageTitleEquals($forum->getTitle(), $crawler);
         $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
 
@@ -51,8 +59,6 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
             $this->assertPageContainsNotice('This forum', $crawler);
             $this->assertPageContainsNotice('and was last updated', $crawler);
         }
-
-        return $crawler;
     }
 
     protected function testForumPlainPermalink(HttpBrowser $browser, Forum $forum): void
@@ -65,6 +71,10 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
                 ? $forum->getNumericPermalink() : $forum->getSamplePermalink(),
             $browser->getResponse()
         );
+
+        $crawler = $browser->request('GET', $forum->getPlainSlugPermalink($this->browsers->getHomePageURL()));
+
+        $this->testForumPage($forum, $browser->getResponse(), $crawler);
     }
 
     protected function testNotLoggedIn(Crawler $crawler): void
