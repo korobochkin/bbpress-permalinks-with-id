@@ -46,6 +46,9 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
         return $crawler;
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     protected function testForumPage(Forum $forum, Response $response, Crawler $crawler): void
     {
         $this->assertPageStatusIs200($response);
@@ -61,6 +64,9 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
         }
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     */
     protected function testForumPlainPermalink(HttpBrowser $browser, Forum $forum): void
     {
         $browser->request('GET', $forum->getPlainNumericPermalink($this->browsers->getHomePageURL()));
