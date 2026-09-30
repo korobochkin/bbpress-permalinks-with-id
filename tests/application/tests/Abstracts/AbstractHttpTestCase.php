@@ -43,8 +43,6 @@ abstract class AbstractHttpTestCase extends TestCase
 
     protected bool $useNumericPermalinksHTML = false;
 
-    protected PermalinkStructureEnum $permalinkStructure = PermalinkStructureEnum::PLAIN_NUMERIC;
-
     /**
      * @throws \UnexpectedValueException
      */
