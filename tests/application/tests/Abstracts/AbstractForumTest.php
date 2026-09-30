@@ -64,6 +64,16 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
         }
     }
 
+    protected function testForumRedirect(Forum $forum, Response $response): void
+    {
+        $this->assertIsRedirect($response);
+        $this->assertLocation(
+            $this->useNumericPermalinksHTML
+                ? $forum->getNumericPermalink() : $forum->getSamplePermalink(),
+            $response
+        );
+    }
+
     /**
      * @throws \InvalidArgumentException
      */
@@ -71,12 +81,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
     {
         $browser->request('GET', $forum->getPlainNumericPermalink($this->browsers->getHomePageURL()));
 
-        $this->assertIsRedirect($browser->getResponse());
-        $this->assertLocation(
-            $this->useNumericPermalinksHTML
-                ? $forum->getNumericPermalink() : $forum->getSamplePermalink(),
-            $browser->getResponse()
-        );
+        $this->testForumRedirect($forum, $browser->getResponse());
 
         $crawler = $browser->request('GET', $forum->getPlainSlugPermalink($this->browsers->getHomePageURL()));
 
