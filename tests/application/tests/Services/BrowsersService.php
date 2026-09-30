@@ -51,6 +51,8 @@ final class BrowsersService
     }
 
     /**
+     * @return non-falsy-string
+     *
      * @throws \InvalidArgumentException
      */
     public function getHomePageURL(): string
@@ -59,6 +61,8 @@ final class BrowsersService
     }
 
     /**
+     * @return non-falsy-string
+     *
      * @throws \InvalidArgumentException
      */
     private function getEnvOrThrowError(TestSiteCredentials $name): string
@@ -67,11 +71,12 @@ final class BrowsersService
         if (
             \is_string($value)
             && '' !== $value
+            && $value
         ) {
             return $value;
         }
 
-        throw new \InvalidArgumentException("Required ENV variable is not defined: {$name->value}");
+        throw new \InvalidArgumentException("Required ENV variable is not defined or invalid: {$name->value}");
     }
 
     /**
