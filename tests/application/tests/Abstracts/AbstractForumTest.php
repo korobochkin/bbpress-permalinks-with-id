@@ -41,7 +41,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 
         $crawler = $browser->request('GET', $this->useNumericPermalinksRequests ? $forum->getNumericPermalink() : $forum->getSamplePermalink());
 
-        $this->testForumPage($forum, $browser->getResponse(), $crawler);
+        $this->assertForumPage($forum, $browser->getResponse(), $crawler);
 
         return $crawler;
     }
@@ -49,7 +49,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
     /**
      * @throws \InvalidArgumentException
      */
-    protected function testForumPage(Forum $forum, Response $response, Crawler $crawler): void
+    protected function assertForumPage(Forum $forum, Response $response, Crawler $crawler): void
     {
         $this->assertPageStatusIs200($response);
         $this->assertPageTitleEquals($forum->getTitle(), $crawler);
@@ -64,7 +64,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
         }
     }
 
-    protected function testForumRedirect(Forum $forum, Response $response): void
+    protected function assertForumRedirect(Forum $forum, Response $response): void
     {
         $this->assertIsRedirect($response);
         $this->assertLocation(
@@ -81,11 +81,11 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
     {
         $browser->request('GET', $forum->getPlainNumericPermalink($this->browsers->getHomePageURL()));
 
-        $this->testForumRedirect($forum, $browser->getResponse());
+        $this->assertForumRedirect($forum, $browser->getResponse());
 
         $crawler = $browser->request('GET', $forum->getPlainSlugPermalink($this->browsers->getHomePageURL()));
 
-        $this->testForumPage($forum, $browser->getResponse(), $crawler);
+        $this->assertForumPage($forum, $browser->getResponse(), $crawler);
     }
 
     protected function testNotLoggedIn(Crawler $crawler): void
