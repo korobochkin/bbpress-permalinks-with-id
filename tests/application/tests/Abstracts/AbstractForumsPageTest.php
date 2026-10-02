@@ -10,6 +10,9 @@ use Symfony\Component\BrowserKit\Response;
 
 abstract class AbstractForumsPageTest extends AbstractHttpTestCase
 {
+    /**
+     * @throws \LogicException
+     */
     public function testForumsPageAsGuest(Page $forumsPage): void
     {
         $this->testForumsPagePlainPermalink($this->browsers->guest, $forumsPage);
@@ -17,6 +20,9 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
         $this->assertForumsPage($this->browsers->guest, $forumsPage);
     }
 
+    /**
+     * @throws \LogicException
+     */
     public function testForumsPageAsAdmin(Page $forumsPage): void
     {
         $this->testForumsPagePlainPermalink($this->browsers->admin, $forumsPage);
@@ -30,17 +36,30 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
         $browser->request('GET', '/forums/');
     }
 
+    /**
+     * @throws \LogicException
+     */
     protected function testForumsPagePlainPermalink(HttpBrowser $browser, Page $forumsPage): void
     {
         $browser->followRedirects(false);
         $browser->request('GET', $forumsPage->getPlainNumericPermalink($this->browsers->getHomePageURL()));
-        $this->assertForumsPage($browser, $forumsPage);
+        $this->assertForumsPageRedirect($forumsPage, $browser->getResponse());
     }
 
     protected function assertForumsPage(HttpBrowser $browser, Page $forumsPage): void
     {
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($forumsPage->getTitle(), $browser->getCrawler());
+    }
+
+    protected function assertForumsPageRedirect(Page $forumsPage, Response $response): void
+    {
+        $this->assertIsRedirect($response);
+        $this->assertLocation(
+            $this->useNumericPermalinksHTML
+                ? $forumsPage->getNumericPermalink() : $forumsPage->getSamplePermalink(),
+            $response
+        );
     }
 
     protected function assertForumsPageHasNoForums(HttpBrowser $browser): void
