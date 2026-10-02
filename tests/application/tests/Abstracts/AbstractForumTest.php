@@ -15,6 +15,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
     public function testForumAsGuest(Forum $forum): void
     {
@@ -24,6 +25,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
     public function testForumAsAdmin(Forum $forum): void
     {
@@ -32,6 +34,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
     protected function testForum(HttpBrowser $browser, Forum $forum): Crawler
     {
@@ -64,6 +67,9 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
         }
     }
 
+    /**
+     * @throws \LogicException
+     */
     protected function assertForumRedirect(Forum $forum, Response $response): void
     {
         $this->assertIsRedirect($response);
@@ -76,6 +82,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
     protected function testForumPlainPermalink(HttpBrowser $browser, Forum $forum): void
     {

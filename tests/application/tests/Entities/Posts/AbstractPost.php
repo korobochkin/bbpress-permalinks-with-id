@@ -169,9 +169,14 @@ abstract class AbstractPost implements PostInterface
      * @param non-falsy-string $home
      *
      * @return non-falsy-string
+     *
+     * @throws \LogicException
      */
     public function getPlainSlugPermalink(string $home): string
     {
+        if (Type::Page === $this->getType()) {
+            throw new \LogicException('This kind of permalinks is not available for the post type');
+        }
         $query = http_build_query([
             $this->getType()->value => $this->getName(),
         ]);
