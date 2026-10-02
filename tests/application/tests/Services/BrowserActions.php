@@ -54,7 +54,7 @@ final class BrowserActions
         $post->setId($postID);
         $post->setAuthorId($userID);
 
-        $browser->request(
+        $savedPostCrawler = $browser->request(
             'POST',
             '/wp-admin/post.php',
             [
@@ -73,6 +73,9 @@ final class BrowserActions
                 'post_name' => $post->getName(), // slug
             ],
         );
+
+        $post->setStatus(self::getPostStatus($savedPostCrawler));
+        $post->setSamplePermalink(self::getSamplePermalinkFromAdminBar($savedPostCrawler));
     }
 
     /**
@@ -167,5 +170,16 @@ final class BrowserActions
     private static function getSamplePermalink(Crawler $crawler): string
     {
         return TypesUtilities::getNonFalsyString($crawler->filterXPath('//body//*[contains(@id, "edit-slug-box")]//a')->attr('href'));
+    }
+
+    /**
+     * @return non-falsy-string
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    private static function getSamplePermalinkFromAdminBar(Crawler $crawler): string
+    {
+        return TypesUtilities::getNonFalsyString($crawler->filterXPath('//body//ul[contains(@id, "wp-admin-bar-root-default")]/*[contains(@id, "wp-admin-bar-view")]/a')->attr('href'));
     }
 }
