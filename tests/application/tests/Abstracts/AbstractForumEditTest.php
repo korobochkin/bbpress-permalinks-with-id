@@ -29,7 +29,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     protected function _testForumEditAsAdmin(HttpBrowser $browser, Forum $forum): void
     {
         $crawler = $this->requestEditPage($browser, $forum);
-        $this->testForumEditPage($browser, $forum, $crawler);
+        $this->assertForumEditPage($browser, $forum, $crawler);
     }
 
     /**
@@ -46,7 +46,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
 
         $crawler2 = $this->requestEditPage($browser, $forum);
 
-        $this->testForumEditPage($browser, $newForum, $crawler2);
+        $this->assertForumEditPage($browser, $newForum, $crawler2);
 
         // Rollback to the original content
         FrontendUtilities::submitEditForm($browser, $crawler2, $forum);
@@ -67,7 +67,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */
-    private function testForumEditPage(HttpBrowser $browser, Forum $forum, Crawler $crawler): void
+    private function assertForumEditPage(HttpBrowser $browser, Forum $forum, Crawler $crawler): void
     {
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($forum->getTitle(), $crawler);
