@@ -16,8 +16,7 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
     public function testForumsPageAsGuest(Page $forumsPage): void
     {
         $this->testForumsPagePlainPermalink($this->browsers->guest, $forumsPage);
-        $this->requestForumsPage($this->browsers->guest);
-        $this->assertForumsPage($this->browsers->guest, $forumsPage);
+        $this->testForumsPage($this->browsers->guest, $forumsPage);
     }
 
     /**
@@ -26,14 +25,14 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
     public function testForumsPageAsAdmin(Page $forumsPage): void
     {
         $this->testForumsPagePlainPermalink($this->browsers->admin, $forumsPage);
-        $this->requestForumsPage($this->browsers->admin);
-        $this->assertForumsPage($this->browsers->admin, $forumsPage);
+        $this->testForumsPage($this->browsers->admin, $forumsPage);
     }
 
-    protected function requestForumsPage(HttpBrowser $browser): void
+    protected function testForumsPage(HttpBrowser $browser, Page $forumsPage): void
     {
         $browser->followRedirects(false);
         $browser->request('GET', '/forums/');
+        $this->assertForumsPage($browser, $forumsPage);
     }
 
     /**
