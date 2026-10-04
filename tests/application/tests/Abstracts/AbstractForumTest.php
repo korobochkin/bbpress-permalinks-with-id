@@ -6,6 +6,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -86,11 +87,11 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
      */
     protected function testForumPlainPermalink(HttpBrowser $browser, Forum $forum): void
     {
-        $browser->request('GET', $forum->getPlainNumericPermalink($this->browsers->getHomePageURL()));
+        $browser->request('GET', URL::getPlainNumericPermalink($this->browsers->getHomePageURL(), $forum));
 
         $this->assertForumRedirect($forum, $browser->getResponse());
 
-        $crawler = $browser->request('GET', $forum->getPlainSlugPermalink($this->browsers->getHomePageURL()));
+        $crawler = $browser->request('GET', URL::getPlainSlugPermalink($this->browsers->getHomePageURL(), $forum));
 
         $this->assertForumPage($forum, $browser->getResponse(), $crawler);
     }
