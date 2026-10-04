@@ -6,11 +6,47 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\BbPressPostInterface;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Interfaces\PostInterface;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Type;
 
 final class URL
 {
+    /**
+     * @param non-falsy-string $home
+     *
+     * @return non-falsy-string
+     */
+    public static function getPlainNumericPermalink(string $home, PostInterface $post): string
+    {
+        $query = http_build_query([
+            'post_type' => $post->getType()->value,
+            'p' => $post->getId(),
+        ]);
+
+        return $home.'/?'.$query;
+    }
+
+    /**
+     * @param non-falsy-string $home
+     *
+     * @return non-falsy-string
+     *
+     * @throws \LogicException
+     */
+    public static function getPlainSlugPermalink(string $home, PostInterface $post): string
+    {
+        if (Type::Page === $post->getType()) {
+            throw new \LogicException('This kind of permalinks is not available for the post type');
+        }
+        $query = http_build_query([
+            $post->getType()->value => $post->getName(),
+        ]);
+
+        return $home.'/?'.$query;
+    }
+
     /**
      * @throws \LogicException
      */
