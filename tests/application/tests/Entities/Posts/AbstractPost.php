@@ -150,40 +150,6 @@ abstract class AbstractPost implements PostInterface
         return $result;
     }
 
-    /**
-     * @param non-falsy-string $home
-     *
-     * @return non-falsy-string
-     */
-    public function getPlainNumericPermalink(string $home): string
-    {
-        $query = http_build_query([
-            'post_type' => $this->getType()->value,
-            'p' => $this->getId(),
-        ]);
-
-        return $home.'/?'.$query;
-    }
-
-    /**
-     * @param non-falsy-string $home
-     *
-     * @return non-falsy-string
-     *
-     * @throws \LogicException
-     */
-    public function getPlainSlugPermalink(string $home): string
-    {
-        if (Type::Page === $this->getType()) {
-            throw new \LogicException('This kind of permalinks is not available for the post type');
-        }
-        $query = http_build_query([
-            $this->getType()->value => $this->getName(),
-        ]);
-
-        return $home.'/?'.$query;
-    }
-
     #[\Override]
     public function getPostDate(): \DateTime
     {

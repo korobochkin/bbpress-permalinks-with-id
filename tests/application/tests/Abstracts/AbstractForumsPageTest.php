@@ -6,6 +6,7 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Page;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\BrowserKit\Response;
 
 abstract class AbstractForumsPageTest extends AbstractHttpTestCase
@@ -41,7 +42,7 @@ abstract class AbstractForumsPageTest extends AbstractHttpTestCase
     protected function testForumsPagePlainPermalink(HttpBrowser $browser, Page $forumsPage): void
     {
         $browser->followRedirects(false);
-        $browser->request('GET', $forumsPage->getPlainNumericPermalink($this->browsers->getHomePageURL()));
+        $browser->request('GET', URL::getPlainNumericPermalink($this->browsers->getHomePageURL(), $forumsPage));
         $this->assertForumsPageRedirect($forumsPage, $browser->getResponse());
     }
 
