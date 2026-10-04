@@ -13,16 +13,19 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Typ
 
 final class URL
 {
+    private static $edit = ['edit' => '1'];
+
     /**
      * @param non-falsy-string $home
      *
      * @return non-falsy-string
      */
-    public static function getPlainNumericPermalink(string $home, PostInterface $post): string
+    public static function getPlainNumericPermalink(string $home, PostInterface $post, array $extraQuery = []): string
     {
         $query = http_build_query([
             'post_type' => $post->getType()->value,
             'p' => $post->getId(),
+            ...$extraQuery,
         ]);
 
         return $home.'/?'.$query;
@@ -35,13 +38,14 @@ final class URL
      *
      * @throws \LogicException
      */
-    public static function getPlainSlugPermalink(string $home, PostInterface $post): string
+    public static function getPlainSlugPermalink(string $home, PostInterface $post, array $extraQuery = []): string
     {
         if (Type::Page === $post->getType()) {
             throw new \LogicException('This kind of permalinks is not available for the post type');
         }
         $query = http_build_query([
             $post->getType()->value => $post->getName(),
+            ...$extraQuery,
         ]);
 
         return $home.'/?'.$query;
@@ -70,6 +74,13 @@ final class URL
         }
 
         return $permalink.'edit/';
+    }
+
+    public static function editPlainPermalink(string $home, BbPressPostInterface $post, bool $useNumericPermalinks): string
+    {
+        return $useNumericPermalinks
+            ? self::getPlainNumericPermalink($home, $post, self::$edit)
+            : self::getPlainSlugPermalink($home, $post, self::$edit);
     }
 
     /**
