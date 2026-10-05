@@ -20,6 +20,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     {
         $this->requestEditPage($browser, $forum);
         $this->assertForumEditPageRedirect($browser, $forum);
+        $this->_testForumEditPlainPermalinkAsGuest($browser, $forum);
     }
 
     /**
@@ -30,6 +31,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     {
         $crawler = $this->requestEditPage($browser, $forum);
         $this->assertForumEditPage($browser, $forum, $crawler);
+        $this->_testForumEditPlainPermalinkAsAdmin($browser, $forum);
     }
 
     /**
@@ -50,6 +52,36 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
 
         // Rollback to the original content
         FrontendUtilities::submitEditForm($browser, $crawler2, $forum);
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     */
+    private function _testForumEditPlainPermalinkAsGuest(HttpBrowser $browser, Forum $forum): void
+    {
+        $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, true));
+
+        $this->assertForumEditPageRedirect($browser, $forum);
+
+        $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, false));
+
+        $this->assertForumEditPageRedirect($browser, $forum);
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     */
+    private function _testForumEditPlainPermalinkAsAdmin(HttpBrowser $browser, Forum $forum): void
+    {
+        $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, true));
+
+        $this->assertForumEditPageRedirectEdit($browser, $forum);
+
+        $crawler = $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, false));
+
+        $this->assertForumEditPage($browser, $forum, $crawler);
     }
 
     /**
@@ -87,6 +119,12 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     {
         $this->assertIsRedirect($browser->getResponse());
         $this->assertLocation($this->useNumericPermalinksHTML ? $forum->getNumericPermalink() : $forum->getSamplePermalink(), $browser->getResponse());
+    }
+
+    private function assertForumEditPageRedirectEdit(HttpBrowser $browser, Forum $forum): void
+    {
+        $this->assertIsRedirect($browser->getResponse());
+        $this->assertLocation(URL::editPermalink($forum, $this->useNumericPermalinksHTML), $browser->getResponse());
     }
 
     /**
