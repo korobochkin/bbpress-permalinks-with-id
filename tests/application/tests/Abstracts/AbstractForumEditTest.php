@@ -75,12 +75,10 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
      */
     private function _testForumEditPlainPermalinkAsAdmin(HttpBrowser $browser, Forum $forum): void
     {
-        $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, true));
-
+        $this->requestEditPagePlain($browser, $forum, true);
         $this->assertForumEditPageRedirectAsAdmin($browser, $forum);
 
-        $crawler = $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, false));
-
+        $crawler = $this->requestEditPagePlain($browser, $forum, false);
         $this->assertForumEditPage($browser, $forum, $crawler);
     }
 
@@ -93,6 +91,24 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $browser->followRedirects(false);
 
         return $browser->request('GET', URL::editPermalink($forum, $this->useNumericPermalinksRequests));
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     */
+    private function requestEditPagePlain(HttpBrowser $browser, Forum $forum, bool $useNumericPermalinksRequests): Crawler
+    {
+        $browser->followRedirects(false);
+
+        return $browser->request(
+            'GET',
+            URL::editPlainPermalink(
+                $this->browsers->getHomePageURL(),
+                $forum,
+                $useNumericPermalinksRequests
+            )
+        );
     }
 
     /**
