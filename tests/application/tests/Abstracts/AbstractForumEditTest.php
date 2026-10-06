@@ -77,7 +77,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     {
         $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, true));
 
-        $this->assertForumEditPageRedirectEdit($browser, $forum);
+        $this->assertForumEditPageRedirectAsAdmin($browser, $forum);
 
         $crawler = $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, false));
 
@@ -121,10 +121,10 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertLocation($this->useNumericPermalinksHTML ? $forum->getNumericPermalink() : $forum->getSamplePermalink(), $browser->getResponse());
     }
 
-    private function assertForumEditPageRedirectEdit(HttpBrowser $browser, Forum $forum): void
+    private function assertForumEditPageRedirectAsAdmin(HttpBrowser $browser, Forum $forum): void
     {
         $this->assertIsRedirect($browser->getResponse());
-        $this->assertLocation(URL::editPermalink($forum, $this->useNumericPermalinksHTML), $browser->getResponse());
+        $this->assertLocation(URL::editPermalinkEditAsPlain($forum, $this->useNumericPermalinksHTML), $browser->getResponse());
     }
 
     /**

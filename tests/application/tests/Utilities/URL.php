@@ -83,6 +83,19 @@ final class URL
             : self::getPlainSlugPermalink($home, $post, self::$edit);
     }
 
+    public static function editPermalinkEditAsPlain(BbPressPostInterface $post, bool $useNumericPermalinks): string
+    {
+        $permalink = $useNumericPermalinks ? $post->getNumericPermalink() : $post->getSamplePermalink();
+
+        if (!str_ends_with($permalink, '/')) {
+            throw new \LogicException('Invalid permalink format');
+        }
+
+        $query = http_build_query(self::$edit);
+
+        return $permalink.'?'.$query;
+    }
+
     /**
      * @throws \LogicException
      */
