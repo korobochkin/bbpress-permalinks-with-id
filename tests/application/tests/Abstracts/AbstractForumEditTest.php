@@ -54,6 +54,22 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         FrontendUtilities::submitEditForm($browser, $crawler2, $forum);
     }
 
+    protected function _testForumSubmitEditPlainAsAdmin(HttpBrowser $browser, Forum $forum, Forum $newForum): void
+    {
+        $crawler = $this->requestEditPagePlain($browser, $forum, false);
+
+        FrontendUtilities::submitEditForm($browser, $crawler, $newForum);
+
+        $this->assertForumEditPageRedirect($browser, $forum);
+
+        $crawler2 = $this->requestEditPagePlain($browser, $forum, false);
+
+        $this->assertForumEditPage($browser, $newForum, $crawler2);
+
+        // Rollback to the original content
+        FrontendUtilities::submitEditForm($browser, $crawler2, $forum);
+    }
+
     /**
      * @throws \InvalidArgumentException
      * @throws \LogicException

@@ -56,5 +56,6 @@ final class ForumNumericEditTest extends AbstractForumEditTest
     public function testForumSubmitEditAsAdmin(Forum $forum): void
     {
         $this->_testForumSubmitEditAsAdmin($this->browsers->admin, $forum, PostUtilities::copyAndEditTitleAndContent($forum));
+        $this->_testForumSubmitEditPlainAsAdmin($this->browsers->admin, $forum, PostUtilities::copyAndEditTitleAndContent($forum));
     }
 }
