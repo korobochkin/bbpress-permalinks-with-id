@@ -20,7 +20,12 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     {
         $this->requestEditPage($browser, $forum);
         $this->assertForumEditPageRedirect($browser, $forum);
-        $this->_testForumEditPlainPermalinkAsGuest($browser, $forum);
+
+        $this->requestEditPagePlain($browser, $forum, true);
+        $this->assertForumEditPageRedirect($browser, $forum);
+
+        $this->requestEditPagePlain($browser, $forum, false);
+        $this->assertForumEditPageRedirect($browser, $forum);
     }
 
     /**
@@ -31,7 +36,12 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     {
         $crawler = $this->requestEditPage($browser, $forum);
         $this->assertForumEditPage($browser, $forum, $crawler);
-        $this->_testForumEditPlainPermalinkAsAdmin($browser, $forum);
+
+        $this->requestEditPagePlain($browser, $forum, true);
+        $this->assertForumEditPageRedirectAsAdmin($browser, $forum);
+
+        $crawler2 = $this->requestEditPagePlain($browser, $forum, false);
+        $this->assertForumEditPage($browser, $forum, $crawler2);
     }
 
     /**
@@ -54,6 +64,10 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         FrontendUtilities::submitEditForm($browser, $crawler2, $forum);
     }
 
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     protected function _testForumSubmitEditPlainAsAdmin(HttpBrowser $browser, Forum $forum, Forum $newForum): void
     {
         $crawler = $this->requestEditPagePlain($browser, $forum, false);
@@ -68,34 +82,6 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
 
         // Rollback to the original content
         FrontendUtilities::submitEditForm($browser, $crawler2, $forum);
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     * @throws \LogicException
-     */
-    private function _testForumEditPlainPermalinkAsGuest(HttpBrowser $browser, Forum $forum): void
-    {
-        $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, true));
-
-        $this->assertForumEditPageRedirect($browser, $forum);
-
-        $browser->request('GET', URL::editPlainPermalink($this->browsers->getHomePageURL(), $forum, false));
-
-        $this->assertForumEditPageRedirect($browser, $forum);
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     * @throws \LogicException
-     */
-    private function _testForumEditPlainPermalinkAsAdmin(HttpBrowser $browser, Forum $forum): void
-    {
-        $this->requestEditPagePlain($browser, $forum, true);
-        $this->assertForumEditPageRedirectAsAdmin($browser, $forum);
-
-        $crawler = $this->requestEditPagePlain($browser, $forum, false);
-        $this->assertForumEditPage($browser, $forum, $crawler);
     }
 
     /**
