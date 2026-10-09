@@ -13,6 +13,9 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Typ
 
 final class URL
 {
+    /**
+     * @var non-empty-array<string, string>
+     */
     private static $edit = ['edit' => '1'];
 
     /**
@@ -76,6 +79,11 @@ final class URL
         return $permalink.'edit/';
     }
 
+    /**
+     * @param non-falsy-string $home
+     *
+     * @return non-falsy-string
+     */
     public static function editPlainPermalink(string $home, BbPressPostInterface $post, bool $useNumericPermalinks): string
     {
         return $useNumericPermalinks
@@ -83,6 +91,11 @@ final class URL
             : self::getPlainSlugPermalink($home, $post, self::$edit);
     }
 
+    /**
+     * @return non-falsy-string
+     *
+     * @throws \LogicException
+     */
     public static function editPermalinkEditAsPlain(BbPressPostInterface $post, bool $useNumericPermalinks): string
     {
         $permalink = $useNumericPermalinks ? $post->getNumericPermalink() : $post->getSamplePermalink();
