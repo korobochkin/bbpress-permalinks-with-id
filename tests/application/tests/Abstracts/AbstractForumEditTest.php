@@ -139,6 +139,9 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertLocation($this->useNumericPermalinksHTML ? $forum->getNumericPermalink() : $forum->getSamplePermalink(), $browser->getResponse());
     }
 
+    /**
+     * @throws \LogicException
+     */
     private function assertForumEditPageRedirectAsAdmin(HttpBrowser $browser, Forum $forum): void
     {
         $this->assertIsRedirect($browser->getResponse());
