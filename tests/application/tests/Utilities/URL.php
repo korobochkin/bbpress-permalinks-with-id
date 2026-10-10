@@ -70,6 +70,19 @@ final class URL
     }
 
     /**
+     * @param non-falsy-string $home
+     * @param positive-int     $page
+     *
+     * @throws \LogicException
+     */
+    public static function pagePermalinkPlain(string $home, Forum|Topic $post, int $page, bool $useNumericPermalinks): string
+    {
+        return $useNumericPermalinks
+        ? self::getPlainNumericPermalink($home, $post, ['paged' => $page])
+        : self::getPlainSlugPermalink($home, $post, ['paged' => $page]);
+    }
+
+    /**
      * @throws \LogicException
      */
     public static function editPermalink(BbPressPostInterface $post, bool $useNumericPermalinks): string

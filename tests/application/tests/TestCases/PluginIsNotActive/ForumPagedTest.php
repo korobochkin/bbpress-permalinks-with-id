@@ -28,6 +28,7 @@ final class ForumPagedTest extends AbstractForumPagedTest
     public function testForumPagedAsGuest(Forum $forum, int $page, array $topics): void
     {
         $this->_testForumPaged($this->browsers->guest, $forum, $page, $topics);
+        $this->_testForumPagedPlain($this->browsers->guest, $forum, $page, $topics);
     }
 
     /**
@@ -42,5 +43,6 @@ final class ForumPagedTest extends AbstractForumPagedTest
     public function testForumPagedAsAdmin(Forum $forum, int $page, array $topics): void
     {
         $this->_testForumPaged($this->browsers->admin, $forum, $page, $topics);
+        $this->_testForumPagedPlain($this->browsers->admin, $forum, $page, $topics);
     }
 }
