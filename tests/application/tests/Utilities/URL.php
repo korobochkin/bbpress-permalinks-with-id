@@ -19,7 +19,8 @@ final class URL
     private static $edit = ['edit' => '1'];
 
     /**
-     * @param non-falsy-string $home
+     * @param non-falsy-string          $home
+     * @param array<string, int|string> $extraQuery
      *
      * @return non-falsy-string
      */
@@ -35,7 +36,8 @@ final class URL
     }
 
     /**
-     * @param non-falsy-string $home
+     * @param non-falsy-string          $home
+     * @param array<string, int|string> $extraQuery
      *
      * @return non-falsy-string
      *
@@ -55,6 +57,8 @@ final class URL
     }
 
     /**
+     * @param positive-int $page
+     *
      * @throws \LogicException
      */
     public static function pagePermalink(Forum|Topic $post, int $page, bool $useNumericPermalinks): string
@@ -132,6 +136,8 @@ final class URL
     }
 
     /**
+     * @param positive-int $page
+     *
      * @throws \LogicException
      */
     private static function paged(string $permalink, int $page): string
