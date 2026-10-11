@@ -1,0 +1,47 @@
+### GET Topic (pretty, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/forums/topic/{{ bbpress.topic.slug }}/
+
+
+### GET Topic (pretty, numeric)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/forums/topic/{{ bbpress.topic.id }}/
+
+
+### GET Topic (plain, numeric)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?post_type=topic&p={{ bbpress.topic.id }}
+
+
+### Edit Topic (plain, numeric)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?post_type=topic&p={{ bbpress.topic.id }}&edit=1
+
+
+### GET Topic. Page $NUMBER (plain, numeric)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?post_type=topic&p={{ bbpress.topic.id }}&paged={{ bbpress.topic.page }}
+
+
+### GET Topic. Page $NUMBER (plain, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?topic={{ bbpress.topic.slug }}&paged={{ bbpress.topic.page }}
+
+
+### GET Topic (plain, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?topic={{ bbpress.topic.slug }}
