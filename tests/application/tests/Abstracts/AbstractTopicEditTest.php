@@ -31,7 +31,7 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
     protected function _testTopicEditAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic): void
     {
         $crawler = $this->requestEditPage($browser, $topic);
-        $this->testTopicEditPage($browser, $forum, $topic, $crawler);
+        $this->assertTopicEditPage($browser, $forum, $topic, $crawler);
     }
 
     /**
@@ -48,7 +48,7 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
 
         $crawler2 = $this->requestEditPage($browser, $topic);
 
-        $this->testTopicEditPage($browser, $forum, $newTopic, $crawler2);
+        $this->assertTopicEditPage($browser, $forum, $newTopic, $crawler2);
 
         // Rollback to the original content
         FrontendUtilities::submitEditForm($browser, $crawler2, $topic);
@@ -68,7 +68,7 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
     /**
      * @throws \InvalidArgumentException
      */
-    private function testTopicEditPage(HttpBrowser $browser, Forum $forum, Topic $topic, Crawler $crawler): void
+    private function assertTopicEditPage(HttpBrowser $browser, Forum $forum, Topic $topic, Crawler $crawler): void
     {
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($topic->getTitle(), $crawler);
