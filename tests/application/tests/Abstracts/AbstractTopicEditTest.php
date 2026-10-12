@@ -21,7 +21,7 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
     protected function _testTopicEditAsGuest(HttpBrowser $browser, Forum $forum, Topic $topic): void
     {
         $this->requestEditPage($browser, $topic);
-        $this->assertEditPageRedirected($browser, $topic);
+        $this->assertEditPageRedirect($browser, $topic);
     }
 
     /**
@@ -44,7 +44,7 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
 
         FrontendUtilities::submitEditForm($browser, $crawler, $newTopic);
 
-        $this->assertEditPageRedirected($browser, $topic);
+        $this->assertEditPageRedirect($browser, $topic);
 
         $crawler2 = $this->requestEditPage($browser, $topic);
 
@@ -83,7 +83,7 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
         $this->assertTopicEditFormHasSubmit($crawler);
     }
 
-    private function assertEditPageRedirected(HttpBrowser $browser, Topic $topic): void
+    private function assertEditPageRedirect(HttpBrowser $browser, Topic $topic): void
     {
         $this->assertIsRedirect($browser->getResponse());
         $this->assertLocation($this->useNumericPermalinksHTML ? $topic->getNumericPermalink() : $topic->getSamplePermalink(), $browser->getResponse());
