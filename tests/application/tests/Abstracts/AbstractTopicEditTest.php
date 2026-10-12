@@ -22,6 +22,12 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
     {
         $this->requestEditPage($browser, $topic);
         $this->assertEditPageRedirect($browser, $topic);
+
+        $this->requestEditPagePlain($browser, $topic, true);
+        $this->assertEditPageRedirect($browser, $topic);
+
+        $this->requestEditPagePlain($browser, $topic, false);
+        $this->assertEditPageRedirect($browser, $topic);
     }
 
     /**
@@ -32,6 +38,12 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
     {
         $crawler = $this->requestEditPage($browser, $topic);
         $this->assertTopicEditPage($browser, $forum, $topic, $crawler);
+
+        $crawler2 = $this->requestEditPagePlain($browser, $topic, true);
+        $this->assertTopicEditPage($browser, $forum, $topic, $crawler2);
+
+        $crawler3 = $this->requestEditPagePlain($browser, $topic, false);
+        $this->assertTopicEditPage($browser, $forum, $topic, $crawler3);
     }
 
     /**
@@ -58,11 +70,49 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */
+    protected function _testTopicSubmitEditPlainAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic, Topic $newTopic): void
+    {
+        $crawler = $this->requestEditPagePlain($browser, $topic, false);
+
+        FrontendUtilities::submitEditForm($browser, $crawler, $newTopic);
+
+        $this->assertEditPageRedirect($browser, $topic);
+
+        $crawler2 = $this->requestEditPagePlain($browser, $topic, false);
+
+        $this->assertTopicEditPage($browser, $forum, $newTopic, $crawler2);
+
+        // Rollback to the original content
+        FrontendUtilities::submitEditForm($browser, $crawler2, $topic);
+    }
+
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
     private function requestEditPage(HttpBrowser $browser, Topic $topic): Crawler
     {
         $browser->followRedirects(false);
 
         return $browser->request('GET', URL::editPermalink($topic, $this->useNumericPermalinksRequests));
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     */
+    private function requestEditPagePlain(HttpBrowser $browser, Topic $topic, bool $useNumericPermalinksRequests): Crawler
+    {
+        $browser->followRedirects(false);
+
+        return $browser->request(
+            'GET',
+            URL::editPlainPermalink(
+                $this->browsers->getHomePageURL(),
+                $topic,
+                $useNumericPermalinksRequests
+            )
+        );
     }
 
     /**

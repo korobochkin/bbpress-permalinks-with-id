@@ -56,5 +56,6 @@ final class TopicEditTest extends AbstractTopicEditTest
     public function testTopicSubmitEditAsAdmin(Forum $forum, Topic $topic): void
     {
         $this->_testTopicSubmitEditAsAdmin($this->browsers->admin, $forum, $topic, PostUtilities::copyAndEditTitleAndContent($topic));
+        $this->_testTopicSubmitEditPlainAsAdmin($this->browsers->admin, $forum, $topic, PostUtilities::copyAndEditTitleAndContent($topic));
     }
 }
