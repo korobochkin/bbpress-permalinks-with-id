@@ -21,7 +21,7 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
     protected function _testReplyEditAsGuest(HttpBrowser $browser, Topic $topic, Reply $reply): void
     {
         $this->requestEditPage($browser, $reply);
-        $this->assertEditPageRedirected($browser, $topic, $reply);
+        $this->assertEditPageRedirect($browser, $topic, $reply);
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
         $reply->setTitle('');
         $newReply->setTitle('');
 
-        $this->assertEditPageRedirected($browser, $topic, $reply);
+        $this->assertEditPageRedirect($browser, $topic, $reply);
 
         $crawler2 = $this->requestEditPage($browser, $reply);
 
@@ -99,7 +99,7 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
     /**
      * @throws \LogicException
      */
-    private function assertEditPageRedirected(HttpBrowser $browser, Topic $topic, Reply $reply): void
+    private function assertEditPageRedirect(HttpBrowser $browser, Topic $topic, Reply $reply): void
     {
         $this->assertIsRedirect($browser->getResponse());
 

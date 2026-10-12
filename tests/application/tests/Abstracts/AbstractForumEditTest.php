@@ -19,13 +19,13 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     protected function _testForumEditAsGuest(HttpBrowser $browser, Forum $forum): void
     {
         $this->requestEditPage($browser, $forum);
-        $this->assertForumEditPageRedirect($browser, $forum);
+        $this->assertEditPageRedirect($browser, $forum);
 
         $this->requestEditPagePlain($browser, $forum, true);
-        $this->assertForumEditPageRedirect($browser, $forum);
+        $this->assertEditPageRedirect($browser, $forum);
 
         $this->requestEditPagePlain($browser, $forum, false);
-        $this->assertForumEditPageRedirect($browser, $forum);
+        $this->assertEditPageRedirect($browser, $forum);
     }
 
     /**
@@ -38,7 +38,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
         $this->assertForumEditPage($browser, $forum, $crawler);
 
         $this->requestEditPagePlain($browser, $forum, true);
-        $this->assertForumEditPageRedirectAsAdmin($browser, $forum);
+        $this->assertEditPageRedirectAsAdmin($browser, $forum);
 
         $crawler2 = $this->requestEditPagePlain($browser, $forum, false);
         $this->assertForumEditPage($browser, $forum, $crawler2);
@@ -54,7 +54,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
 
         FrontendUtilities::submitEditForm($browser, $crawler, $newForum);
 
-        $this->assertForumEditPageRedirect($browser, $forum);
+        $this->assertEditPageRedirect($browser, $forum);
 
         $crawler2 = $this->requestEditPage($browser, $forum);
 
@@ -74,7 +74,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
 
         FrontendUtilities::submitEditForm($browser, $crawler, $newForum);
 
-        $this->assertForumEditPageRedirect($browser, $forum);
+        $this->assertEditPageRedirect($browser, $forum);
 
         $crawler2 = $this->requestEditPagePlain($browser, $forum, false);
 
@@ -133,7 +133,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
      * @throws \LogicException
      * @throws \InvalidArgumentException
      */
-    private function assertForumEditPageRedirect(HttpBrowser $browser, Forum $forum): void
+    private function assertEditPageRedirect(HttpBrowser $browser, Forum $forum): void
     {
         $this->assertIsRedirect($browser->getResponse());
         $this->assertLocation($this->useNumericPermalinksHTML ? $forum->getNumericPermalink() : $forum->getSamplePermalink(), $browser->getResponse());
@@ -142,7 +142,7 @@ abstract class AbstractForumEditTest extends AbstractHttpTestCase
     /**
      * @throws \LogicException
      */
-    private function assertForumEditPageRedirectAsAdmin(HttpBrowser $browser, Forum $forum): void
+    private function assertEditPageRedirectAsAdmin(HttpBrowser $browser, Forum $forum): void
     {
         $this->assertIsRedirect($browser->getResponse());
         $this->assertLocation(URL::editPermalinkEditAsPlain($forum, $this->useNumericPermalinksHTML), $browser->getResponse());
