@@ -26,17 +26,7 @@ abstract class AbstractTopicPagedTest extends AbstractHttpTestCase
         $permalink = URL::pagePermalink($topic, $page, $this->useNumericPermalinksRequests);
         $crawler = $browser->request('GET', $permalink);
 
-        $this->assertPageStatusIs200($browser->getResponse());
-        $this->assertPageTitleEquals($topic->getTitle(), $crawler);
-        $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
-        $this->assertBbPressBreadCrumbsContains($topic->getTitle(), $crawler);
-
-        $this->assertThat(
-            $contents = $this->buildReplyContentsOnPageList($crawler),
-            $this->logicalAnd(...$constraints = $this->buildConstraintsForReplyContents($topic, $page, $replies)),
-        );
-
-        $this->assertSameSize($constraints, $contents);
+        $this->assertTopicPaged($crawler, $browser, $forum, $topic, $page, $replies);
     }
 
     protected function getReplyContentsList(Crawler $crawler): Crawler
@@ -70,5 +60,27 @@ abstract class AbstractTopicPagedTest extends AbstractHttpTestCase
         }
 
         return $constraints;
+    }
+
+    /**
+     * @param int<1, max> $page
+     * @param list<Reply> $replies
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
+    protected function assertTopicPaged(Crawler $crawler, HttpBrowser $browser, Forum $forum, Topic $topic, int $page, array $replies): void
+    {
+        $this->assertPageStatusIs200($browser->getResponse());
+        $this->assertPageTitleEquals($topic->getTitle(), $crawler);
+        $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
+        $this->assertBbPressBreadCrumbsContains($topic->getTitle(), $crawler);
+
+        $this->assertThat(
+            $contents = $this->buildReplyContentsOnPageList($crawler),
+            $this->logicalAnd(...$constraints = $this->buildConstraintsForReplyContents($topic, $page, $replies)),
+        );
+
+        $this->assertSameSize($constraints, $contents);
     }
 }
