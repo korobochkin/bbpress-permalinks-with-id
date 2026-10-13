@@ -29,6 +29,22 @@ abstract class AbstractTopicPagedTest extends AbstractHttpTestCase
         $this->assertTopicPaged($crawler, $browser, $forum, $topic, $page, $replies);
     }
 
+    /**
+     * @param int<1, max> $page
+     * @param list<Reply> $replies
+     *
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
+    protected function _testTopicPagedPlain(HttpBrowser $browser, Forum $forum, Topic $topic, int $page, array $replies): void
+    {
+        $browser->followRedirects(false);
+        $permalink = URL::pagePermalinkPlain($this->browsers->getHomePageURL(), $topic, $page, $this->useNumericPermalinksRequests);
+        $crawler = $browser->request('GET', $permalink);
+
+        $this->assertTopicPaged($crawler, $browser, $forum, $topic, $page, $replies);
+    }
+
     protected function getReplyContentsList(Crawler $crawler): Crawler
     {
         return $crawler->filterXPath('//body//div[@class="site-content"]//article//div[contains(@class, "entry-content")]//div[contains(@class, "reply")]/div[contains(@class, "bbp-reply-content")]/p');
