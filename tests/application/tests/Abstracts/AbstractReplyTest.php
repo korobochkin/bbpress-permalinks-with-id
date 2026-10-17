@@ -8,6 +8,7 @@ use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\For
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Reply;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Topic;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -19,6 +20,7 @@ abstract class AbstractReplyTest extends AbstractHttpTestCase
     public function testReplyAsGuest(Forum $forum, Topic $topic, Reply $reply): void
     {
         $this->testReply($this->browsers->guest, $forum, $topic, $reply);
+        $this->testReplyPlain($this->browsers->guest, $forum, $topic, $reply);
     }
 
     /**
@@ -27,17 +29,39 @@ abstract class AbstractReplyTest extends AbstractHttpTestCase
     public function testReplyAsAdmin(Forum $forum, Topic $topic, Reply $reply): void
     {
         $this->testReply($this->browsers->admin, $forum, $topic, $reply);
+        $this->testReplyPlain($this->browsers->admin, $forum, $topic, $reply);
     }
 
     /**
      * @throws \InvalidArgumentException
      */
-    protected function testReply(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply): void
+    private function testReply(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply): void
     {
         $browser->followRedirects(false);
+        // TODO: why always use the same permalink type?
         $crawler = $browser->request('GET', $reply->getSamplePermalink());
 
         $this->assertReply($browser->getResponse(), $crawler, $forum, $topic, $reply);
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function testReplyPlain(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply): void
+    {
+        $browser->followRedirects(false);
+        $crawler = $browser->request(
+            'GET',
+            $this->useNumericPermalinksRequests
+                ? URL::getPlainNumericPermalink($this->browsers->getHomePageURL(), $reply)
+                : URL::getPlainSlugPermalink($this->browsers->getHomePageURL(), $reply)
+        );
+
+        if ($this->useNumericPermalinksRequests) {
+            $this->assertReplyRedirect($browser->getResponse(), $reply);
+        } else {
+            $this->assertReply($browser->getResponse(), $crawler, $forum, $topic, $reply);
+        }
     }
 
     /**
@@ -52,5 +76,14 @@ abstract class AbstractReplyTest extends AbstractHttpTestCase
         $this->assertBbPressBreadCrumbsContains($reply->getTitle(), $crawler);
         $this->assertBbPressReplyContentContains($reply, $crawler);
         $this->assertBbPressReplyHasLink($topic, $reply, $crawler);
+    }
+
+    private function assertReplyRedirect(Response $response, Reply $reply): void
+    {
+        $this->assertIsRedirect($response);
+        $this->assertLocation(
+            $reply->getSamplePermalink(), // TODO: this must use $this->useNumericPermalinksHTML
+            $response
+        );
     }
 }
