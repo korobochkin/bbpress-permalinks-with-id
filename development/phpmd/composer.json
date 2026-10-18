@@ -6,6 +6,6 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require-dev": {
-        "phpmd/phpmd": "^2.15"
+        "phpmd/phpmd": "^3.0"
     }
 }
