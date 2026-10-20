@@ -22,6 +22,12 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
     {
         $this->requestEditPage($browser, $reply);
         $this->assertEditPageRedirect($browser, $topic, $reply);
+
+        $this->requestEditPagePlain($browser, $reply, true);
+        $this->assertEditPageRedirect($browser, $topic, $reply);
+
+        $this->requestEditPagePlain($browser, $reply, false);
+        $this->assertEditPageRedirect($browser, $topic, $reply);
     }
 
     /**
@@ -31,7 +37,13 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
     protected function _testReplyEditAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply): void
     {
         $crawler = $this->requestEditPage($browser, $reply);
-        $this->testReplyEditPage($browser, $forum, $topic, $reply, $crawler);
+        $this->assertReplyEditPage($browser, $forum, $topic, $reply, $crawler);
+
+        $crawler2 = $this->requestEditPagePlain($browser, $reply, true);
+        $this->assertReplyEditPage($browser, $forum, $topic, $reply, $crawler2);
+
+        $crawler3 = $this->requestEditPagePlain($browser, $reply, false);
+        $this->assertReplyEditPage($browser, $forum, $topic, $reply, $crawler3);
     }
 
     /**
@@ -58,7 +70,37 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
 
         $crawler2 = $this->requestEditPage($browser, $reply);
 
-        $this->testReplyEditPage($browser, $forum, $topic, $newReply, $crawler2);
+        $this->assertReplyEditPage($browser, $forum, $topic, $newReply, $crawler2);
+
+        // Rollback to the original content
+        FrontendUtilities::submitEditForm($browser, $crawler2, $reply);
+    }
+
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
+    protected function _testReplySubmitEditPlainAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply, Reply $newReply): void
+    {
+        $crawler = $this->requestEditPagePlain($browser, $reply, false);
+
+        FrontendUtilities::submitEditForm($browser, $crawler, $newReply);
+
+        /*
+         * bbPress doesn't have title field in frontend form for replies.
+         * But after submitting a form, it erases the actual title in the DB.
+         * After that bbPress starts using "Reply To: $TOPIC_TITLE" instead.
+         *
+         * @see FrontendUtilities::submitEditForm
+         */
+        $reply->setTitle('');
+        $newReply->setTitle('');
+
+        $this->assertEditPageRedirect($browser, $topic, $reply);
+
+        $crawler2 = $this->requestEditPagePlain($browser, $reply, false);
+
+        $this->assertReplyEditPage($browser, $forum, $topic, $newReply, $crawler2);
 
         // Rollback to the original content
         FrontendUtilities::submitEditForm($browser, $crawler2, $reply);
@@ -76,8 +118,26 @@ abstract class AbstractReplyEditTest extends AbstractHttpTestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
-    private function testReplyEditPage(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply, Crawler $crawler): void
+    private function requestEditPagePlain(HttpBrowser $browser, Reply $reply, bool $useNumericPermalinksRequests): Crawler
+    {
+        $browser->followRedirects(false);
+
+        return $browser->request(
+            'GET',
+            URL::editPlainPermalink(
+                $this->browsers->getHomePageURL(),
+                $reply,
+                $useNumericPermalinksRequests
+            )
+        );
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function assertReplyEditPage(HttpBrowser $browser, Forum $forum, Topic $topic, Reply $reply, Crawler $crawler): void
     {
         $expectedReplyTitle = $reply->getTitle();
 

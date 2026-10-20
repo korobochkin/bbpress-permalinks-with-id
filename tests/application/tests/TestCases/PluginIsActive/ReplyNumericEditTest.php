@@ -58,5 +58,6 @@ final class ReplyNumericEditTest extends AbstractReplyEditTest
     public function testReplySubmitEditAsAdmin(Forum $forum, Topic $topic, Reply $reply): void
     {
         $this->_testReplySubmitEditAsAdmin($this->browsers->admin, $forum, $topic, $reply, PostUtilities::copyAndEditTitleAndContent($reply));
+        $this->_testReplySubmitEditPlainAsAdmin($this->browsers->admin, $forum, $topic, $reply, PostUtilities::copyAndEditTitleAndContent($reply));
     }
 }
