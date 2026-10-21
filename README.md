@@ -36,7 +36,7 @@ The URL components `forums`, `forum`, `topic`, `reply`, and `paged` are dynamic 
 
 | URL + ID                          | URL + slug (bbPress default)           |
 |:----------------------------------|:---------------------------------------|
-| `/forums/forum/`                  | `/forums/forum/`                       |
+| `/forums/`                        | `/forums/`                             |
 | `/forums/forum/111/`              | `/forums/forum/test/`                  |
 | `/forums/forum/111/edit/`         | `/forums/forum/test/edit/`             |
 | `/forums/forum/111/page/2/`       | `/forums/forum/test/page/2/`           |
