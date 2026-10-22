@@ -4,7 +4,6 @@
          bootstrap="phpunit-bootstrap.php"
          cacheDirectory=".cache/phpunit"
          recordTestRunHistory="false"
-         executionOrder="depends"
          requireCoverageMetadata="true"
          beStrictAboutCoverageMetadata="true"
          beStrictAboutOutputDuringTests="true"
@@ -14,6 +13,7 @@
          failOnWarning="true"
          stopOnError="true"
          stopOnFailure="true"
+         resolveDependencies="true"
 >
     <testsuites>
         <testsuite name="default">
