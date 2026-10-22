@@ -37,6 +37,7 @@ The URL components `forums`, `forum`, `topic`, `reply`, and `paged` are dynamic 
 | URL + ID                          | URL + slug (bbPress default)           |
 |:----------------------------------|:---------------------------------------|
 | `/forums/`                        | `/forums/`                             |
+|                                   |                                        |
 | `/forums/forum/111/`              | `/forums/forum/test/`                  |
 | `/forums/forum/111/edit/`         | `/forums/forum/test/edit/`             |
 | `/forums/forum/111/page/2/`       | `/forums/forum/test/page/2/`           |
@@ -49,14 +50,18 @@ The URL components `forums`, `forum`, `topic`, `reply`, and `paged` are dynamic 
 | `/forums/reply/333/edit/`         | `/forums/reply/test/edit/`             |
 |                                   |                                        |
 | `/?post_type=forum`               | `/?post_type=forum`                    |
+|                                   |                                        |
+|                                   | `/?forum=test`                         |
 | `/?post_type=forum&p=111`         | `/?post_type=forum&forum=test`         |
 | `/?post_type=forum&p=111&edit=1`  | `/?post_type=forum&forum=test&edit=1`  |
 | `/?post_type=forum&p=111&paged=2` | `/?post_type=forum&forum=test&paged=2` |
 |                                   |                                        |
+|                                   | `/?topic=test`                         |
 | `/?post_type=topic&p=222`         | `/?post_type=topic&forum=test`         |
 | `/?post_type=topic&p=222&edit=1`  | `/?post_type=topic&forum=test&edit=1`  |
 | `/?post_type=topic&p=222&paged=2` | `/?post_type=topic&forum=test&paged=2` |
 |                                   |                                        |
+|                                   | `/?reply=test`                         |
 | `/?reply=333`                     | `/post_type=reply&reply=test`          |
 | `/?reply=333&edit=1`              | `/post_type=reply&reply=test&edit=1`   |
 
