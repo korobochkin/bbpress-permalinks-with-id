@@ -65,7 +65,7 @@ requests/http-client.env.json:
 	@if [ -f requests/http-client.env.json ]; then \
 		echo "File requests/http-client.env.json exists. Update manually or delete it and rerun the command."; \
 	else \
-		cp http-client.example.env.json requests/http-client.env.json; \
+		cp requests/http-client.example.env.json requests/http-client.env.json; \
 		echo "File created. Do not forget to fill it with values manually."; \
 	fi
 
