@@ -21,7 +21,13 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
     protected function _testTopicEditAsGuest(HttpBrowser $browser, Forum $forum, Topic $topic): void
     {
         $this->requestEditPage($browser, $topic);
-        $this->assertEditPageRedirected($browser, $topic);
+        $this->assertEditPageRedirect($browser, $topic);
+
+        $this->requestEditPagePlain($browser, $topic, true);
+        $this->assertEditPageRedirect($browser, $topic);
+
+        $this->requestEditPagePlain($browser, $topic, false);
+        $this->assertEditPageRedirect($browser, $topic);
     }
 
     /**
@@ -31,7 +37,13 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
     protected function _testTopicEditAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic): void
     {
         $crawler = $this->requestEditPage($browser, $topic);
-        $this->testTopicEditPage($browser, $forum, $topic, $crawler);
+        $this->assertTopicEditPage($browser, $forum, $topic, $crawler);
+
+        $crawler2 = $this->requestEditPagePlain($browser, $topic, true);
+        $this->assertTopicEditPage($browser, $forum, $topic, $crawler2);
+
+        $crawler3 = $this->requestEditPagePlain($browser, $topic, false);
+        $this->assertTopicEditPage($browser, $forum, $topic, $crawler3);
     }
 
     /**
@@ -44,11 +56,31 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
 
         FrontendUtilities::submitEditForm($browser, $crawler, $newTopic);
 
-        $this->assertEditPageRedirected($browser, $topic);
+        $this->assertEditPageRedirect($browser, $topic);
 
         $crawler2 = $this->requestEditPage($browser, $topic);
 
-        $this->testTopicEditPage($browser, $forum, $newTopic, $crawler2);
+        $this->assertTopicEditPage($browser, $forum, $newTopic, $crawler2);
+
+        // Rollback to the original content
+        FrontendUtilities::submitEditForm($browser, $crawler2, $topic);
+    }
+
+    /**
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
+     */
+    protected function _testTopicSubmitEditPlainAsAdmin(HttpBrowser $browser, Forum $forum, Topic $topic, Topic $newTopic): void
+    {
+        $crawler = $this->requestEditPagePlain($browser, $topic, false);
+
+        FrontendUtilities::submitEditForm($browser, $crawler, $newTopic);
+
+        $this->assertEditPageRedirect($browser, $topic);
+
+        $crawler2 = $this->requestEditPagePlain($browser, $topic, false);
+
+        $this->assertTopicEditPage($browser, $forum, $newTopic, $crawler2);
 
         // Rollback to the original content
         FrontendUtilities::submitEditForm($browser, $crawler2, $topic);
@@ -67,8 +99,26 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
-    private function testTopicEditPage(HttpBrowser $browser, Forum $forum, Topic $topic, Crawler $crawler): void
+    private function requestEditPagePlain(HttpBrowser $browser, Topic $topic, bool $useNumericPermalinksRequests): Crawler
+    {
+        $browser->followRedirects(false);
+
+        return $browser->request(
+            'GET',
+            URL::editPlainPermalink(
+                $this->browsers->getHomePageURL(),
+                $topic,
+                $useNumericPermalinksRequests
+            )
+        );
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function assertTopicEditPage(HttpBrowser $browser, Forum $forum, Topic $topic, Crawler $crawler): void
     {
         $this->assertPageStatusIs200($browser->getResponse());
         $this->assertPageTitleEquals($topic->getTitle(), $crawler);
@@ -83,7 +133,7 @@ abstract class AbstractTopicEditTest extends AbstractHttpTestCase
         $this->assertTopicEditFormHasSubmit($crawler);
     }
 
-    private function assertEditPageRedirected(HttpBrowser $browser, Topic $topic): void
+    private function assertEditPageRedirect(HttpBrowser $browser, Topic $topic): void
     {
         $this->assertIsRedirect($browser->getResponse());
         $this->assertLocation($this->useNumericPermalinksHTML ? $topic->getNumericPermalink() : $topic->getSamplePermalink(), $browser->getResponse());

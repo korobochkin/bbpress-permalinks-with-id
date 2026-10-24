@@ -61,6 +61,14 @@ config:
 		echo "File created. Do not forget to fill it with values manually."; \
 	fi
 
+requests/http-client.env.json:
+	@if [ -f requests/http-client.env.json ]; then \
+		echo "File requests/http-client.env.json exists. Update manually or delete it and rerun the command."; \
+	else \
+		cp requests/http-client.example.env.json requests/http-client.env.json; \
+		echo "File created. Do not forget to fill it with values manually."; \
+	fi
+
 reset_logs:
 	docker exec "$(CONTAINER_NAME_PREFIX)-syslog-1" sh -c "find /var/log/remote -maxdepth 1 -type f -name '*.log' -exec truncate -s 0 {} \;"
 

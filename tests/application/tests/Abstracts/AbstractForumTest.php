@@ -6,6 +6,8 @@ namespace Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Abstracts;
 
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Entities\Posts\Forum;
 use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Services\HttpBrowser;
+use Korobochkin\BBPressPermalinksWithIdTestsApplication\Tests\Utilities\URL;
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AbstractForumTest extends AbstractHttpTestCase
@@ -14,6 +16,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
     public function testForumAsGuest(Forum $forum): void
     {
@@ -23,6 +26,7 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
     public function testForumAsAdmin(Forum $forum): void
     {
@@ -31,13 +35,27 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
 
     /**
      * @throws \InvalidArgumentException
+     * @throws \LogicException
      */
     protected function testForum(HttpBrowser $browser, Forum $forum): Crawler
     {
         $browser->followRedirects(false);
+
+        $this->testForumPlainPermalink($browser, $forum);
+
         $crawler = $browser->request('GET', $this->useNumericPermalinksRequests ? $forum->getNumericPermalink() : $forum->getSamplePermalink());
 
-        $this->assertPageStatusIs200($browser->getResponse());
+        $this->assertForumPage($forum, $browser->getResponse(), $crawler);
+
+        return $crawler;
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    protected function assertForumPage(Forum $forum, Response $response, Crawler $crawler): void
+    {
+        $this->assertPageStatusIs200($response);
         $this->assertPageTitleEquals($forum->getTitle(), $crawler);
         $this->assertBbPressBreadCrumbsContains($forum->getTitle(), $crawler);
 
@@ -48,8 +66,34 @@ abstract class AbstractForumTest extends AbstractHttpTestCase
             $this->assertPageContainsNotice('This forum', $crawler);
             $this->assertPageContainsNotice('and was last updated', $crawler);
         }
+    }
 
-        return $crawler;
+    /**
+     * @throws \LogicException
+     */
+    protected function assertForumRedirect(Forum $forum, Response $response): void
+    {
+        $this->assertIsRedirect($response);
+        $this->assertLocation(
+            $this->useNumericPermalinksHTML
+                ? $forum->getNumericPermalink() : $forum->getSamplePermalink(),
+            $response
+        );
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
+     */
+    protected function testForumPlainPermalink(HttpBrowser $browser, Forum $forum): void
+    {
+        $browser->request('GET', URL::getPlainNumericPermalink($this->browsers->getHomePageURL(), $forum));
+
+        $this->assertForumRedirect($forum, $browser->getResponse());
+
+        $crawler = $browser->request('GET', URL::getPlainSlugPermalink($this->browsers->getHomePageURL(), $forum));
+
+        $this->assertForumPage($forum, $browser->getResponse(), $crawler);
     }
 
     protected function testNotLoggedIn(Crawler $crawler): void

@@ -1,0 +1,33 @@
+### GET Forums page (pretty, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/forums/
+
+
+### GET Forums page (plain, post type)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?post_type=forum
+
+
+### GET Forums page (plain, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?post_type=page&pagename=forums
+
+
+### GET Forums page (plain, numeric)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?post_type=page&p={{ bbpress.forums.id }}
+
+
+### GET Forums page (plain, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?pagename=forums

@@ -1,0 +1,54 @@
+### GET Reply (pretty, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/forums/reply/{{ bbpress.reply.slug }}/
+
+
+### GET Reply (pretty, numeric)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/forums/reply/{{ bbpress.reply.id }}/
+
+
+### GET Reply (plain, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?reply={{ bbpress.reply.slug }}
+
+
+### GET Reply (plain, numeric)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?post_type=reply&p={{ bbpress.reply.id }}
+
+
+### Edit Reply (pretty, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/forums/reply/{{ bbpress.reply.slug }}/edit/
+
+
+### Edit Reply (pretty, numeric)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/forums/reply/{{ bbpress.reply.id }}/edit/
+
+
+### Edit Reply (plain, slug)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?reply={{ bbpress.reply.slug }}&edit=1
+
+
+### Edit Reply (plain, numeric)
+# @no-cookie-jar
+# @no-redirect
+# @no-log
+GET {{ wordpress.site_home }}/?post_type=reply&p={{ bbpress.reply.id }}&edit=1
