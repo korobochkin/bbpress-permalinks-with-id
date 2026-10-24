@@ -16,7 +16,7 @@ GET {{ wordpress.site_home }}/?post_type=forum
 # @no-cookie-jar
 # @no-redirect
 # @no-log
-GET {{ wordpress.site_home }}/?post_type=page&p=forums
+GET {{ wordpress.site_home }}/?post_type=page&pagename=forums
 
 
 ### GET Forums page (plain, numeric)
@@ -30,4 +30,4 @@ GET {{ wordpress.site_home }}/?post_type=page&p={{ bbpress.forums.id }}
 # @no-cookie-jar
 # @no-redirect
 # @no-log
-GET {{ wordpress.site_home }}/?page=forums
+GET {{ wordpress.site_home }}/?pagename=forums
