@@ -360,7 +360,7 @@ jobs:
     strategy:
       matrix:
         config:
-          - wordpress_arg_base_image: 'wordpress:beta-7.2-beta3'
+          - wordpress_arg_base_image: 'wordpress:beta-apache'
             cli_arg_base_image: 'wordpress:cli'
             wordpress_arg_plugin_bbpress_zip_url: 'https://downloads.wordpress.org/plugin/bbpress.2.6.21.zip'
             wordpress_arg_theme_zip_url: 'https://downloads.wordpress.org/theme/twentytwelve.4.9.zip'
