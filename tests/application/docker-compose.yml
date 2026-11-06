@@ -37,6 +37,10 @@ x-cli: &service-cli
     dockerfile_inline: |
       ARG CLI_ARG_BASE_IMAGE
       FROM $CLI_ARG_BASE_IMAGE
+      USER root
+      RUN \
+        ln -s /tmp/shells/reset-wordpress.sh /usr/local/bin/reset
+      USER www-data
     args:
       CLI_ARG_BASE_IMAGE: ${CLI_ARG_BASE_IMAGE}
     cache_from:
