@@ -3,6 +3,6 @@
 set -Eeuo pipefail
 
 cd /var/www/html
-wp db query "DELETE FROM wp_posts;"
+echo "DELETE FROM wp_posts; DELETE FROM wp_postmeta;" | wp db cli --defaults
 wp plugin deactivate bbpress-permalinks-with-id
 wp rewrite flush
