@@ -1,0 +1,13 @@
+path: /var/www/html
+
+db cli:
+  ssl-verify-server-cert: false
+
+db export:
+  ssl-verify-server-cert: false
+
+db import:
+  ssl-verify-server-cert: false
+
+db query:
+  ssl-verify-server-cert: false

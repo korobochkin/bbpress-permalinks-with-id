@@ -37,6 +37,12 @@ x-cli: &service-cli
     dockerfile_inline: |
       ARG CLI_ARG_BASE_IMAGE
       FROM $CLI_ARG_BASE_IMAGE
+      USER root
+      RUN \
+        apk add --no-cache mariadb-connector-c
+      RUN \
+        ln -s /tmp/shells/reset-wordpress.sh /usr/local/bin/reset
+      USER www-data
     args:
       CLI_ARG_BASE_IMAGE: ${CLI_ARG_BASE_IMAGE}
     cache_from:
@@ -59,6 +65,12 @@ x-cli: &service-cli
     WORDPRESS_ADMIN_PASSWORD: "${WORDPRESS_ADMIN_PASSWORD}"
     WORDPRESS_ADMIN_EMAIL: "${WORDPRESS_ADMIN_EMAIL}"
     WORDPRESS_SITE_LOCALE: "${WORDPRESS_SITE_LOCALE}"
+  configs:
+    - source: cli
+      target: /home/www-data/.wp-cli/config.yml
+      mode: 0400
+      uid: '1001'
+      gid: '1001'
   volumes_from:
     - wordpress
   volumes:
@@ -278,6 +290,8 @@ volumes:
 configs:
   syslog_main:
     file: ./containers/syslog/rsyslog.conf
+  cli:
+    file: ./containers/cli/config.yml
   php:
     file: ./containers/php/php-production.ini
   php_xdebug:
