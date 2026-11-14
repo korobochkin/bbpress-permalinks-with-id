@@ -103,34 +103,27 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up the PHP
-        uses: shivammathur/setup-php@v2
+      - name: Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v4
         with:
-          php-version: 8.5
-          ini-file: development
-          extensions: filter, libxml, tokenizer, xmlreader, iconv, mbstring
-          tools: composer
+          cleanup: true
 
-      - name: Detect Composer Cache Directory
-        id: composer-cache
-        run: 'echo "cache-files-dir=$(composer config cache-files-dir --global)" >> $GITHUB_OUTPUT'
-
-      - name: Composer Cache
-        uses: actions/cache@v6
+      - name: Docker Bake
+        uses: docker/bake-action@v7
         with:
-          path: |
-            ${{ steps.composer-cache.outputs.cache-files-dir }}
-            development/phpcs/vendor
-          key: ${{ runner.os }}-composer-phpcs-${{ hashFiles('development/phpcs/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-phpcs-
+          builder: ${{ steps.buildx.outputs.name }}
+          files: development/docker-compose-tests.yml
+          targets: phpcs
 
-      - name: Composer Install
-        working-directory: development/phpcs
-        run: make vendor
+      - name: Docker Compose Up. PHP Syntax Check
+        working-directory: development
+        run: make up-phpcs
 
-      - name: Run PHP Coding Standards and Compatibility
-        run: make phpcs
+      - name: Docker Compose Down
+        if: always()
+        working-directory: development
+        run: make down
 
   php-stan:
     name: PHP Stan

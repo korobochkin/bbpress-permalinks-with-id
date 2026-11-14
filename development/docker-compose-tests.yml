@@ -101,3 +101,13 @@ services:
       tags:
         - bbpress-permalinks-with-id-tests-php-syntax-check-tests-application:latest
     entrypoint: ["make", "php-syntax-check-tests-application-busybox"]
+
+  phpcs:
+    <<: *service-php-base
+    build:
+      # TODO: need to `composer install`
+      <<: *service-php-base-build
+      dockerfile: ./development/containers/php/php-8.5.Dockerfile
+      tags:
+        - bbpress-permalinks-with-id-tests-phpcs:latest
+    entrypoint: ["make", "phpcs"]
