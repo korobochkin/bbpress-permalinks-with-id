@@ -116,6 +116,19 @@ jobs:
           files: development/docker-compose-tests.yml
           targets: phpcs
 
+      - name: Composer Directory
+        run: mkdir -p tmp/composer-global
+
+      - name: Composer Cache
+        uses: actions/cache@v6
+        with:
+          path: |
+            tmp/composer-global
+            development/phpcs/vendor
+          key: ${{ runner.os }}-composer-phpcs-${{ hashFiles('development/phpcs/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-phpcs-
+
       - name: Docker Compose Up. PHP Syntax Check
         working-directory: development
         run: make up-phpcs

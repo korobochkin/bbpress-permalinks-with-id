@@ -23,6 +23,7 @@ x-php-base: &service-php-base
   entrypoint: ["make", "php-syntax-check-busybox"]
   volumes:
     - ../:/home/php/app
+    - tmp/composer-global:/home/php/.composer:rw,noexec,nosuid,nodev
   tmpfs:
     - /tmp
     - /run
@@ -111,4 +112,4 @@ services:
       target: php-base-with-composer
       tags:
         - bbpress-permalinks-with-id-tests-phpcs:latest
-    entrypoint: ["make", "--directory", "development/phpcs", "vendor", "&&", "make", "phpcs"]
+    entrypoint: ["/bin/sh", "-c", "make", "--directory", "development/phpcs", "vendor", "&&", "make", "phpcs"]
