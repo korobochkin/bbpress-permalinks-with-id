@@ -22,8 +22,7 @@ x-php-base: &service-php-base
   user: 1001:1001
   entrypoint: ["make", "php-syntax-check-busybox"]
   volumes:
-    - ../:/home/php/app
-    - tmp/composer-global:/home/php/.composer:rw,noexec,nosuid,nodev
+    - &service-php-base-volumes-app ../:/home/php/app
   tmpfs:
     - /tmp
     - /run
@@ -112,4 +111,7 @@ services:
       target: php-base-with-composer
       tags:
         - bbpress-permalinks-with-id-tests-phpcs:latest
+    volumes:
+      - *service-php-base-volumes-app
+      - ./../tmp/composer-global:/home/php/.composer:rw,noexec,nosuid,nodev
     entrypoint: ["/bin/sh", "-c", "make", "--directory", "development/phpcs", "vendor", "&&", "make", "phpcs"]
