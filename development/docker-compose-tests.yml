@@ -112,5 +112,4 @@ services:
         - bbpress-permalinks-with-id-tests-phpcs:latest
     volumes:
       - *service-php-base-volumes-app
-      - ./../tmp/composer-global:/home/php/.composer:rw,noexec,nosuid,nodev
-    entrypoint: ["/bin/sh", "-c", "make --directory development/phpcs vendor && make phpcs"]
+    entrypoint: ["make", "phpcs"]

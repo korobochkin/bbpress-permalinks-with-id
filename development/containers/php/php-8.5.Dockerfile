@@ -36,4 +36,13 @@ FROM php-base-with-composer AS phpcs
 
 USER $UID:$GID
 
+RUN mkdir -p development/phpcs/vendor
+
+RUN \
+    --mount=type=bind,source=development/phpcs/composer.json,destination=./development/phpcs/composer.json \
+    --mount=type=bind,source=development/phpcs/composer.lock,destination=./development/phpcs/composer.lock \
+    --mount=type=bind,source=development/phpcs/Makefile,destination=./development/phpcs/Makefile \
+    --mount=type=cache,id=composer,mode=0755,uid=$UID,gid=$GID,destination=/home/php/.composer \
+    make --directory development/phpcs --always-make vendor
+
 FROM php-base AS default

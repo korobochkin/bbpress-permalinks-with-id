@@ -1,6 +1,24 @@
+include make/common.mk
 
 build:
 	docker compose --file docker-compose-tests.yml build --pull
+
+_up-no-start-%:
+	docker compose \
+		--file=docker-compose-tests.yml \
+		up \
+		--no-build \
+		--quiet-pull \
+		--remove-orphans \
+		--timeout=120 \
+		--wait-timeout=120 \
+		--yes \
+		--abort-on-container-failure \
+		--no-log-prefix \
+		--no-start \
+		--exit-code-from=$* \
+		--attach=$* \
+		$*
 
 _up-%:
 	docker compose \
@@ -17,6 +35,12 @@ _up-%:
 		--exit-code-from=$* \
 		--attach=$* \
 		$*
+
+_cp-%: guard-SRC_PATH guard-DEST_PATH
+	docker compose \
+		--file=docker-compose-tests.yml \
+		cp \
+		$*:$(SRC_PATH) $(DEST_PATH)
 
 up-php-syntax-check-php-5.6: _up-php-syntax-check-php-5.6
 
@@ -46,7 +70,9 @@ down:
 
 .PHONY: \
 	build \
+	_up-no-start-% \
 	_up-% \
+	_cp-% \
 	up-php-syntax-check-php-5.6 \
 	up-php-syntax-check-php-7.4 \
 	up-php-syntax-check-php-8.0 \
