@@ -122,7 +122,7 @@ jobs:
 
       - name: Docker Compose Cp vendor
         working-directory: development
-        run: make _cp-phpcs SRC_PATH=/home/php/app/development/phpcs/vendor DEST_PATH=phpcs
+        run: make _cp-phpcs SRC_PATH=/tmp/vendor DEST_PATH=phpcs
 
       - name: Docker Compose Up. PHP Syntax Check
         working-directory: development
